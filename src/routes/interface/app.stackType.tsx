@@ -5,7 +5,9 @@ export type propsNavigationStack = {
   CadDispositivo: undefined;
 
   Home: undefined;
-  //ListaItens: { handle: number };
+  Cart: undefined;
+  ListaDeGrupo2: undefined;
+  ListaDeItens: { handle: number };
 };
 
 export type propsStack = NativeStackNavigationProp<propsNavigationStack>;

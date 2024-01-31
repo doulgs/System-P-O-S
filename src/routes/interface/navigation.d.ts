@@ -5,6 +5,9 @@ export declare global {
       CadDispositivo: undefined;
 
       Home: undefined;
+      Cart: undefined;
+      ListaDeGrupo2: undefined;
+      ListaDeItens: { handle: number };
     }
   }
 }

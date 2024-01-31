@@ -11,6 +11,9 @@ import { Routes } from "./src/routes";
 import "intl";
 import "intl/locale-data/jsonp/pt-BR";
 
+import { AuthProvaider } from "./src/context/authContext";
+import { CartProvaider } from "./src/context/cartContext";
+
 export default function App() {
   const [isFontsLoaded] = useFonts({
     "GeneralSans-400": require("./src/assets/fonts/GeneralSans-Regular.otf"),
@@ -25,8 +28,12 @@ export default function App() {
   return (
     <ThemeProvider theme={THEME}>
       <NavigationContainer>
-        <StatusBar style="dark" />
-        <Routes />
+        <AuthProvaider>
+          <CartProvaider>
+            <StatusBar style="dark" />
+            <Routes />
+          </CartProvaider>
+        </AuthProvaider>
       </NavigationContainer>
     </ThemeProvider>
   );
