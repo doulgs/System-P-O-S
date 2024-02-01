@@ -16,7 +16,7 @@ import { IntItemCart } from "../../../Interface";
 import { useFocusEffect } from "@react-navigation/native";
 
 const Cart = () => {
-  const { cart, AddItemCart } = useCart();
+  const { cart, AddItemCart, RemoveItemCart } = useCart();
 
   return (
     <>
@@ -34,7 +34,13 @@ const Cart = () => {
           <FlatList
             data={cart}
             keyExtractor={(item) => String(item.Handle)}
-            renderItem={({ item }) => <CardItem item={item} />}
+            renderItem={({ item }) => (
+              <CardItem
+                item={item}
+                addAmount={() => AddItemCart(item)}
+                removeAmount={() => RemoveItemCart(item)}
+              />
+            )}
           />
         </MenuContainer>
 

@@ -4,6 +4,7 @@ import { IntItemCart } from "../Interface";
 interface CartContextProps {
   cart: IntItemCart[];
   AddItemCart: Function;
+  RemoveItemCart: Function;
   cartDot: number;
 }
 
@@ -50,8 +51,42 @@ export const CartProvaider = ({ children }: any) => {
     setCartDot(dotCartList);
   };
 
+  function RemoveItemCart(itemCart: IntItemCart) {
+    const indexItemRemove = cart.findIndex(
+      (item) => item.Handle === itemCart.Handle
+    );
+
+    if (cart[indexItemRemove]?.Amount > 1) {
+      const updatedCart = [...cart];
+      const removedItem = updatedCart[indexItemRemove];
+
+      removedItem.Amount -= 1;
+      removedItem.Total = removedItem.Total - removedItem.VendaValor;
+
+      const dotCartList = updatedCart.reduce(
+        (soma, objeto) => soma + objeto.Amount,
+        0
+      );
+
+      setCart(updatedCart);
+      setCartDot(dotCartList);
+      return;
+    }
+
+    const updatedCart = cart.filter((item) => item.Handle !== itemCart.Handle);
+    const dotCartList = updatedCart.reduce(
+      (soma, objeto) => soma + objeto.Amount,
+      0
+    );
+
+    setCart(updatedCart);
+    setCartDot(dotCartList);
+  }
+
   return (
-    <CartContext.Provider value={{ cart, cartDot, AddItemCart }}>
+    <CartContext.Provider
+      value={{ cart, cartDot, AddItemCart, RemoveItemCart }}
+    >
       {children}
     </CartContext.Provider>
   );
