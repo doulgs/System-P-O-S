@@ -7,7 +7,7 @@ export const SchemaGrupo1: ObjectSchema = {
     Codigo: { type: "string", optional: true },
     Nome: { type: "string", optional: true },
     Reduzido: { type: "string", optional: true },
-    Tabelas: { type: "object", objectType: "Tabela", optional: true }, //Não é utilizado
+    Tabelas: { type: "string", optional: true }, //Não é utilizado
     Handle: "int",
     HandleWeb: { type: "int", optional: true },
     HandleFilial: { type: "int", optional: true },

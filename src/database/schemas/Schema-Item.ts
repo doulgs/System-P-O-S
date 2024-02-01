@@ -33,10 +33,12 @@ export const SchemaItem: ObjectSchema = {
     Quantidade: { type: "double", optional: true },
     FotoByte: { type: "string", optional: true }, // Se FotoByte for uma sequência de bytes, ajuste o tipo conforme necessário
     Mark: { type: "bool", optional: true },
-    Tabelas: { type: "object", objectType: "Tabela", optional: true }, //Não é utilizado
+    Tabelas: { type: "string", optional: true }, //Não é utilizado
     Handle: "int",
     HandleFilial: { type: "int", optional: true },
     HandleTrade: { type: "int", optional: true },
     Plataforma: { type: "int", optional: true },
+    Amount: { type: "int", optional: true },
+    Total: { type: "double", optional: true },
   },
 };

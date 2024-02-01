@@ -71,11 +71,11 @@ export const SchemaFilial: ObjectSchema = {
     MostarExcecaoPedidoVenda: { type: "bool", optional: true },
     LayoutTelaItensSowPublisoft: { type: "int", optional: true },
     PermiteDigitacaoPreco: { type: "bool", optional: true },
-    QuantidadeInteira: { type: "int", optional: true },
+    QuantidadeInteira: { type: "bool", optional: true },
     DiasPrevisaoEntrega: { type: "int", optional: true },
     QtdAparelhosLiberadosPubliVendas: { type: "string", optional: true },
     ChaveApps: { type: "string", optional: true },
-    Tabelas: { type: "string", optional: true },
+    Tabelas: { type: "string", optional: true }, //Não é utilizado
     Handle: "int",
     HandleFilial: { type: "string", optional: true },
     HandleTrade: { type: "int", optional: true },

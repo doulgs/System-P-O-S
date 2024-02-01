@@ -1,13 +1,16 @@
 import { ObjectSchema } from "realm";
 
-export const SchemaUnidade: ObjectSchema = {
-  name: "SchemaUnidade",
+export const SchemaTabela: ObjectSchema = {
+  name: "SchemaTabela",
   primaryKey: "Handle",
-
   properties: {
-    Sigla: { type: "string", optional: true },
+    Formula: { type: "object", objectType: "SchemaFormula", optional: true },
     Descricao: { type: "string", optional: true },
-    Tabelas: { type: "list", objectType: "Tabela", optional: true }, //Não é utilizado
+    Preco1: { type: "string", optional: true },
+    Preco2: { type: "string", optional: true },
+    Preco3: { type: "string", optional: true },
+    HandleFormula: { type: "int", optional: true },
+    Tabelas: { type: "string", optional: true }, //Não é utilizado
     Handle: "int",
     HandleFilial: { type: "int", optional: true },
     HandleTrade: { type: "int", optional: true },

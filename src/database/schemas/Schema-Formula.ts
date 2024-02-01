@@ -28,7 +28,7 @@ export const SchemaFormula: ObjectSchema = {
     Utiliza2: { type: "string", optional: true },
     Utiliza3: { type: "string", optional: true },
     Icms: { type: "int", optional: true },
-    Tabelas: { type: "object", objectType: "Tabela", optional: true }, //Não é utilizado
+    Tabelas: { type: "string", optional: true }, //Não é utilizado
     Handle: "int",
     HandleFilial: { type: "int", optional: true },
     HandleTrade: { type: "int", optional: true },

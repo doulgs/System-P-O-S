@@ -13,7 +13,7 @@ export const ItemExcecaoAuto: ObjectSchema = {
     HandleItem: { type: "int", optional: true },
     HandleExcecao: { type: "int", optional: true },
     Quantidade: { type: "double", optional: true },
-    Tabelas: { type: "object", objectType: "Tabela", optional: true },
+    Tabelas: { type: "string", optional: true }, //Não é utilizado
     Handle: "int",
     HandleFilial: { type: "int", optional: true },
     HandleTrade: { type: "int", optional: true },

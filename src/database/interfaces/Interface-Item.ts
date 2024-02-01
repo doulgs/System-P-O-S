@@ -40,6 +40,8 @@ export interface Item {
   HandleFilial?: number;
   HandleTrade?: number;
   Plataforma?: number;
+  Amount?: number;
+  Total?: number;
 }
 
 export type ItemObject = Item & Realm.Object;

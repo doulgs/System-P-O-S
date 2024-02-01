@@ -1,0 +1,16 @@
+export type NomeDosSchemas =
+  | "SchemaFilial"
+  | "SchemaFormula"
+  | "SchemaGrupo1"
+  | "SchemaGrupo2"
+  | "SchemaGrupo2Excecao"
+  | "SchemaGrupo3"
+  | "SchemaGrupoExcecao"
+  | "SchemaIteTabFor"
+  | "SchemaItem"
+  | "ItemExcecaoAuto"
+  | "SchemaPromocaoItem"
+  | "SchemaTabela"
+  | "SchemaTipoPedido"
+  | "SchemaUsuario"
+  | "SchemaUnidade";

@@ -17,6 +17,7 @@ const AcessarApp = () => {
   const onSubmit = async (data: credenciaisProps) => {
     await acessar(data.usuario, data.senha);
   };
+
   const handleConfig = () => {
     navigation.navigate("CadDispositivo");
   };

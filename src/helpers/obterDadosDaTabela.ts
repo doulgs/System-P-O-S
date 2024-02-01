@@ -2,13 +2,13 @@ import api from "../infra/services/api";
 import { getRealm } from "../infra/realm";
 import { obterToken } from "./obterToken";
 import { NomeDaTabela } from "./utils/nomeDasTabelasAPI";
-import { IntFilial } from "../database/interface/IntFilial";
+import { Filial } from "../database/interfaces/Interface-Filial";
 
 async function obterDadosDaTabelaAPI(Table: NomeDaTabela) {
   try {
     const realm = await getRealm();
     const token = await obterToken();
-    const filial = realm.objects<IntFilial>("FilialSchema");
+    const filial = realm.objects<Filial>("SchemaFilial");
     const site = filial.length > 0 ? filial[0].NomeSite : null;
 
     const { data } = await api.post(

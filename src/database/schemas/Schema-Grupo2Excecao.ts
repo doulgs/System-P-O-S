@@ -24,7 +24,7 @@ export const SchemaGrupo2Excecao: ObjectSchema = {
     IteValorInformado: { type: "double", optional: true },
     Quantidade: { type: "double", optional: true },
     Mark: { type: "bool", optional: true },
-    Tabelas: { type: "object", objectType: "Tabela", optional: true }, //Não é utilizado
+    Tabelas: { type: "string", optional: true }, //Não é utilizado
     Handle: "int",
     HandleFilial: { type: "int", optional: true },
     HandleTrade: { type: "int", optional: true },

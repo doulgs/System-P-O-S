@@ -10,7 +10,7 @@ export const SchemaGrupo3: ObjectSchema = {
     Reduzido: { type: "string", optional: true },
     Inativo: { type: "bool", optional: true },
     QuantidadeItensComposicao: { type: "int", optional: true },
-    Tabelas: { type: "object", objectType: "Tabela", optional: true }, //Não é utilizado
+    Tabelas: { type: "string", optional: true }, //Não é utilizado
     Handle: "int",
     HandleFilial: { type: "int", optional: true },
     HandleTrade: { type: "int", optional: true },

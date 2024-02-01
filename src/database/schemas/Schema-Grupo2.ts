@@ -14,7 +14,7 @@ export const SchemaGrupo2: ObjectSchema = {
     AbrirTelaExcecoes: { type: "bool", optional: true },
     PossuiCaracteristicaItem: { type: "bool", optional: true },
     FotoByte: { type: "string", optional: true },
-    Tabelas: { type: "object", objectType: "Tabela", optional: true }, //Não é utilizado
+    Tabelas: { type: "string", optional: true }, //Não é utilizado
     Handle: "int",
     HandleFilial: { type: "int", optional: true },
     HandleTrade: { type: "int", optional: true },
