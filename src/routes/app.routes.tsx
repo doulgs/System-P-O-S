@@ -17,34 +17,15 @@ const Stack = createNativeStackNavigator();
 
 function AppRoutes() {
   const { colors } = useTheme();
-  const { cart } = useCart();
+  const { cart, cartDot } = useCart();
   const navigation = useNavigation();
+
   return (
     <Stack.Navigator screenOptions={{}}>
       <Stack.Screen
         name="Home"
         component={Home}
         options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Cart"
-        component={Cart}
-        options={{
-          headerTintColor: colors.MildScale[50],
-          headerTitle: "Pedido",
-          headerStyle: {
-            backgroundColor: colors.Primary,
-          },
-          headerRight: () => {
-            return (
-              <TouchableOpacity
-                onPress={() => navigation.navigate("ListaDeGrupo2")}
-              >
-                <More />
-              </TouchableOpacity>
-            );
-          },
-        }}
       />
       <Stack.Screen
         name="ListaDeGrupo2"
@@ -86,9 +67,29 @@ function AppRoutes() {
                     top: -10,
                   }}
                 >
-                  <Text weight="600">{cart?.length}</Text>
+                  <Text weight="600">{cartDot}</Text>
                 </View>
                 <Storefont />
+              </TouchableOpacity>
+            );
+          },
+        }}
+      />
+      <Stack.Screen
+        name="Cart"
+        component={Cart}
+        options={{
+          headerTintColor: colors.MildScale[50],
+          headerTitle: "Pedido",
+          headerStyle: {
+            backgroundColor: colors.Primary,
+          },
+          headerRight: () => {
+            return (
+              <TouchableOpacity
+                onPress={() => navigation.navigate("ListaDeGrupo2")}
+              >
+                <More />
               </TouchableOpacity>
             );
           },

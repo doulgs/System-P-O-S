@@ -4,6 +4,7 @@ import { IntItemCart } from "../Interface";
 interface CartContextProps {
   cart: IntItemCart[];
   AddItemCart: Function;
+  cartDot: number;
 }
 
 export const CartContext = createContext<CartContextProps>(
@@ -12,6 +13,7 @@ export const CartContext = createContext<CartContextProps>(
 
 export const CartProvaider = ({ children }: any) => {
   const [cart, setCart] = useState<IntItemCart[]>([]);
+  const [cartDot, setCartDot] = useState(0);
 
   const AddItemCart = (newItem: IntItemCart) => {
     const indexItem = cart.findIndex((item) => item.Handle === newItem.Handle);
@@ -23,8 +25,14 @@ export const CartProvaider = ({ children }: any) => {
       cartList[indexItem].Total =
         cartList[indexItem].Amount * cartList[indexItem].VendaValor;
 
+      const dotCartList: number = cartList.reduce(
+        (soma, objeto) => soma + objeto.Amount,
+        0
+      );
+
       setCart(cartList);
-      //console.log(cartList);
+      setCartDot(dotCartList);
+
       return;
     }
 
@@ -34,12 +42,17 @@ export const CartProvaider = ({ children }: any) => {
       Total: newItem.VendaValor,
     };
 
+    const dotCartList: number = cart.reduce(
+      (soma, objeto) => soma + objeto.Amount,
+      0
+    );
     setCart((itens) => [...itens, data]);
+    setCartDot(dotCartList);
     //console.log([...cart, data]);
   };
 
   return (
-    <CartContext.Provider value={{ cart, AddItemCart }}>
+    <CartContext.Provider value={{ cart, cartDot, AddItemCart }}>
       {children}
     </CartContext.Provider>
   );
