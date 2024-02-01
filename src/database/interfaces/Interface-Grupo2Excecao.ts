@@ -1,9 +1,12 @@
 import Realm from "realm";
+import { Grupo2 } from "./Interface-Grupo2";
+import { GrupoExcecao } from "./Interface-GrupoExcecao";
+import { Item } from "./Interface-Item";
 
 export interface Grupo2Excecao {
-  Grupo2?: any | null;
-  GrupoExcecao?: any | null;
-  Item?: any | null;
+  Grupo2?: Grupo2 | null;
+  GrupoExcecao?: GrupoExcecao | null;
+  Item?: Item | null;
   HandleGrupo2?: number;
   HandleItem?: number;
   HandleGrupoExcecao?: number;

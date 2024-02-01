@@ -1,11 +1,16 @@
 import Realm from "realm";
+import { Filial } from "./Interface-Filial";
+import { Grupo1 } from "./Interface-Grupo1";
+import { Grupo2 } from "./Interface-Grupo2";
+import { Grupo3 } from "./Interface-Grupo3";
+import { Unidade } from "./Interface-Unidade";
 
 export interface Item {
-  Filial?: any | null;
-  Grupo1?: any | null;
-  Grupo2?: any | null;
-  Grupo3?: any | null;
-  Unidade?: any | null;
+  Filial?: Filial | null;
+  Grupo1?: Grupo1 | null;
+  Grupo2?: Grupo2 | null;
+  Grupo3?: Grupo3 | null;
+  Unidade?: Unidade | null;
   HandleGrupo1?: number;
   HandleGrupo2?: number;
   HandleGrupo3?: number;

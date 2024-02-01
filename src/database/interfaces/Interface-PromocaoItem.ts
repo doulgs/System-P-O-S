@@ -1,7 +1,8 @@
 import Realm from "realm";
+import { Item } from "./Interface-Item";
 
 export interface PromocaoItem {
-  Item?: any | null;
+  Item?: Item | null;
   HandleItem?: number | null;
   DataInicio?: Date | null;
   DataFim?: Date | null;

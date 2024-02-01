@@ -1,8 +1,10 @@
 import Realm from "realm";
+import { Filial } from "./Interface-Filial";
+import { Tabela } from "./Interface-Tabela";
 
 export interface TipoPedido {
-  Filial?: any | null;
-  Tabela?: any | null;
+  Filial?: Filial | null;
+  Tabela?: Tabela | null;
   Descricao?: string | null;
   AcaoRepetirItem?: number | null;
   ReservaEstoque?: boolean | null;

@@ -1,8 +1,10 @@
 import Realm from "realm";
+import { Filial } from "./Interface-Filial";
+import { TipoPedido } from "./Interface-TipoPedido";
 
 export interface Usuario {
-  Filial?: any | null;
-  TipoPedido?: string | null;
+  Filial?: Filial | null;
+  TipoPedido?: TipoPedido | null;
   Login?: string | null;
   Senha?: string | null;
   Nome?: string | null;
