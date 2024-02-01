@@ -19,36 +19,35 @@ export const CartProvaider = ({ children }: any) => {
     const indexItem = cart.findIndex((item) => item.Handle === newItem.Handle);
 
     if (indexItem !== -1) {
-      let cartList = cart;
+      const updatedCart = [...cart];
+      const existingItem = updatedCart[indexItem];
 
-      cartList[indexItem].Amount = cartList[indexItem].Amount + 1;
-      cartList[indexItem].Total =
-        cartList[indexItem].Amount * cartList[indexItem].VendaValor;
+      existingItem.Amount += 1;
+      existingItem.Total = existingItem.Amount * existingItem.VendaValor;
 
-      const dotCartList: number = cartList.reduce(
+      const dotCartList = updatedCart.reduce(
         (soma, objeto) => soma + objeto.Amount,
         0
       );
 
-      setCart(cartList);
+      setCart(updatedCart);
       setCartDot(dotCartList);
 
       return;
     }
 
-    let data = {
-      ...newItem,
-      Amount: 1,
-      Total: newItem.VendaValor,
-    };
+    const updatedCart = [
+      ...cart,
+      { ...newItem, Amount: 1, Total: newItem.VendaValor },
+    ];
 
-    const dotCartList: number = cart.reduce(
+    const dotCartList = updatedCart.reduce(
       (soma, objeto) => soma + objeto.Amount,
       0
     );
-    setCart((itens) => [...itens, data]);
+
+    setCart(updatedCart);
     setCartDot(dotCartList);
-    //console.log([...cart, data]);
   };
 
   return (
