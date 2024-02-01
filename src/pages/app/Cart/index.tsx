@@ -11,12 +11,10 @@ import {
 } from "./styles";
 import { useCart } from "../../../context/cartContext";
 import { CardItem } from "../../../components/CartItem";
-import React, { useState } from "react";
-import { IntItemCart } from "../../../Interface";
-import { useFocusEffect } from "@react-navigation/native";
+import { Empty } from "../../../assets/icons/Empty";
 
 const Cart = () => {
-  const { cart, AddItemCart, RemoveItemCart } = useCart();
+  const { cart, AddItemCart, RemoveItemCart, cartTotal } = useCart();
 
   return (
     <>
@@ -27,7 +25,7 @@ const Cart = () => {
               Valor Total do Pedido
             </Text>
             <Text weight="700" size={20}>
-              {formatarParaMoeda(100)}
+              {formatarParaMoeda(cartTotal)}
             </Text>
           </ContainerTotal>
 
@@ -41,6 +39,7 @@ const Cart = () => {
                 removeAmount={() => RemoveItemCart(item)}
               />
             )}
+            //ListEmptyComponent={() => <Empty />}
           />
         </MenuContainer>
 

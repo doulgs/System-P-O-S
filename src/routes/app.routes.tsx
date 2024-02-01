@@ -47,30 +47,33 @@ function AppRoutes() {
           headerStyle: {
             backgroundColor: colors.Primary,
           },
+
           headerRight: ({}) => {
             return (
-              <TouchableOpacity
-                onPress={() => navigation.navigate("Cart")}
-                style={{ marginHorizontal: 8 }}
-              >
-                <View
-                  style={{
-                    alignItems: "center",
-                    justifyContent: "center",
-                    width: 20,
-                    height: 20,
-                    borderRadius: 20,
-                    backgroundColor: colors.MildScale[50],
-                    position: "absolute",
-                    zIndex: 99,
-                    right: -10,
-                    top: -10,
-                  }}
+              cart.length >= 1 && (
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("Cart")}
+                  style={{ marginHorizontal: 8 }}
                 >
-                  <Text weight="600">{cartDot}</Text>
-                </View>
-                <Storefont />
-              </TouchableOpacity>
+                  <View
+                    style={{
+                      alignItems: "center",
+                      justifyContent: "center",
+                      width: 20,
+                      height: 20,
+                      borderRadius: 20,
+                      backgroundColor: colors.MildScale[50],
+                      position: "absolute",
+                      zIndex: 99,
+                      right: -10,
+                      top: -10,
+                    }}
+                  >
+                    <Text weight="600">{cartDot}</Text>
+                  </View>
+                  <Storefont />
+                </TouchableOpacity>
+              )
             );
           },
         }}

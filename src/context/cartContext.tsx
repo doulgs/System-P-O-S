@@ -6,6 +6,7 @@ interface CartContextProps {
   AddItemCart: Function;
   RemoveItemCart: Function;
   cartDot: number;
+  cartTotal: number;
 }
 
 export const CartContext = createContext<CartContextProps>(
@@ -15,8 +16,9 @@ export const CartContext = createContext<CartContextProps>(
 export const CartProvaider = ({ children }: any) => {
   const [cart, setCart] = useState<IntItemCart[]>([]);
   const [cartDot, setCartDot] = useState(0);
+  const [cartTotal, setTotal] = useState(0);
 
-  const AddItemCart = (newItem: IntItemCart) => {
+  function AddItemCart(newItem: IntItemCart) {
     const indexItem = cart.findIndex((item) => item.Handle === newItem.Handle);
 
     if (indexItem !== -1) {
@@ -32,6 +34,7 @@ export const CartProvaider = ({ children }: any) => {
       );
 
       setCart(updatedCart);
+      ResultCart(updatedCart);
       setCartDot(dotCartList);
 
       return;
@@ -48,8 +51,9 @@ export const CartProvaider = ({ children }: any) => {
     );
 
     setCart(updatedCart);
+    ResultCart(updatedCart);
     setCartDot(dotCartList);
-  };
+  }
 
   function RemoveItemCart(itemCart: IntItemCart) {
     const indexItemRemove = cart.findIndex(
@@ -69,6 +73,7 @@ export const CartProvaider = ({ children }: any) => {
       );
 
       setCart(updatedCart);
+      ResultCart(updatedCart);
       setCartDot(dotCartList);
       return;
     }
@@ -80,12 +85,22 @@ export const CartProvaider = ({ children }: any) => {
     );
 
     setCart(updatedCart);
+    ResultCart(updatedCart);
     setCartDot(dotCartList);
+  }
+
+  function ResultCart(items: IntItemCart[]) {
+    let myCart = items;
+    const result = myCart.reduce((acc, objeto) => {
+      return acc + objeto.Total;
+    }, 0);
+
+    setTotal(result);
   }
 
   return (
     <CartContext.Provider
-      value={{ cart, cartDot, AddItemCart, RemoveItemCart }}
+      value={{ cart, cartDot, AddItemCart, RemoveItemCart, cartTotal }}
     >
       {children}
     </CartContext.Provider>
