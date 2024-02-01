@@ -1,8 +1,8 @@
 import { useState, useContext, createContext, useEffect } from "react";
-import { IntItem } from "../mocks/Item";
+import { IntItemCart } from "../Interface";
 
 interface CartContextProps {
-  cart: IntItem[];
+  cart: IntItemCart[];
   AddItemCart: Function;
 }
 
@@ -11,31 +11,31 @@ export const CartContext = createContext<CartContextProps>(
 );
 
 export const CartProvaider = ({ children }: any) => {
-  const [cart, setCart] = useState<IntItem[]>([]);
+  const [cart, setCart] = useState<IntItemCart[]>([]);
 
-  const AddItemCart = (newItem: IntItem) => {
+  const AddItemCart = (newItem: IntItemCart) => {
     const indexItem = cart.findIndex((item) => item.Handle === newItem.Handle);
 
     if (indexItem !== -1) {
       let cartList = cart;
-      cartList[indexItem].amount = cartList[indexItem].amount + 1;
 
-      cartList[indexItem].totel =
-        cartList[indexItem].amount * cartList[indexItem].VendaValor;
+      cartList[indexItem].Amount = cartList[indexItem].Amount + 1;
+      cartList[indexItem].Total =
+        cartList[indexItem].Amount * cartList[indexItem].VendaValor;
 
       setCart(cartList);
-      console.log(cartList);
+      //console.log(cartList);
       return;
     }
 
     let data = {
       ...newItem,
-      amount: 1,
-      totel: newItem.VendaValor,
+      Amount: 1,
+      Total: newItem.VendaValor,
     };
 
     setCart((itens) => [...itens, data]);
-    console.log([...cart, data]);
+    //console.log([...cart, data]);
   };
 
   return (

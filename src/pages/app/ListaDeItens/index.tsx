@@ -1,4 +1,4 @@
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { FlatList } from "react-native";
 
 import {
@@ -12,27 +12,43 @@ import {
 import { formatarParaMoeda } from "../../../helpers/utils/formatarParaMoeda";
 import { IntItem, Item } from "../../../mocks/Item";
 import { Text } from "../../../components/Text";
+import { useCart } from "../../../context/cartContext";
 
 type ScreenProps = {
   handle: number;
 };
 
 const ListaDeItens = () => {
+  const { AddItemCart } = useCart();
+  const navigation = useNavigation();
   const { handle } = useRoute().params as ScreenProps;
-  const renderizarProduto = ({ item: product }: { item: IntItem }) => {
-    const imageAPI = product?.FotoByte || null;
+
+  const handleAddItemToCart = (item: IntItem) => {
+    AddItemCart(item);
+  };
+
+  const renderizarProduto = ({ item }: { item: IntItem }) => {
+    const imageAPI = item?.FotoByte || null;
     const source = imageAPI
       ? { uri: `data:image/jpeg;base64,${imageAPI}` }
       : require("../../../assets/images/NoImage.jpg");
     return (
-      <Product>
+      <Product onPress={() => handleAddItemToCart(item)}>
         <Image source={source} />
 
         <ProductDetails>
-          <Text weight="600">{product.Descricao}</Text>
-          <Text color="#666">{product.DescLonga}</Text>
+          <Text
+            weight="600"
+            style={{ textTransform: "uppercase" }}
+            numberOfLines={1}
+          >
+            {item.Descricao}
+          </Text>
+          <Text color="#666" numberOfLines={2}>
+            {item.DescLonga}
+          </Text>
           <Text weight="600" size={14}>
-            {formatarParaMoeda(product.VendaValor)}
+            {formatarParaMoeda(item.VendaValor)}
           </Text>
         </ProductDetails>
 
