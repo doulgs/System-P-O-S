@@ -1,37 +1,51 @@
 import styled from "styled-components/native";
 
-export const Container = styled.View`
+export const Container = styled.KeyboardAvoidingView`
   flex: 1;
-  padding: 16px;
+  align-items: center;
   justify-content: center;
   background-color: ${(props) => props.theme.colors.Primary};
 `;
 
-export const ContentInput = styled.View`
-  border-color: #fff;
-  height: 45px;
-  border-bottom-width: 1px;
-  padding: 8px;
-  margin-bottom: 16px;
+export const ContainerImage = styled.View`
+  flex: 1;
+  justify-content: center;
 `;
 
-export const Input = styled.TextInput.attrs({
-  placeholderTextColor: "#fff",
-})`
+export const Image = styled.Image`
+  width: 250px;
+  height: 250px;
+`;
+
+export const ContainerInput = styled.View`
   flex: 1;
-  color: ${(props) => props.theme.colorBase.White};
+  align-items: center;
+
+  width: 90%;
+`;
+
+export const Input = styled.TextInput`
+  width: 90%;
+  height: 45px;
+  padding: 8px;
+  margin-bottom: 16px;
+  border-radius: 16px;
+  background-color: ${(props) => props.theme.colors.Background[50]};
+  color: ${(props) => props.theme.colors.Background[900]};
 `;
 
 export const Button = styled.TouchableOpacity`
+  background-color: ${(props) => props.theme.colors.Secondary};
+  width: 90%;
   height: 45px;
-  margin: 24px 0px;
-  border-radius: 8px;
+  padding: 8px;
+  margin-bottom: 16px;
+  border-radius: 16px;
   align-items: center;
   justify-content: center;
-  background-color: ${(props) => props.theme.colors.Secondary};
 `;
-export const ButtonText = styled.Text`
-  font-size: 24px;
-  font-weight: bold;
-  color: ${(props) => props.theme.colorBase.White};
+export const ButtonConfig = styled.TouchableOpacity``;
+
+export const ErrorContent = styled.View`
+  margin: 4px 0;
 `;
