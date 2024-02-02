@@ -11,7 +11,8 @@ import {
 } from "./styles";
 import { useCart } from "../../../context/cartContext";
 import { CardItem } from "../../../components/CartItem";
-import { Empty } from "../../../assets/icons/Empty";
+import { useState } from "react";
+import { ExcecoesModal } from "../../../components/Modal";
 
 const Cart = () => {
   const { cart, AddItemCart, RemoveItemCart, cartTotal } = useCart();
@@ -31,7 +32,7 @@ const Cart = () => {
 
           <FlatList
             data={cart}
-            keyExtractor={(item) => String(item.Handle)}
+            keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => (
               <CardItem
                 item={item}

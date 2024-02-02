@@ -13,7 +13,18 @@ export const ContentInfo = styled.View`
   margin-bottom: 8px;
 `;
 
-export const ContentAction = styled.View``;
+export const ContentAction = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+export const ActionQuantidade = styled.View`
+  flex-direction: row;
+  margin: 14px 8px;
+  align-items: center;
+  gap: 16px;
+`;
 
 export const Action = styled.View`
   flex-direction: row;
