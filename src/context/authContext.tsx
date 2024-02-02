@@ -1,15 +1,15 @@
+import Realm from "realm";
 import { getRealm } from "../infra/realm";
 import { useState, useContext, createContext, useEffect } from "react";
 //import NetInfo, { NetInfoState } from "@react-native-community/netinfo";
 import { cadastrarDispositivoDB } from "../helpers/functions/cadastrarDispositivoDB";
-import { criptografarParaMD5 } from "../helpers/utils/criptografarParaMD5";
-import { gerarHandle } from "../helpers/utils/gerarHandle";
 import {
   Usuario,
   UsuarioObject,
 } from "../database/interfaces/Interface-Usuario";
 import { Filial } from "../database/interfaces/Interface-Filial";
 import { Alert } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 interface AuthContextProps {
   user: UsuarioProp | null;
@@ -37,7 +37,7 @@ export const AuthProvaider = ({ children }: any) => {
   const [isConnectedInternet, setIsConnectedInternet] = useState<
     boolean | null
   >(null);
-
+  const { navigate } = useNavigation();
   const [user, setUser] = useState<UsuarioProp | null>(null);
   const [isLoading, setIsLoading] = useState<true | false>(false);
 
@@ -104,7 +104,7 @@ export const AuthProvaider = ({ children }: any) => {
         Alert.alert(
           "Informações",
           ` As informações da empresa ${filial.Nome} foram sincronizadas com sucesso`,
-          [{ text: "OK", onPress: () => console.log("OK Pressed") }]
+          [{ text: "OK", onPress: () => navigate("AcessarApp") }]
         );
       });
     } catch (error) {

@@ -42,8 +42,7 @@ const Home = () => {
     <>
       <Container>
         <ContainerHeader>
-          <Header />
-          <Button onPress={() => Sync()}>Sync</Button>
+          <Header realizarSync={() => Sync()} />
         </ContainerHeader>
 
         <MenuContainer>

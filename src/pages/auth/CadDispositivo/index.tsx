@@ -15,17 +15,20 @@ import { useAuth } from "../../../context/authContext";
 import { Keyboard } from "react-native";
 import { Text } from "../../../components/Text";
 import { Button } from "../../../components/Button";
+import { Loading } from "../../../components/Loading";
 
 const CadDispositivo: React.FC = () => {
   const { cadastrarDispositivo } = useAuth();
   const [chaveAtivacao, setChaveAtivacao] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [dispositivoInfo, setDispositivoInfo] =
     useState<InfoDispositivoProps | null>(null);
 
   async function handleSubmit() {
     Keyboard.dismiss();
+    setIsLoading(true);
     await cadastrarDispositivo(chaveAtivacao);
-    setChaveAtivacao("");
+    setIsLoading(false);
   }
 
   useEffect(() => {
@@ -44,6 +47,10 @@ const CadDispositivo: React.FC = () => {
 
     recuperarInfoDispositivo();
   }, []);
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <Container>

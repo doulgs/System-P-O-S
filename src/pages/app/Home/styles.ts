@@ -8,11 +8,7 @@ export const Container = styled.SafeAreaView`
   background-color: ${(props) => props.theme.colors.Background[100]};
   padding-top: ${isAndroid ? `${StatusBar.currentHeight}px` : "0"};
 `;
-export const ContainerHeader = styled.SafeAreaView`
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-`;
+export const ContainerHeader = styled.View``;
 
 export const MenuContainer = styled.View`
   flex: 1;
