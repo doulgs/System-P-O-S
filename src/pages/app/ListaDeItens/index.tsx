@@ -47,22 +47,18 @@ const ListaDeItens = () => {
             .objects<Item>("SchemaItem")
             .filtered(`HandleGrupo2 = '${handle}'`);
 
-          //realm.write(() => {
-          //  result.forEach(async (obj: Item) => {
-          //    const obterIteTabFor = realm
-          //      .objects<IteTabFor>("IteTabForSchema")
-          //      .filtered(`HandleItem = '${obj.Handle}'`);
-          //
-          //              const obterUnidade = realm
-          //                .objects<Unidade>("UnidadeSchema")
-          //               .filtered(`Handle = '${obj.HandleUnidade}'`);
-          //
-          //             const obterGrupo2 = realm
-          //               .objects<Grupo2>("Grupo2Schema")
-          //                .filtered(`Handle = '${obj.HandleGrupo2}'`);
-          //           });
-          //         });
+          realm.write(() => {
+            result.forEach(async (MyItem: Item) => {
+              const obterIteTabFor = realm
+                .objects<IteTabFor>("SchemaIteTabFor")
+                .filtered(`HandleItem = '${MyItem.Handle}'`);
 
+              // Adicione as propriedades desejadas ao objeto 'obj' dentro da transação
+              if (obterIteTabFor[0]?.Preco !== null) {
+                MyItem.VendaValor = obterIteTabFor[0]?.Preco;
+              }
+            });
+          });
           setItens(Array.from(result));
           setLoading(false);
         } catch (error) {
