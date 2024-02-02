@@ -13,6 +13,7 @@ import "intl/locale-data/jsonp/pt-BR";
 
 import { AuthProvaider } from "./src/context/authContext";
 import { CartProvaider } from "./src/context/cartContext";
+import { Loading } from "./src/components/Loading";
 
 export default function App() {
   const [isFontsLoaded] = useFonts({
@@ -22,7 +23,7 @@ export default function App() {
   });
 
   if (!isFontsLoaded) {
-    return null;
+    return <Loading />;
   }
 
   return (

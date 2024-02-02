@@ -25,8 +25,8 @@ interface AuthContextProps {
 interface UsuarioProp {
   Login: string | null | undefined;
   Senha: string | null | undefined;
-  NomeSite?: string | null | undefined;
-  NomeEmpresa?: string | null | undefined;
+  NomeSite: string | null | undefined;
+  NomeEmpresa: string | null | undefined;
 }
 
 export const AuthContext = createContext<AuthContextProps>(
@@ -112,35 +112,21 @@ export const AuthProvaider = ({ children }: any) => {
     }
   }
 
-  async function acessar(usuario: string, senha: string) {
+  async function acessar(login: string, senha: string) {
     const realm = await getRealm();
+    console.log(login, senha);
     try {
-      if (usuario && senha && usuario !== "" && senha !== "") {
-        const passwordCrypto = await criptografarParaMD5(senha);
-        const response = realm
-          .objects<Usuario[]>("SchemaUsuario")
-          .filtered(
-            `Login = '${usuario}'`,
-            `Password = '${passwordCrypto}'`
-          )[0];
-
-        if (response.length !== 0) {
-          //if (
-          //  passwordCrypto === response[0]?.Senha &&
-          //  usuario === response[0]?.Login
-          //) {
-          setUser({
-            Login: "TESTE",
-            Senha: "TESTE",
-          });
-          //setUser({
-          //  Login: response[0].Login,
-          //  Senha: response[0].Senha,
-          //  NomeSite: response[0].Filial?.NomeSite,
-          //  NomeEmpresa: response[0].Filial?.Nome,
-          //});
-          //}
-        }
+      const response = realm
+        .objects<Usuario>("SchemaUsuario")
+        .filtered(`Login = '${login}'`, `Senha = '${senha}'`)[0];
+      console.log(response);
+      if (response) {
+        setUser({
+          Login: response.Login,
+          Senha: response.Senha,
+          NomeSite: response.Filial?.NomeSite,
+          NomeEmpresa: response.Filial?.Nome,
+        });
       }
     } catch (error) {
       console.log("Erro fazer Login", error);

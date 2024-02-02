@@ -41,8 +41,8 @@ const AcessarApp = () => {
   const onSubmit = async (data: credenciaisProps) => {
     const senha = await criptografarParaMD5(data.senha);
     const login = data.login;
-    console.log(login, senha);
-    //acessar(login, senha);
+    await acessar(login, senha);
+    console.log("Fim");
   };
 
   return (
