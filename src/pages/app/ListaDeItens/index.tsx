@@ -1,36 +1,18 @@
-import {
-  useFocusEffect,
-  useNavigation,
-  useRoute,
-} from "@react-navigation/native";
-import { FlatList } from "react-native";
-
-import {
-  AddToCartButton,
-  AddToCartButtonStyle,
-  Image,
-  Product,
-  ProductDetails,
-  Separator,
-} from "./styles";
-import { formatarParaMoeda } from "../../../helpers/utils/formatarParaMoeda";
-import { Text } from "../../../components/Text";
-import { useCart } from "../../../context/cartContext";
+import { useFocusEffect, useRoute } from "@react-navigation/native";
+import { Separator } from "./styles";
 import { useCallback, useEffect, useState } from "react";
 import { getRealm } from "../../../infra/realm";
 import { Item } from "../../../database/interfaces/Interface-Item";
 import { IteTabFor } from "../../../database/interfaces/Interface-IteTabFor";
-import { Grupo2, Unidade } from "../../../Interface";
 import { Loading } from "../../../components/Loading";
 import { FlashList } from "@shopify/flash-list";
+import { ItemLayout } from "../../../components/ItemLayout";
 
 type ScreenProps = {
   handle: number;
 };
 
 const ListaDeItens = () => {
-  const { AddItemCart } = useCart();
-  const navigation = useNavigation();
   const { handle } = useRoute().params as ScreenProps;
 
   const [itens, setItens] = useState<Item[]>([]);
@@ -86,51 +68,15 @@ const ListaDeItens = () => {
     return <Loading />;
   }
 
-  const handleAddItemToCart = (item: Item) => {
-    AddItemCart(item);
-  };
-
-  const renderizarProduto = ({ item }: { item: Item }) => {
-    const imageAPI = item?.FotoByte || null;
-    const source = imageAPI
-      ? { uri: `data:image/jpeg;base64,${imageAPI}` }
-      : require("../../../assets/images/NoImage.jpg");
-    return (
-      <Product onPress={() => handleAddItemToCart(item)}>
-        <Image source={source} />
-
-        <ProductDetails>
-          <Text
-            weight="600"
-            style={{ textTransform: "uppercase" }}
-            numberOfLines={1}
-          >
-            {item.Descricao}
-          </Text>
-          <Text color="#666" numberOfLines={2}>
-            {item.DescLonga}
-          </Text>
-          <Text weight="600" size={14}>
-            {formatarParaMoeda(item?.VendaValor ?? 0)}
-          </Text>
-        </ProductDetails>
-
-        <AddToCartButton>
-          <AddToCartButtonStyle>
-            <Text weight="600">+</Text>
-          </AddToCartButtonStyle>
-        </AddToCartButton>
-      </Product>
-    );
-  };
   return (
     <FlashList
       data={itens}
       keyExtractor={(item) => String(item.Handle)}
-      renderItem={renderizarProduto}
+      renderItem={({ item }) => <ItemLayout data={item} />}
       contentContainerStyle={{ padding: 24 }}
       ItemSeparatorComponent={() => <Separator />}
       estimatedItemSize={200}
+      //TODO: Implementar a função de busca de itens
     />
   );
 };
