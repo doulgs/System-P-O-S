@@ -11,11 +11,15 @@ import {
 } from "./styles";
 import { useCart } from "../../../context/cartContext";
 import { CardItem } from "../../../components/CartItem";
-import { useState } from "react";
-import { ExcecoesModal } from "../../../components/Modal";
 
 const Cart = () => {
-  const { cart, AddItemCart, RemoveItemCart, cartTotal } = useCart();
+  const {
+    cart,
+    RetirarItemCart,
+    AddQuantidadeItem,
+    RetirarQuantidadeItem,
+    cartTotal,
+  } = useCart();
 
   return (
     <>
@@ -33,14 +37,14 @@ const Cart = () => {
           <FlatList
             data={cart}
             keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => (
+            renderItem={({ item, index }) => (
               <CardItem
                 item={item}
-                addAmount={() => AddItemCart(item)}
-                removeAmount={() => RemoveItemCart(item)}
+                removerItem={() => RetirarItemCart(index, item)}
+                AdicionarQuantidade={() => AddQuantidadeItem(index)}
+                RemoverQuantidade={() => RetirarQuantidadeItem(index)}
               />
             )}
-            //ListEmptyComponent={() => <Empty />}
           />
         </MenuContainer>
 

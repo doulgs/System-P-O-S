@@ -4,7 +4,9 @@ import { IntItemCart } from "../Interface";
 interface CartContextProps {
   cart: IntItemCart[];
   AddItemCart: Function;
-  RemoveItemCart: Function;
+  RetirarItemCart: Function;
+  AddQuantidadeItem: Function;
+  RetirarQuantidadeItem: Function;
   cartDot: number;
   cartTotal: number;
 }
@@ -28,48 +30,59 @@ export const CartProvaider = ({ children }: any) => {
       },
     ];
 
-    const dotCartList = updatedCart.reduce(
-      (soma, objeto) => soma + objeto.Amount,
-      0
-    );
+    setCart(updatedCart);
+    ResultCart(updatedCart);
+    ResultDotCart(updatedCart);
+  }
+
+  function RetirarItemCart(indexItem: number) {
+    const updatedCart = [...cart];
+    updatedCart.splice(indexItem, 1);
 
     setCart(updatedCart);
     ResultCart(updatedCart);
-    setCartDot(dotCartList);
+    ResultDotCart(updatedCart);
   }
 
-  function RemoveItemCart(itemCart: IntItemCart) {
-    const indexItemRemove = cart.findIndex(
-      (item) => item.Handle === itemCart.Handle
-    );
+  function AddQuantidadeItem(indexItem: number) {
+    const indiceProcurado = indexItem;
 
-    if (cart[indexItemRemove]?.Amount > 1) {
+    if (indiceProcurado >= 0 && indiceProcurado < cart.length) {
       const updatedCart = [...cart];
-      const removedItem = updatedCart[indexItemRemove];
+      const itemEncontrado = updatedCart[indiceProcurado];
 
-      removedItem.Amount -= 1;
-      removedItem.Total = removedItem.Total - removedItem.VendaValor;
-
-      const dotCartList = updatedCart.reduce(
-        (soma, objeto) => soma + objeto.Amount,
-        0
-      );
+      itemEncontrado.Amount += 1;
+      itemEncontrado.Total = itemEncontrado.Amount * itemEncontrado.VendaValor;
 
       setCart(updatedCart);
       ResultCart(updatedCart);
-      setCartDot(dotCartList);
-      return;
+      ResultDotCart(updatedCart);
+    } else {
+      console.log("Índice fora dos limites do array.");
     }
+  }
 
-    const updatedCart = cart.filter((item) => item.Handle !== itemCart.Handle);
-    const dotCartList = updatedCart.reduce(
-      (soma, objeto) => soma + objeto.Amount,
-      0
-    );
+  function RetirarQuantidadeItem(indexItem: number) {
+    const indiceProcurado = indexItem;
 
-    setCart(updatedCart);
-    ResultCart(updatedCart);
-    setCartDot(dotCartList);
+    if (indiceProcurado >= 0 && indiceProcurado < cart.length) {
+      const updatedCart = [...cart];
+      const itemEncontrado = updatedCart[indiceProcurado];
+
+      if (itemEncontrado.Amount > 1) {
+        itemEncontrado.Amount -= 1;
+        itemEncontrado.Total =
+          itemEncontrado.Amount * itemEncontrado.VendaValor;
+      } else {
+        // Se a quantidade for 1 ou menos, não fazer nada
+      }
+
+      setCart(updatedCart);
+      ResultCart(updatedCart);
+      ResultDotCart(updatedCart);
+    } else {
+      console.log("Índice fora dos limites do array.");
+    }
   }
 
   function ResultCart(items: IntItemCart[]) {
@@ -81,9 +94,25 @@ export const CartProvaider = ({ children }: any) => {
     setTotal(result);
   }
 
+  function ResultDotCart(carrinho: IntItemCart[]) {
+    const dotCartList = carrinho.reduce(
+      (soma, objeto) => soma + objeto.Amount,
+      0
+    );
+    setCartDot(dotCartList);
+  }
+
   return (
     <CartContext.Provider
-      value={{ cart, cartDot, AddItemCart, RemoveItemCart, cartTotal }}
+      value={{
+        cart,
+        cartDot,
+        AddItemCart,
+        RetirarItemCart,
+        AddQuantidadeItem,
+        RetirarQuantidadeItem,
+        cartTotal,
+      }}
     >
       {children}
     </CartContext.Provider>

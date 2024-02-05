@@ -114,12 +114,12 @@ export const AuthProvaider = ({ children }: any) => {
 
   async function acessar(login: string, senha: string) {
     const realm = await getRealm();
-    console.log(login, senha);
+    //console.log(login, senha);
     try {
       const response = realm
         .objects<Usuario>("SchemaUsuario")
         .filtered(`Login = '${login}'`, `Senha = '${senha}'`)[0];
-      console.log(response);
+      //console.log(response);
       if (response) {
         setUser({
           Login: response.Login,

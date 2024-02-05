@@ -42,7 +42,7 @@ const AcessarApp = () => {
     const senha = await criptografarParaMD5(data.senha);
     const login = data.login;
     await acessar(login, senha);
-    console.log("Fim");
+    //console.log("Fim");
   };
 
   return (

@@ -15,26 +15,33 @@ import { ExcecoesModal } from "../Modal";
 
 interface CardItemProps {
   item: IntItemCart;
-  addAmount: Function;
-  removeAmount: Function;
+  removerItem: Function;
+  AdicionarQuantidade: Function;
+  RemoverQuantidade: Function;
 }
 
-export const CardItem = ({ item, addAmount, removeAmount }: CardItemProps) => {
+export const CardItem = ({
+  item,
+  removerItem,
+  AdicionarQuantidade,
+  RemoverQuantidade,
+}: CardItemProps) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [amount, setAmount] = useState(item?.Amount);
 
-  function adicionarQuantidade() {
-    addAmount();
-    setAmount(amount + 1);
+  function RetirarItemDoCarrinho() {
+    removerItem();
   }
-
-  function removerQuantidade() {
-    removeAmount();
-    if (amount === 0) {
-      setAmount(0);
+  function AdicionarQuantidadeItemExistente() {
+    setAmount(amount + 1);
+    AdicionarQuantidade();
+  }
+  function RetirarQuantidadeItemExistente() {
+    if (amount !== 1) {
+      setAmount(amount - 1);
+      RemoverQuantidade();
       return;
     }
-    setAmount(amount - 1);
   }
 
   return (
@@ -47,13 +54,13 @@ export const CardItem = ({ item, addAmount, removeAmount }: CardItemProps) => {
 
         <ContentAction>
           <ActionQuantidade>
-            <Button onPress={removerQuantidade}>
+            <Button onPress={() => RetirarQuantidadeItemExistente()}>
               <Text color="#fff" weight="600">
                 -
               </Text>
             </Button>
             <Text weight="700">{amount}</Text>
-            <Button onPress={adicionarQuantidade}>
+            <Button onPress={() => AdicionarQuantidadeItemExistente()}>
               <Text color="#fff" weight="600">
                 +
               </Text>
@@ -67,7 +74,7 @@ export const CardItem = ({ item, addAmount, removeAmount }: CardItemProps) => {
               </Text>
             </Button>
             <Button
-              onPress={() => setModalVisible(!modalVisible)}
+              onPress={() => RetirarItemDoCarrinho()}
               style={{ backgroundColor: "red" }}
             >
               <IconTrash />
