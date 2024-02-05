@@ -1,9 +1,10 @@
 import Realm from "realm";
+import { Tabela } from "./Interface-Tabela";
 
 export interface Filial {
   franquia?: string;
   GrupoFilial?: string;
-  Tabela?: string;
+  Tabela?: Tabela | null;
   HandleGrupoFilial?: string;
   Nome: string;
   Razao?: string;
@@ -42,7 +43,7 @@ export interface Filial {
   ConfigPrecoPizza?: string;
   PossuiIntegracao?: boolean;
   TipoAtendimento?: number;
-  HandleTabela?: string;
+  HandleTabela?: number;
   Preco?: number;
   PossuiValidacaoEndereco?: boolean;
   ImagemPadraoPizza?: string;
@@ -59,7 +60,7 @@ export interface Filial {
   LimiteRetirada?: number;
   IntervaloAgendamento?: number;
   UtilizaHorarioAgendamento?: boolean;
-  HandleFranquia?: string;
+  HandleFranquia?: number;
   GatewayPagamento?: string;
   ChavePublica?: string;
   ChaveSecreta?: string;
@@ -70,11 +71,11 @@ export interface Filial {
   PermiteDigitacaoPreco?: boolean;
   QuantidadeInteira?: number;
   DiasPrevisaoEntrega?: number;
-  QtdAparelhosLiberadosPubliVendas?: string;
+  QtdAparelhosLiberadosPubliVendas?: number;
   ChaveApps?: string;
   Tabelas?: string;
   Handle: number;
-  HandleFilial?: string;
+  HandleFilial?: number;
   HandleTrade?: number;
   Plataforma?: number;
 }
