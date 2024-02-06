@@ -1,8 +1,9 @@
 import { useState, useContext, createContext, useEffect } from "react";
 import { IntItemCart } from "../Interface";
+import { Item } from "../database/interfaces/Interface-Item";
 
 interface CartContextProps {
-  cart: IntItemCart[];
+  cart: Item[];
   AddItemCart: Function;
   RetirarItemCart: Function;
   AddQuantidadeItem: Function;
@@ -16,11 +17,11 @@ export const CartContext = createContext<CartContextProps>(
 );
 
 export const CartProvaider = ({ children }: any) => {
-  const [cart, setCart] = useState<IntItemCart[]>([]);
+  const [cart, setCart] = useState<Item[]>([]);
   const [cartDot, setCartDot] = useState(0);
   const [cartTotal, setTotal] = useState(0);
 
-  function AddItemCart(newItem: IntItemCart) {
+  function AddItemCart(newItem: Item) {
     const updatedCart = [
       ...cart,
       {
@@ -85,18 +86,18 @@ export const CartProvaider = ({ children }: any) => {
     }
   }
 
-  function ResultCart(items: IntItemCart[]) {
+  function ResultCart(items: Item[]) {
     let myCart = items;
     const result = myCart.reduce((acc, objeto) => {
-      return acc + objeto.Total;
+      return acc + (objeto.Total ?? 0);
     }, 0);
 
     setTotal(result);
   }
 
-  function ResultDotCart(carrinho: IntItemCart[]) {
+  function ResultDotCart(carrinho: Item[]) {
     const dotCartList = carrinho.reduce(
-      (soma, objeto) => soma + objeto.Amount,
+      (soma, objeto) => soma + (objeto.Amount ?? 0),
       0
     );
     setCartDot(dotCartList);

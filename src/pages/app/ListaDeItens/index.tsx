@@ -1,5 +1,5 @@
 import { useFocusEffect, useRoute } from "@react-navigation/native";
-import { Separator } from "./styles";
+import { Footer, FooterContainer, Separator } from "./styles";
 import { useCallback, useEffect, useState } from "react";
 import { getRealm } from "../../../infra/realm";
 import { Item } from "../../../database/interfaces/Interface-Item";
@@ -8,6 +8,8 @@ import { Loading } from "../../../components/Loading";
 import { FlashList } from "@shopify/flash-list";
 import { ItemLayout } from "../../../components/ItemLayout";
 import { Grupo2Excecao } from "../../../database/interfaces/Interface-Grupo2Excecao";
+import { Button } from "../../../components/Button";
+import { Carrinho } from "../../../components/Carrinho";
 
 type ScreenProps = {
   handle: number;
@@ -77,15 +79,22 @@ const ListaDeItens = () => {
   }
 
   return (
-    <FlashList
-      data={itens}
-      keyExtractor={(item) => String(item.Handle)}
-      renderItem={({ item }) => <ItemLayout data={item} />}
-      contentContainerStyle={{ padding: 24 }}
-      ItemSeparatorComponent={() => <Separator />}
-      estimatedItemSize={200}
-      //TODO: Implementar a função de busca de itens
-    />
+    <>
+      <FlashList
+        data={itens}
+        keyExtractor={(item) => String(item.Handle)}
+        renderItem={({ item }) => <ItemLayout data={item} />}
+        contentContainerStyle={{ padding: 24 }}
+        ItemSeparatorComponent={() => <Separator />}
+        estimatedItemSize={200}
+        //TODO: Implementar a função de busca de itens
+      />
+      <Footer>
+        <FooterContainer>
+          <Carrinho />
+        </FooterContainer>
+      </Footer>
+    </>
   );
 };
 
