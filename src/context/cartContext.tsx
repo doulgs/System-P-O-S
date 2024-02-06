@@ -47,13 +47,18 @@ export const CartProvaider = ({ children }: any) => {
 
   function AddQuantidadeItem(indexItem: number) {
     const indiceProcurado = indexItem;
-
     if (indiceProcurado >= 0 && indiceProcurado < cart.length) {
       const updatedCart = [...cart];
       const itemEncontrado = updatedCart[indiceProcurado];
 
-      itemEncontrado.Amount += 1;
-      itemEncontrado.Total = itemEncontrado.Amount * itemEncontrado.VendaValor;
+      if (
+        itemEncontrado.Amount !== undefined &&
+        itemEncontrado.VendaValor !== undefined
+      ) {
+        itemEncontrado.Amount += 1;
+        itemEncontrado.Total =
+          itemEncontrado.Amount * itemEncontrado.VendaValor;
+      }
 
       setCart(updatedCart);
       ResultCart(updatedCart);
@@ -70,10 +75,14 @@ export const CartProvaider = ({ children }: any) => {
       const updatedCart = [...cart];
       const itemEncontrado = updatedCart[indiceProcurado];
 
-      if (itemEncontrado.Amount > 1) {
+      if (
+        itemEncontrado &&
+        itemEncontrado.Amount &&
+        itemEncontrado.Amount > 1
+      ) {
         itemEncontrado.Amount -= 1;
         itemEncontrado.Total =
-          itemEncontrado.Amount * itemEncontrado.VendaValor;
+          itemEncontrado.Amount * (itemEncontrado.VendaValor ?? 0);
       } else {
         // Se a quantidade for 1 ou menos, não fazer nada
       }
