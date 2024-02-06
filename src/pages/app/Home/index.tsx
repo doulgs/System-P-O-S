@@ -20,6 +20,7 @@ const Home = () => {
 
   async function Sync() {
     setisLoading(true);
+    console.log("Inicio do Sync");
     await realizarSync("SchemaFilial", "Filial");
     await realizarSync("SchemaFormula", "Formula");
     await realizarSync("SchemaGrupo1", "Grupo1");
@@ -31,6 +32,7 @@ const Home = () => {
     await realizarSync("SchemaIteTabFor", "IteTabFor");
     await realizarSync("SchemaTabela", "Tabela");
     await realizarSync("SchemaUnidade", "Unidade");
+    console.log("Fim do Sync");
     setisLoading(false);
   }
 

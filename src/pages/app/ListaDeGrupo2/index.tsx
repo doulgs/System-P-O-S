@@ -59,7 +59,7 @@ const ListaDeGrupo2 = () => {
           data={grupo2}
           keyExtractor={(grupo2) => String(grupo2.Handle)}
           renderItem={renderizarGrupo2}
-          contentContainerStyle={{ flex: 1, alignItems: "center" }}
+          contentContainerStyle={{ alignItems: "center" }}
           numColumns={3}
         />
       </Container>

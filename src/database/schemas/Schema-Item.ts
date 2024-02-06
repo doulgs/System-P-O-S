@@ -41,9 +41,8 @@ export const SchemaItem: ObjectSchema = {
     Amount: { type: "int", optional: true }, //Utilizada para controle do Item fica em branco no sincronismo
     Total: { type: "double", optional: true }, //Utilizada para controle do Item fica em branco no sincronismo
     Excecoes: {
-      type: "object",
+      type: "list",
       objectType: "SchemaGrupo2Excecao",
-      optional: true,
     }, //Utilizada para controle do Item fica em branco no sincronismo
   },
 };

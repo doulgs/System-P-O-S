@@ -43,7 +43,7 @@ export interface Item {
   Plataforma?: number;
   Amount?: number;
   Total?: number;
-  Excecoes?: Grupo2Excecao[] | null;
+  Excecoes: Grupo2Excecao[];
 }
 
 export type ItemObject = Item & Realm.Object;

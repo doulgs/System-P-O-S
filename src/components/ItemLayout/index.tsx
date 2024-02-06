@@ -30,32 +30,12 @@ export const ItemLayout: React.FC<Props> = ({ data: item }) => {
 
   const adicionarItemCart = async (item: ItemProps) => {
     setModalVisible(true);
-
-    const realm = await getRealm();
-    try {
-      const result = realm
-        .objects<Grupo2Excecao>("SchemaGrupo2Excecao")
-        .filtered(
-          `HandleItem = '${item.Handle}' OR HandleGrupo2 = '${item.HandleGrupo2}'`
-        );
-      console.log(result);
-      setListaExcecao(Array.from(result));
-    } catch (error) {
-      console.error("Error fetching SchemaItem objects:", error);
-    }
-
-    //await AddItemCart(item);
+    await AddItemCart(item);
   };
 
   const adicionarDiretoItemCart = async (item: ItemProps) => {
     await AddItemCart(item);
   };
-
-  useEffect(() => {
-    const recuperarExcecao = async () => {};
-
-    recuperarExcecao();
-  }, []);
 
   return (
     <>

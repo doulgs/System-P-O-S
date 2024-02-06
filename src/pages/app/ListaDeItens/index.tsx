@@ -8,7 +8,6 @@ import { Loading } from "../../../components/Loading";
 import { FlashList } from "@shopify/flash-list";
 import { ItemLayout } from "../../../components/ItemLayout";
 import { Grupo2Excecao } from "../../../database/interfaces/Interface-Grupo2Excecao";
-import { ItemExcecaoAuto } from "../../../database/interfaces/Interface-ItemExcecaoAuto";
 
 type ScreenProps = {
   handle: number;
@@ -30,19 +29,26 @@ const ListaDeItens = () => {
           const result = realm
             .objects<Item>("SchemaItem")
             .filtered(`HandleGrupo2 = '${handle}'`);
-
           realm.write(() => {
             result.forEach(async (MyItem: Item) => {
               const obterIteTabFor = realm
                 .objects<IteTabFor>("SchemaIteTabFor")
                 .filtered(`HandleItem = '${MyItem.Handle}'`);
 
-              // Adicione as propriedades desejadas ao objeto 'obj' dentro da transação
               if (obterIteTabFor[0]?.Preco !== null) {
                 MyItem.VendaValor = obterIteTabFor[0]?.Preco;
               }
+
+              const execoesDoItem = realm
+                .objects<Grupo2Excecao>("SchemaGrupo2Excecao")
+                .filtered(
+                  `HandleItem = '${MyItem.Handle}' OR HandleGrupo2 = '${MyItem.HandleGrupo2}'`
+                );
+
+              MyItem.Excecoes = Array.from(execoesDoItem);
             });
           });
+
           setItens(Array.from(result));
           setLoading(false);
         } catch (error) {
