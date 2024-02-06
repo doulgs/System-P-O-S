@@ -84,6 +84,7 @@ export const CardItem = ({
       </Container>
 
       <ExcecoesModal
+        data={[]}
         visible={modalVisible}
         onClose={() => setModalVisible(!modalVisible)}
       />

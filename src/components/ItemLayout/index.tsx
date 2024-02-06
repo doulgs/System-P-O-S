@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useCart } from "../../context/cartContext";
 import { Item as ItemProps } from "../../database/interfaces/Interface-Item";
 import { formatarParaMoeda } from "../../helpers/utils/formatarParaMoeda";
@@ -11,32 +11,55 @@ import {
   ProductDetails,
 } from "./styles";
 import { ExcecoesModal } from "../Modal";
+import { getRealm } from "../../infra/realm";
+import { Grupo2Excecao } from "../../database/interfaces/Interface-Grupo2Excecao";
 
 interface Props {
   data: ItemProps;
 }
 
-export const ItemLayout: React.FC<Props> = ({ data }) => {
+export const ItemLayout: React.FC<Props> = ({ data: item }) => {
   const { AddItemCart } = useCart();
   const [modalVisible, setModalVisible] = useState(false);
+  const [listaExcecao, setListaExcecao] = useState<Grupo2Excecao[]>([]);
 
-  const imageAPI = data?.FotoByte || null;
+  const imageAPI = item?.FotoByte || null;
   const source = imageAPI
     ? { uri: `data:image/jpeg;base64,${imageAPI}` }
     : require("../../assets/images/NoImage.jpg");
 
   const adicionarItemCart = async (item: ItemProps) => {
     setModalVisible(true);
-    await AddItemCart(item);
+
+    const realm = await getRealm();
+    try {
+      const result = realm
+        .objects<Grupo2Excecao>("SchemaGrupo2Excecao")
+        .filtered(
+          `HandleItem = '${item.Handle}' OR HandleGrupo2 = '${item.HandleGrupo2}'`
+        );
+      console.log(result);
+      setListaExcecao(Array.from(result));
+    } catch (error) {
+      console.error("Error fetching SchemaItem objects:", error);
+    }
+
+    //await AddItemCart(item);
   };
 
   const adicionarDiretoItemCart = async (item: ItemProps) => {
     await AddItemCart(item);
   };
 
+  useEffect(() => {
+    const recuperarExcecao = async () => {};
+
+    recuperarExcecao();
+  }, []);
+
   return (
     <>
-      <Product onPress={() => adicionarItemCart(data)}>
+      <Product onPress={() => adicionarItemCart(item)}>
         <Image source={source} />
 
         <ProductDetails>
@@ -45,18 +68,18 @@ export const ItemLayout: React.FC<Props> = ({ data }) => {
             style={{ textTransform: "uppercase" }}
             numberOfLines={1}
           >
-            {data.Descricao}
+            {item.Descricao}
           </Text>
           <Text color="#666" numberOfLines={2}>
-            {data.DescLonga}
+            {item.DescLonga}
           </Text>
           <Text weight="600" size={14}>
-            {formatarParaMoeda(data?.VendaValor ?? 0)}
+            {formatarParaMoeda(item?.VendaValor ?? 0)}
           </Text>
         </ProductDetails>
 
         <AddToCartButton>
-          <AddToCartButtonStyle onPress={() => adicionarDiretoItemCart(data)}>
+          <AddToCartButtonStyle onPress={() => adicionarDiretoItemCart(item)}>
             <Text weight="600">+</Text>
           </AddToCartButtonStyle>
         </AddToCartButton>
@@ -65,6 +88,7 @@ export const ItemLayout: React.FC<Props> = ({ data }) => {
       <ExcecoesModal
         visible={modalVisible}
         onClose={() => setModalVisible(!modalVisible)}
+        data={listaExcecao}
       />
     </>
   );

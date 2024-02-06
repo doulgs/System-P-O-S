@@ -7,6 +7,8 @@ import { IteTabFor } from "../../../database/interfaces/Interface-IteTabFor";
 import { Loading } from "../../../components/Loading";
 import { FlashList } from "@shopify/flash-list";
 import { ItemLayout } from "../../../components/ItemLayout";
+import { Grupo2Excecao } from "../../../database/interfaces/Interface-Grupo2Excecao";
+import { ItemExcecaoAuto } from "../../../database/interfaces/Interface-ItemExcecaoAuto";
 
 type ScreenProps = {
   handle: number;
