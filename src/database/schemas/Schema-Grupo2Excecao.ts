@@ -29,5 +29,6 @@ export const SchemaGrupo2Excecao: ObjectSchema = {
     HandleFilial: { type: "int", optional: true },
     HandleTrade: { type: "int", optional: true },
     Plataforma: { type: "int", optional: true },
+    Amount: { type: "int", optional: true }, //Utilizada para controle do Item fica em branco no sincronismo
   },
 };

@@ -38,7 +38,12 @@ export const SchemaItem: ObjectSchema = {
     HandleFilial: { type: "int", optional: true },
     HandleTrade: { type: "int", optional: true },
     Plataforma: { type: "int", optional: true },
-    Amount: { type: "int", optional: true },
-    Total: { type: "double", optional: true },
+    Amount: { type: "int", optional: true }, //Utilizada para controle do Item fica em branco no sincronismo
+    Total: { type: "double", optional: true }, //Utilizada para controle do Item fica em branco no sincronismo
+    Excecoes: {
+      type: "object",
+      objectType: "SchemaGrupo2Excecao",
+      optional: true,
+    }, //Utilizada para controle do Item fica em branco no sincronismo
   },
 };

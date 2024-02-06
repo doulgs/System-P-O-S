@@ -4,6 +4,7 @@ import { Grupo1 } from "./Interface-Grupo1";
 import { Grupo2 } from "./Interface-Grupo2";
 import { Grupo3 } from "./Interface-Grupo3";
 import { Unidade } from "./Interface-Unidade";
+import { Grupo2Excecao } from "./Interface-Grupo2Excecao";
 
 export interface Item {
   Filial?: Filial | null;
@@ -42,6 +43,7 @@ export interface Item {
   Plataforma?: number;
   Amount?: number;
   Total?: number;
+  Excecoes?: Grupo2Excecao[] | null;
 }
 
 export type ItemObject = Item & Realm.Object;
