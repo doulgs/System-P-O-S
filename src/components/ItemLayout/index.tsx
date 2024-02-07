@@ -29,7 +29,7 @@ export const ItemLayout: React.FC<Props> = ({ data: item }) => {
     : require("../../assets/images/NoImage.jpg");
 
   const adicionarItemCart = async (item: ItemProps) => {
-    setModalVisible(true);
+    //setModalVisible(true);
     await AddItemCart(item);
   };
 

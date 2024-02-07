@@ -1,5 +1,4 @@
-import { useState, useContext, createContext, useEffect } from "react";
-import { IntItemCart } from "../Interface";
+import { useState, useContext, createContext } from "react";
 import { Item } from "../database/interfaces/Interface-Item";
 
 interface CartContextProps {

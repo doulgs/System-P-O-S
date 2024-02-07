@@ -1,4 +1,6 @@
 import { FlatList } from "react-native";
+import { useCart } from "../../../context/cartContext";
+import { CardItem } from "../../../components/CartItem";
 import { Button } from "../../../components/Button";
 import { Text } from "../../../components/Text";
 import { formatarParaMoeda } from "../../../helpers/utils/formatarParaMoeda";
@@ -9,17 +11,9 @@ import {
   FooterContainer,
   MenuContainer,
 } from "./styles";
-import { useCart } from "../../../context/cartContext";
-import { CardItem } from "../../../components/CartItem";
 
 const Cart = () => {
-  const {
-    cart,
-    RetirarItemCart,
-    AddQuantidadeItem,
-    RetirarQuantidadeItem,
-    cartTotal,
-  } = useCart();
+  const { cart, cartTotal } = useCart();
 
   return (
     <>
@@ -36,14 +30,9 @@ const Cart = () => {
 
           <FlatList
             data={cart}
-            keyExtractor={(item, index) => index.toString()}
+            keyExtractor={(index) => index.toString()}
             renderItem={({ item, index }) => (
-              <CardItem
-                item={item}
-                removerItem={() => RetirarItemCart(index, item)}
-                AdicionarQuantidade={() => AddQuantidadeItem(index)}
-                RemoverQuantidade={() => RetirarQuantidadeItem(index)}
-              />
+              <CardItem item={item} index={index} />
             )}
           />
         </MenuContainer>

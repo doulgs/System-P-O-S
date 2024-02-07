@@ -10,6 +10,7 @@ import { ItemLayout } from "../../../components/ItemLayout";
 import { Grupo2Excecao } from "../../../database/interfaces/Interface-Grupo2Excecao";
 import { Button } from "../../../components/Button";
 import { Carrinho } from "../../../components/Carrinho";
+import { useCart } from "../../../context/cartContext";
 
 type ScreenProps = {
   handle: number;
@@ -17,7 +18,7 @@ type ScreenProps = {
 
 const ListaDeItens = () => {
   const { handle } = useRoute().params as ScreenProps;
-
+  const { cart } = useCart();
   const [itens, setItens] = useState<Item[]>([]);
   const [buscarItens, setBuscarItens] = useState("");
   const [resultadosBusca, setResultadosBusca] = useState<Item[]>([]);
@@ -89,11 +90,13 @@ const ListaDeItens = () => {
         estimatedItemSize={200}
         //TODO: Implementar a função de busca de itens
       />
-      <Footer>
-        <FooterContainer>
-          <Carrinho />
-        </FooterContainer>
-      </Footer>
+      {cart.length > 0 && (
+        <Footer>
+          <FooterContainer>
+            <Carrinho />
+          </FooterContainer>
+        </Footer>
+      )}
     </>
   );
 };

@@ -51,10 +51,7 @@ function AppRoutes() {
           headerRight: ({}) => {
             return (
               cart.length >= 1 && (
-                <TouchableOpacity
-                  onPress={() => navigation.navigate("Cart")}
-                  style={{ marginHorizontal: 8 }}
-                >
+                <View style={{ marginHorizontal: 8 }}>
                   <View
                     style={{
                       alignItems: "center",
@@ -72,7 +69,7 @@ function AppRoutes() {
                     <Text weight="600">{cartDot}</Text>
                   </View>
                   <Storefont />
-                </TouchableOpacity>
+                </View>
               )
             );
           },

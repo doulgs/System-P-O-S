@@ -1,6 +1,10 @@
 import React, { useState } from "react";
-import { IntItemCart } from "../../Interface";
+import { useCart } from "../../context/cartContext";
+import { formatarParaMoeda } from "../../helpers/utils/formatarParaMoeda";
 import { Text } from "../Text";
+import { Item } from "../../database/interfaces/Interface-Item";
+import { ExcecoesModal } from "../Modal";
+import { IconTrash } from "../../assets/icons/Icon-Trash";
 import {
   Container,
   ContentInfo,
@@ -9,39 +13,26 @@ import {
   Action,
   ActionQuantidade,
 } from "./styles";
-import { formatarParaMoeda } from "../../helpers/utils/formatarParaMoeda";
-import { IconTrash } from "../../assets/icons/Icon-Trash";
-import { ExcecoesModal } from "../Modal";
 
 interface CardItemProps {
-  item: IntItemCart;
-  removerItem: Function;
-  AdicionarQuantidade: Function;
-  RemoverQuantidade: Function;
+  item: Item;
+  index: number;
 }
 
-export const CardItem = ({
-  item,
-  removerItem,
-  AdicionarQuantidade,
-  RemoverQuantidade,
-}: CardItemProps) => {
+export const CardItem = ({ item, index }: CardItemProps) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [amount, setAmount] = useState(item?.Amount);
+  const { AddQuantidadeItem, RetirarItemCart, RetirarQuantidadeItem } =
+    useCart();
 
-  function RetirarItemDoCarrinho() {
-    removerItem();
-  }
   function AdicionarQuantidadeItemExistente() {
-    setAmount(amount + 1);
-    AdicionarQuantidade();
+    AddQuantidadeItem(index);
   }
   function RetirarQuantidadeItemExistente() {
-    if (amount !== 1) {
-      setAmount(amount - 1);
-      RemoverQuantidade();
+    if (item.Amount === 1) {
+      RetirarItemCart();
       return;
     }
+    RetirarQuantidadeItem(index);
   }
 
   return (
@@ -49,7 +40,7 @@ export const CardItem = ({
       <Container>
         <ContentInfo>
           <Text>{item?.Descricao}</Text>
-          <Text weight="600">{formatarParaMoeda(item?.VendaValor)}</Text>
+          <Text weight="600">{formatarParaMoeda(item?.VendaValor ?? 0)}</Text>
         </ContentInfo>
 
         <ContentAction>
@@ -59,7 +50,7 @@ export const CardItem = ({
                 -
               </Text>
             </Button>
-            <Text weight="700">{amount}</Text>
+            <Text weight="700">{item?.Amount}</Text>
             <Button onPress={() => AdicionarQuantidadeItemExistente()}>
               <Text color="#fff" weight="600">
                 +
@@ -74,7 +65,7 @@ export const CardItem = ({
               </Text>
             </Button>
             <Button
-              onPress={() => RetirarItemDoCarrinho()}
+              onPress={() => RetirarItemCart()}
               style={{ backgroundColor: "red" }}
             >
               <IconTrash />
@@ -84,7 +75,7 @@ export const CardItem = ({
       </Container>
 
       <ExcecoesModal
-        data={[]}
+        data={item.Excecoes}
         visible={modalVisible}
         onClose={() => setModalVisible(!modalVisible)}
       />
