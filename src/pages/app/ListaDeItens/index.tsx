@@ -18,7 +18,7 @@ type ScreenProps = {
 
 const ListaDeItens = () => {
   const { handle } = useRoute().params as ScreenProps;
-  const { cart } = useCart();
+  const { cart, LimparCarrinho } = useCart();
   const [itens, setItens] = useState<Item[]>([]);
   const [buscarItens, setBuscarItens] = useState("");
   const [resultadosBusca, setResultadosBusca] = useState<Item[]>([]);
@@ -61,6 +61,7 @@ const ListaDeItens = () => {
       };
 
       recuperarItens();
+      LimparCarrinho();
     }, [])
   );
 
@@ -84,19 +85,20 @@ const ListaDeItens = () => {
       <FlashList
         data={itens}
         keyExtractor={(item) => String(item.Handle)}
-        renderItem={({ item }) => <ItemLayout data={item} />}
+        renderItem={({ item, index }) => (
+          <ItemLayout data={item} index={index} />
+        )}
+        estimatedItemSize={200}
         contentContainerStyle={{ padding: 24 }}
         ItemSeparatorComponent={() => <Separator />}
-        estimatedItemSize={200}
-        //TODO: Implementar a função de busca de itens
       />
-      {cart.length > 0 && (
+      {/* {cart.length > 0 && (
         <Footer>
           <FooterContainer>
             <Carrinho />
           </FooterContainer>
         </Footer>
-      )}
+      )} */}
     </>
   );
 };

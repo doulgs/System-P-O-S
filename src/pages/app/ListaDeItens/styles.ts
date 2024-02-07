@@ -8,7 +8,7 @@ export const Separator = styled.View`
 `;
 
 export const Footer = styled.View`
-  min-height: 110px;
+  min-height: 80px;
   background-color: ${(props) => props.theme.colors.Background[50]};
   padding: 16px 24px;
   justify-content: center;

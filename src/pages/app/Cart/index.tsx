@@ -13,7 +13,7 @@ import {
 } from "./styles";
 
 const Cart = () => {
-  const { cart, cartTotal } = useCart();
+  const { cartList, cartTotal } = useCart();
 
   return (
     <>
@@ -29,7 +29,7 @@ const Cart = () => {
           </ContainerTotal>
 
           <FlatList
-            data={cart}
+            data={cartList}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item, index }) => (
               <CardItem item={item} index={index} />
@@ -39,7 +39,7 @@ const Cart = () => {
 
         <Footer>
           <FooterContainer>
-            <Button onPress={() => {}} disabled={cart.length === 0}>
+            <Button onPress={() => {}} disabled={cartList.length === 0}>
               Finalizar
             </Button>
           </FooterContainer>

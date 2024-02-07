@@ -29,7 +29,7 @@ export function Carrinho() {
 
   return (
     <>
-      <FlatList
+      {/* <FlatList
         data={cart}
         keyExtractor={(item, index) => index.toString()}
         showsVerticalScrollIndicator={false}
@@ -86,7 +86,7 @@ export function Carrinho() {
             </Container>
           );
         }}
-      />
+      /> */}
 
       <Resumo>
         <ContainerTotal>
@@ -100,9 +100,10 @@ export function Carrinho() {
         <Button
           onPress={() => navigation.navigate("Cart")}
           disabled={cart.length === 0}
+          style={{ backgroundColor: "##eeb161" }}
         >
           <Text weight="600" color="#fff">
-            Revisar Pedido
+            Confirmar Itens
           </Text>
         </Button>
       </Resumo>

@@ -21,17 +21,23 @@ interface CardItemProps {
 
 export const CardItem = ({ item, index }: CardItemProps) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const { AddQuantidadeItem, RetirarItemCart, RetirarQuantidadeItem } =
-    useCart();
+  const {
+    AddQuantidadeItem,
+    RetirarItemCart,
+    RetirarQuantidadeItem,
+    AdicionarQuantidade,
+    RemoverQuantidade,
+    RemoverItem,
+  } = useCart();
 
-  function AdicionarQuantidadeItemExistente() {
-    AddQuantidadeItem(index);
+  function AdicionarQuantidadeItemExistente(index: number) {
+    AdicionarQuantidade(index);
   }
-  function RetirarQuantidadeItemExistente() {
+  function RetirarQuantidadeItemExistente(index: number) {
     if (item.Amount === 1) {
       return;
     }
-    RetirarQuantidadeItem(index);
+    RemoverQuantidade(index);
   }
 
   return (
@@ -44,13 +50,13 @@ export const CardItem = ({ item, index }: CardItemProps) => {
 
         <ContentAction>
           <ActionQuantidade>
-            <Button onPress={() => RetirarQuantidadeItemExistente()}>
+            <Button onPress={() => RetirarQuantidadeItemExistente(index)}>
               <Text color="#fff" weight="600">
                 -
               </Text>
             </Button>
             <Text weight="700">{item?.Amount}</Text>
-            <Button onPress={() => AdicionarQuantidadeItemExistente()}>
+            <Button onPress={() => AdicionarQuantidadeItemExistente(index)}>
               <Text color="#fff" weight="600">
                 +
               </Text>
@@ -64,7 +70,7 @@ export const CardItem = ({ item, index }: CardItemProps) => {
               </Text>
             </Button>
             <Button
-              onPress={() => RetirarItemCart()}
+              onPress={() => RemoverItem(index)}
               style={{ backgroundColor: "red" }}
             >
               <IconTrash />

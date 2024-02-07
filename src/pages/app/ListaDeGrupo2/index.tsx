@@ -12,10 +12,12 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { propsStack } from "../../../routes/interface/app.stackType";
 import { Grupo2 } from "../../../database/interfaces/Interface-Grupo2";
 import { getRealm } from "../../../infra/realm";
+import { useCart } from "../../../context/cartContext";
 
 const ListaDeGrupo2 = () => {
   const navigation = useNavigation<propsStack>();
   const [grupo2, setGrupo2] = React.useState<Grupo2[]>([]);
+  const { LimparCarrinho } = useCart();
 
   useFocusEffect(
     React.useCallback(() => {
@@ -29,6 +31,7 @@ const ListaDeGrupo2 = () => {
         }
       };
       recuperarGrupo2();
+      LimparCarrinho();
     }, [])
   );
 

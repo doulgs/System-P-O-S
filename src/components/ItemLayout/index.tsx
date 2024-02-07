@@ -1,45 +1,63 @@
-import { useEffect, useState } from "react";
-import { useCart } from "../../context/cartContext";
-import { Item as ItemProps } from "../../database/interfaces/Interface-Item";
+import { useState } from "react";
+import {
+  Item,
+  Item as ItemProps,
+} from "../../database/interfaces/Interface-Item";
 import { formatarParaMoeda } from "../../helpers/utils/formatarParaMoeda";
 import { Text } from "../Text";
 import {
+  Acao,
+  ActionContentAmount,
   AddToCartButton,
-  AddToCartButtonStyle,
+  ButtonActionAdd,
+  ButtonActionRemove,
   Image,
   Product,
   ProductDetails,
 } from "./styles";
-import { ExcecoesModal } from "../Modal";
-import { getRealm } from "../../infra/realm";
-import { Grupo2Excecao } from "../../database/interfaces/Interface-Grupo2Excecao";
+import { useCart } from "../../context/cartContext";
 
 interface Props {
   data: ItemProps;
+  index: number;
 }
 
-export const ItemLayout: React.FC<Props> = ({ data: item }) => {
-  const { AddItemCart } = useCart();
-  const [modalVisible, setModalVisible] = useState(false);
-  const [listaExcecao, setListaExcecao] = useState<Grupo2Excecao[]>([]);
-
+export function ItemLayout({ data: item, index }: Props) {
+  const {
+    AddItemCart,
+    AddQuantidadeItem,
+    RetirarItemCart,
+    RetirarQuantidadeItem,
+  } = useCart();
   const imageAPI = item?.FotoByte || null;
   const source = imageAPI
     ? { uri: `data:image/jpeg;base64,${imageAPI}` }
     : require("../../assets/images/NoImage.jpg");
 
-  const adicionarItemCart = async (item: ItemProps) => {
-    //setModalVisible(true);
-    await AddItemCart(item);
-  };
+  const [amount, setAmount] = useState(0);
 
-  const adicionarDiretoItemCart = async (item: ItemProps) => {
-    await AddItemCart(item);
-  };
+  function AddQuantidade(item: Item) {
+    if (amount === 0) {
+      AddItemCart(item);
+      setAmount(amount + 1);
+      return;
+    }
+    setAmount(amount + 1);
+    AddQuantidadeItem(index);
+  }
+
+  function RemoveQuantidade(index: number) {
+    if (amount === 0) {
+      RetirarItemCart(index);
+      return;
+    }
+    setAmount(amount - 1);
+    RetirarQuantidadeItem(index);
+  }
 
   return (
     <>
-      <Product onPress={() => adicionarItemCart(item)}>
+      <Product>
         <Image source={source} />
 
         <ProductDetails>
@@ -50,26 +68,34 @@ export const ItemLayout: React.FC<Props> = ({ data: item }) => {
           >
             {item.Descricao}
           </Text>
-          <Text color="#666" numberOfLines={2}>
-            {item.DescLonga}
-          </Text>
+          <Text
+            color="#666"
+            style={{ textTransform: "lowercase" }}
+            numberOfLines={2}
+          ></Text>
           <Text weight="600" size={14}>
             {formatarParaMoeda(item?.VendaValor ?? 0)}
           </Text>
         </ProductDetails>
 
         <AddToCartButton>
-          <AddToCartButtonStyle onPress={() => adicionarDiretoItemCart(item)}>
-            <Text weight="600">+</Text>
-          </AddToCartButtonStyle>
+          <Acao>
+            <ButtonActionAdd onPress={() => RemoveQuantidade(index)}>
+              <Text color="#fff" weight="600">
+                -
+              </Text>
+            </ButtonActionAdd>
+            <ActionContentAmount>
+              <Text weight="700">{amount ?? 0}</Text>
+            </ActionContentAmount>
+            <ButtonActionRemove onPress={() => AddQuantidade(item)}>
+              <Text color="#fff" weight="600">
+                +
+              </Text>
+            </ButtonActionRemove>
+          </Acao>
         </AddToCartButton>
       </Product>
-
-      <ExcecoesModal
-        visible={modalVisible}
-        onClose={() => setModalVisible(!modalVisible)}
-        data={listaExcecao}
-      />
     </>
   );
-};
+}

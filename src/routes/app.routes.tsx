@@ -16,8 +16,8 @@ import { useCart } from "../context/cartContext";
 const Stack = createNativeStackNavigator();
 
 function AppRoutes() {
-  const { colors } = useTheme();
-  const { cart, cartDot } = useCart();
+  const { colors, colorBase } = useTheme();
+  const { ConfirmarItens } = useCart();
   const navigation = useNavigation();
 
   return (
@@ -43,12 +43,12 @@ function AppRoutes() {
         component={ListaDeItens}
         options={{
           headerTintColor: colors.MildScale[50],
-          headerTitle: "Selecione o Item",
+          headerTitle: "ITENS",
           headerStyle: {
             backgroundColor: colors.Primary,
           },
 
-          headerRight: ({}) => {
+          /*  headerRight: ({}) => {
             return (
               cart.length >= 1 && (
                 <View style={{ marginHorizontal: 8 }}>
@@ -71,6 +71,26 @@ function AppRoutes() {
                   <Storefont />
                 </View>
               )
+            );
+          }, */
+          headerRight: ({ tintColor }) => {
+            return (
+              //cart.length >= 1 && (
+              <TouchableOpacity
+                onPress={() => ConfirmarItens()}
+                style={{
+                  marginHorizontal: 8,
+                  backgroundColor: colorBase.Alert,
+                  paddingHorizontal: 12,
+                  paddingVertical: 4,
+                  borderRadius: 8,
+                }}
+              >
+                <Text weight="600" color={tintColor}>
+                  Confirmar
+                </Text>
+              </TouchableOpacity>
+              //)
             );
           },
         }}

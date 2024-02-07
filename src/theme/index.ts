@@ -34,7 +34,7 @@ export const THEME = {
 
     Success: "#4caf50",
     Info: "#0288d1",
-    Alert: "#ced67b",
+    Alert: "#dba358",
     Error: "#ff5252",
   },
 };
