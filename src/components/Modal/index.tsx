@@ -20,6 +20,7 @@ import { Button } from "../Button";
 import { Grupo2Excecao } from "../../database/interfaces/Interface-Grupo2Excecao";
 import { formatarParaMoeda } from "../../helpers/utils/formatarParaMoeda";
 import { IconTrash } from "../../assets/icons/Icon-Trash";
+import { Checkbox } from "../Checkbox";
 
 interface ExcecoesModalProps {
   visible: boolean;
@@ -32,14 +33,13 @@ export const ExcecoesModal = ({
   onClose,
   data,
 }: ExcecoesModalProps) => {
-  const [amount, setAmount] = useState(0);
-
   const rendezirarExcecoes = ({ item: excecao }: { item: Grupo2Excecao }) => {
     return (
       <>
         <Container>
           <ContentInfo>
-            <Text style={{ maxWidth: "90%" }}>{excecao?.Excecao}</Text>
+            <Text style={{ maxWidth: "80%" }}>{excecao?.Excecao}</Text>
+            <Checkbox />
           </ContentInfo>
 
           <ContentAction>
@@ -49,7 +49,7 @@ export const ExcecoesModal = ({
                   -
                 </Text>
               </ButtonAction>
-              <Text weight="700">{amount}</Text>
+              <Text weight="700">{excecao.Amount ?? 0}</Text>
               <ButtonAction onPress={() => {}}>
                 <Text color="#fff" weight="600">
                   +
