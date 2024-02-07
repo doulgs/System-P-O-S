@@ -29,7 +29,6 @@ export const CardItem = ({ item, index }: CardItemProps) => {
   }
   function RetirarQuantidadeItemExistente() {
     if (item.Amount === 1) {
-      RetirarItemCart();
       return;
     }
     RetirarQuantidadeItem(index);

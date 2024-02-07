@@ -30,7 +30,7 @@ const Cart = () => {
 
           <FlatList
             data={cart}
-            keyExtractor={(index) => index.toString()}
+            keyExtractor={(item, index) => index.toString()}
             renderItem={({ item, index }) => (
               <CardItem item={item} index={index} />
             )}
