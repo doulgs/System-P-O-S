@@ -50,13 +50,13 @@ export const CardItem = ({ item, index }: CardItemProps) => {
 
         <ContentAction>
           <ActionQuantidade>
-            <Button onPress={() => RetirarQuantidadeItemExistente(index)}>
+            <Button onPressIn={() => RetirarQuantidadeItemExistente(index)}>
               <Text color="#fff" weight="600">
                 -
               </Text>
             </Button>
             <Text weight="700">{item?.Amount}</Text>
-            <Button onPress={() => AdicionarQuantidadeItemExistente(index)}>
+            <Button onPressIn={() => AdicionarQuantidadeItemExistente(index)}>
               <Text color="#fff" weight="600">
                 +
               </Text>
@@ -64,13 +64,13 @@ export const CardItem = ({ item, index }: CardItemProps) => {
           </ActionQuantidade>
 
           <Action>
-            <Button onPress={() => setModalVisible(!modalVisible)}>
+            <Button onPressIn={() => setModalVisible(!modalVisible)}>
               <Text color="#fff" weight="600">
                 EX
               </Text>
             </Button>
             <Button
-              onPress={() => RemoverItem(index)}
+              onPressIn={() => RemoverItem(index)}
               style={{ backgroundColor: "red" }}
             >
               <IconTrash />

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   Item,
   Item as ItemProps,
@@ -16,6 +16,7 @@ import {
   ProductDetails,
 } from "./styles";
 import { useCart } from "../../context/cartContext";
+import { useFocusEffect } from "@react-navigation/native";
 
 interface Props {
   data: ItemProps;
@@ -36,23 +37,37 @@ export function ItemLayout({ data: item, index }: Props) {
 
   const [amount, setAmount] = useState(0);
 
+  useFocusEffect(
+    useCallback(() => {
+      setAmount(0);
+      //LimparCarrinho();
+    }, [])
+  );
+
   function AddQuantidade(item: Item) {
-    if (amount === 0) {
-      AddItemCart(item);
-      setAmount(amount + 1);
-      return;
-    }
-    setAmount(amount + 1);
-    AddQuantidadeItem(index);
+    setAmount((prevAmount) => {
+      const newAmount = prevAmount + 1;
+      if (newAmount === 1) {
+        AddItemCart(item);
+      } else {
+        AddQuantidadeItem(index);
+      }
+      return newAmount;
+    });
   }
 
   function RemoveQuantidade(index: number) {
-    if (amount === 0) {
-      RetirarItemCart(index);
-      return;
-    }
-    setAmount(amount - 1);
-    RetirarQuantidadeItem(index);
+    setAmount((prevAmount) => {
+      const newAmount = Math.max(prevAmount - 1, 0);
+
+      if (newAmount === 0) {
+        RetirarItemCart(index);
+      } else {
+        RetirarQuantidadeItem(index);
+      }
+
+      return newAmount;
+    });
   }
 
   return (
@@ -80,15 +95,15 @@ export function ItemLayout({ data: item, index }: Props) {
 
         <AddToCartButton>
           <Acao>
-            <ButtonActionAdd onPress={() => RemoveQuantidade(index)}>
+            <ButtonActionAdd onPressIn={() => RemoveQuantidade(index)}>
               <Text color="#fff" weight="600">
                 -
               </Text>
             </ButtonActionAdd>
             <ActionContentAmount>
-              <Text weight="700">{amount ?? 0}</Text>
+              <Text weight="700">{amount}</Text>
             </ActionContentAmount>
-            <ButtonActionRemove onPress={() => AddQuantidade(item)}>
+            <ButtonActionRemove onPressIn={() => AddQuantidade(item)}>
               <Text color="#fff" weight="600">
                 +
               </Text>
