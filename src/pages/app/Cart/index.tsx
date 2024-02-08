@@ -14,7 +14,6 @@ import {
 
 const Cart = () => {
   const { cartList, cartTotal } = useCart();
-
   return (
     <>
       <Container>

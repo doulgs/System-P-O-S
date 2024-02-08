@@ -47,9 +47,9 @@ export const CartProvaider = ({ children }: any) => {
     ResultDotCart(updatedCart);
   }
 
-  function RetirarItemCart(indexItem: number) {
+  function RetirarItemCart(item: Item) {
     const updatedCart = [...cart];
-    updatedCart.splice(indexItem, 1);
+    updatedCart.splice(item.Handle, 1);
 
     setCart(updatedCart);
     ResultCart(updatedCart);

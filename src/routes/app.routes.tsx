@@ -17,7 +17,7 @@ const Stack = createNativeStackNavigator();
 
 function AppRoutes() {
   const { colors, colorBase } = useTheme();
-  const { ConfirmarItens } = useCart();
+  const { ConfirmarItens, LimparCarrinho } = useCart();
   const navigation = useNavigation();
 
   return (
@@ -48,36 +48,14 @@ function AppRoutes() {
             backgroundColor: colors.Primary,
           },
 
-          /*  headerRight: ({}) => {
-            return (
-              cart.length >= 1 && (
-                <View style={{ marginHorizontal: 8 }}>
-                  <View
-                    style={{
-                      alignItems: "center",
-                      justifyContent: "center",
-                      width: 20,
-                      height: 20,
-                      borderRadius: 20,
-                      backgroundColor: colors.MildScale[50],
-                      position: "absolute",
-                      zIndex: 99,
-                      right: -10,
-                      top: -10,
-                    }}
-                  >
-                    <Text weight="600">{cartDot}</Text>
-                  </View>
-                  <Storefont />
-                </View>
-              )
-            );
-          }, */
           headerRight: ({ tintColor }) => {
+            function handleConfirmarItens() {
+              ConfirmarItens();
+              LimparCarrinho();
+            }
             return (
-              //cart.length >= 1 && (
               <TouchableOpacity
-                onPress={() => ConfirmarItens()}
+                onPress={handleConfirmarItens}
                 style={{
                   marginHorizontal: 8,
                   backgroundColor: colorBase.Alert,
@@ -90,7 +68,6 @@ function AppRoutes() {
                   Confirmar
                 </Text>
               </TouchableOpacity>
-              //)
             );
           },
         }}

@@ -1,8 +1,5 @@
 import React, { useCallback, useState } from "react";
-import {
-  Item,
-  Item as ItemProps,
-} from "../../database/interfaces/Interface-Item";
+import { Item as ItemProps } from "../../database/interfaces/Interface-Item";
 import { formatarParaMoeda } from "../../helpers/utils/formatarParaMoeda";
 import { Text } from "../Text";
 import {
@@ -30,58 +27,55 @@ export function ItemLayout({ data: item, index }: Props) {
     RetirarItemCart,
     RetirarQuantidadeItem,
   } = useCart();
-  const imageAPI = item?.FotoByte || null;
-  const source = imageAPI
-    ? { uri: `data:image/jpeg;base64,${imageAPI}` }
-    : require("../../assets/images/NoImage.jpg");
 
   const [amount, setAmount] = useState(0);
 
+  // Limpar quantidade quando o componente é focado
   useFocusEffect(
     useCallback(() => {
       setAmount(0);
-      //LimparCarrinho();
     }, [])
   );
 
-  function AddQuantidade(item: Item) {
-    setAmount((prevAmount) => {
-      const newAmount = prevAmount + 1;
-      if (newAmount === 1) {
-        AddItemCart(item);
-      } else {
-        AddQuantidadeItem(index);
-      }
-      return newAmount;
-    });
-  }
+  // Adicionar quantidade de itens
+  const handleAddQuantidade = useCallback(() => {
+    if (!item) return;
+    if (amount === 0) {
+      AddItemCart(item);
+    } else {
+      AddQuantidadeItem(index);
+    }
+    setAmount((prevAmount) => prevAmount + 1);
+  }, [item, index, amount, AddItemCart, AddQuantidadeItem]);
 
-  function RemoveQuantidade(index: number) {
-    setAmount((prevAmount) => {
-      const newAmount = Math.max(prevAmount - 1, 0);
-
-      if (newAmount === 0) {
-        RetirarItemCart(index);
-      } else {
-        RetirarQuantidadeItem(index);
-      }
-
-      return newAmount;
-    });
-  }
+  // Remover quantidade de itens
+  const handleRemoveQuantidade = useCallback(() => {
+    if (!item) return;
+    if (amount === 0) {
+      RetirarItemCart(item);
+    } else {
+      RetirarQuantidadeItem(index);
+    }
+    setAmount((prevAmount) => prevAmount - 1);
+  }, [item, index, RetirarItemCart, RetirarQuantidadeItem]);
 
   return (
     <>
       <Product>
-        <Image source={source} />
-
+        <Image
+          source={
+            item?.FotoByte
+              ? { uri: `data:image/jpeg;base64,${item.FotoByte}` }
+              : require("../../assets/images/NoImage.jpg")
+          }
+        />
         <ProductDetails>
           <Text
             weight="600"
             style={{ textTransform: "uppercase" }}
             numberOfLines={1}
           >
-            {item.Descricao}
+            {item?.Descricao || "N/A"}
           </Text>
           <Text
             color="#666"
@@ -92,10 +86,9 @@ export function ItemLayout({ data: item, index }: Props) {
             {formatarParaMoeda(item?.VendaValor ?? 0)}
           </Text>
         </ProductDetails>
-
         <AddToCartButton>
           <Acao>
-            <ButtonActionAdd onPressIn={() => RemoveQuantidade(index)}>
+            <ButtonActionAdd onPressIn={handleRemoveQuantidade}>
               <Text color="#fff" weight="600">
                 -
               </Text>
@@ -103,7 +96,7 @@ export function ItemLayout({ data: item, index }: Props) {
             <ActionContentAmount>
               <Text weight="700">{amount}</Text>
             </ActionContentAmount>
-            <ButtonActionRemove onPressIn={() => AddQuantidade(item)}>
+            <ButtonActionRemove onPressIn={handleAddQuantidade}>
               <Text color="#fff" weight="600">
                 +
               </Text>
