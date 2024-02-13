@@ -7,6 +7,7 @@ import {
   Content,
   Image,
   Header,
+  CheckBoox,
   Footer,
   Action,
   ActionLeft,
@@ -17,6 +18,7 @@ import {
 import { Item } from "../../database/interfaces/Interface-Item";
 
 import { Text } from "../Text";
+import { CheckIcon } from "../../assets/icons/Icon-Check";
 
 type ItemLayoutProps = {
   data: Item;
@@ -68,6 +70,9 @@ export const ItemLayout = ({
             <Text weight="700" numberOfLines={2}>
               {data?.Descricao}
             </Text>
+            <CheckBoox onPress={handleAdd}>
+              {amount >= 1 && <CheckIcon />}
+            </CheckBoox>
           </Header>
 
           <Footer>

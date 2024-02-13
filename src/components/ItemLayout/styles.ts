@@ -24,6 +24,19 @@ export const Image = styled.Image`
 
 export const Header = styled.View`
   flex: 1;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+export const CheckBoox = styled.TouchableOpacity.attrs({
+  activeOpacity: 0.9,
+})`
+  width: 24px;
+  height: 24px;
+  border-width: 0.5px;
+  border-radius: 4px;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const Footer = styled.View`
