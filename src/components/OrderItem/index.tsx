@@ -13,7 +13,10 @@ import {
   ContentAction,
   Button,
   Action,
-  ActionQuantidade,
+  ActionLeft,
+  ActionView,
+  ActionRight,
+  ActionMenu,
 } from "./styles";
 
 interface OrderItemProps {
@@ -40,21 +43,23 @@ export const OrderItem = ({
         </ContentInfo>
 
         <ContentAction>
-          <ActionQuantidade>
-            <Button activeOpacity={0.8} onPressIn={removerQuantidade}>
-              <Text color="#fff" weight="600">
+          <Action>
+            <ActionLeft onPress={removerQuantidade}>
+              <Text color="#fff" size={28}>
                 -
               </Text>
-            </Button>
-            <Text weight="700">{item?.Amount}</Text>
-            <Button activeOpacity={0.8} onPressIn={adicionarQuantidade}>
-              <Text color="#fff" weight="600">
+            </ActionLeft>
+            <ActionView>
+              <Text weight="600">{item?.Amount}</Text>
+            </ActionView>
+            <ActionRight onPress={adicionarQuantidade}>
+              <Text color="#fff" size={28}>
                 +
               </Text>
-            </Button>
-          </ActionQuantidade>
+            </ActionRight>
+          </Action>
 
-          <Action>
+          <ActionMenu>
             <Button
               activeOpacity={0.8}
               onPressIn={() => setModalVisible(!modalVisible)}
@@ -69,7 +74,7 @@ export const OrderItem = ({
             >
               <IconTrash />
             </Button>
-          </Action>
+          </ActionMenu>
         </ContentAction>
       </Container>
 

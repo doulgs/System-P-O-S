@@ -4,8 +4,7 @@ export const Container = styled.View`
   margin: 8px 16px;
   padding: 8px;
   border-radius: 8px;
-
-  background-color: ${(props) => props.theme.colors.Background[50]};
+  background-color: ${(props) => props.theme.colors.MildScale[50]};
 `;
 export const ContentInfo = styled.View`
   flex-direction: row;
@@ -19,18 +18,9 @@ export const ContentAction = styled.View`
   justify-content: space-between;
 `;
 
-export const ActionQuantidade = styled.View`
+export const ActionMenu = styled.View`
   flex-direction: row;
-  margin: 14px 8px;
-  align-items: center;
-  gap: 16px;
-`;
-
-export const Action = styled.View`
-  flex-direction: row;
-  margin: 14px 8px;
-  align-items: center;
-  gap: 16px;
+  gap: 24px;
 `;
 
 export const Button = styled.TouchableOpacity`
@@ -40,4 +30,33 @@ export const Button = styled.TouchableOpacity`
   border-radius: 8px;
   align-items: center;
   justify-content: center;
+`;
+
+export const Action = styled.View`
+  flex-direction: row;
+  height: 40px;
+  width: 110px;
+  justify-content: center;
+  border-radius: 8px;
+  border-width: 0.4px;
+  background-color: ${(props) => props.theme.colors.Secondary};
+`;
+
+export const ActionRight = styled.TouchableOpacity`
+  width: 30px;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const ActionLeft = styled.TouchableOpacity`
+  width: 30px;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const ActionView = styled.View`
+  width: 40px;
+  align-items: center;
+  justify-content: center;
+  background-color: ${(props) => props.theme.colors.MildScale[50]};
 `;
