@@ -41,8 +41,8 @@ export interface Item {
   HandleFilial?: number;
   HandleTrade?: number;
   Plataforma?: number;
-  Amount?: number;
-  Total?: number;
+  Amount: number;
+  Total: number;
   Excecoes: Grupo2Excecao[];
 }
 

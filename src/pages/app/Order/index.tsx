@@ -1,6 +1,5 @@
 import { FlatList } from "react-native";
-import { useCart } from "../../../context/cartContext";
-import { CardItem } from "../../../components/CartItem";
+import { OrderItem } from "../../../components/OrderItem";
 import { Button } from "../../../components/Button";
 import { Text } from "../../../components/Text";
 import { formatarParaMoeda } from "../../../helpers/utils/formatarParaMoeda";
@@ -11,9 +10,16 @@ import {
   FooterContainer,
   MenuContainer,
 } from "./styles";
+import { useOrder } from "../../../context/orderContext";
 
-const Cart = () => {
-  const { cartList, cartTotal } = useCart();
+const Order = () => {
+  const {
+    order,
+    RemoverItem,
+    AdicionarQuantidade,
+    RemoverQuantidade,
+    orderTotal,
+  } = useOrder();
   return (
     <>
       <Container>
@@ -23,22 +29,27 @@ const Cart = () => {
               Valor Total do Pedido
             </Text>
             <Text weight="700" size={20}>
-              {formatarParaMoeda(cartTotal)}
+              {formatarParaMoeda(orderTotal)}
             </Text>
           </ContainerTotal>
 
           <FlatList
-            data={cartList}
+            data={order}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item, index }) => (
-              <CardItem item={item} index={index} />
+              <OrderItem
+                item={item}
+                removerItemDoCarrinho={() => RemoverItem(index)}
+                adicionarQuantidade={() => AdicionarQuantidade(index)}
+                removerQuantidade={() => RemoverQuantidade(index)}
+              />
             )}
           />
         </MenuContainer>
 
         <Footer>
           <FooterContainer>
-            <Button onPress={() => {}} disabled={cartList.length === 0}>
+            <Button onPress={() => {}} disabled={order.length === 0}>
               Finalizar
             </Button>
           </FooterContainer>
@@ -48,4 +59,4 @@ const Cart = () => {
   );
 };
 
-export default Cart;
+export default Order;

@@ -1,16 +1,17 @@
-import { useFocusEffect, useRoute } from "@react-navigation/native";
-import { Footer, FooterContainer, Separator } from "./styles";
 import { useCallback, useEffect, useState } from "react";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
+import { useCart } from "../../../context/cartContext";
+import { FlashList } from "@shopify/flash-list";
 import { getRealm } from "../../../infra/realm";
+
 import { Item } from "../../../database/interfaces/Interface-Item";
 import { IteTabFor } from "../../../database/interfaces/Interface-IteTabFor";
-import { Loading } from "../../../components/Loading";
-import { FlashList } from "@shopify/flash-list";
-import { ItemLayout } from "../../../components/ItemLayout";
 import { Grupo2Excecao } from "../../../database/interfaces/Interface-Grupo2Excecao";
-import { Button } from "../../../components/Button";
-import { Carrinho } from "../../../components/Carrinho";
-import { useCart } from "../../../context/cartContext";
+
+import { Loading } from "../../../components/Loading";
+import { ItemLayout } from "../../../components/ItemLayout";
+import { Separator } from "./styles";
 
 type ScreenProps = {
   handle: number;
@@ -18,15 +19,25 @@ type ScreenProps = {
 
 const ListaDeItens = () => {
   const { handle } = useRoute().params as ScreenProps;
-  const { cart, LimparCarrinho } = useCart();
+  const {
+    AdicionarItem,
+    RemoverItem,
+    AdicionarQuantidade,
+    RemoverQuantidade,
+    LimparCarrinho,
+  } = useCart();
+
   const [itens, setItens] = useState<Item[]>([]);
   const [buscarItens, setBuscarItens] = useState("");
   const [resultadosBusca, setResultadosBusca] = useState<Item[]>([]);
-  const [loading, setLoading] = useState(true); // Adiciona estado de carregamento
+  const [loading, setLoading] = useState(true);
+
+  const navigation = useNavigation();
 
   useFocusEffect(
     useCallback(() => {
       const recuperarItens = async () => {
+        setLoading(true); // Set loading to true when refocusing
         const realm = await getRealm();
         try {
           const result = realm
@@ -55,14 +66,12 @@ const ListaDeItens = () => {
           setItens(Array.from(result));
           setLoading(false);
         } catch (error) {
-          console.error("Error fetching SchemaItem objects:", error);
+          console.error("Erro ao realizar a consulta dos Itens:", error);
           setLoading(false);
         }
       };
-
       recuperarItens();
-      LimparCarrinho();
-    }, [])
+    }, [handle])
   );
 
   useEffect(() => {
@@ -76,6 +85,10 @@ const ListaDeItens = () => {
     setResultadosBusca(resultados);
   };
 
+  useEffect(() => {
+    LimparCarrinho(); // Move LimparCarrinho outside of useFocusEffect
+  }, []);
+
   if (loading) {
     return <Loading />;
   }
@@ -86,19 +99,19 @@ const ListaDeItens = () => {
         data={itens}
         keyExtractor={(item) => String(item.Handle)}
         renderItem={({ item, index }) => (
-          <ItemLayout data={item} index={index} />
+          <ItemLayout
+            data={item}
+            adicionarItem={() => AdicionarItem(item)}
+            removerItem={() => RemoverItem(index)}
+            adicionarQuantidade={() => AdicionarQuantidade(index)}
+            removerQuantidade={() => RemoverQuantidade(index)}
+          />
         )}
         estimatedItemSize={200}
-        contentContainerStyle={{ padding: 24 }}
+        contentContainerStyle={{ padding: 16 }}
         ItemSeparatorComponent={() => <Separator />}
+        showsVerticalScrollIndicator={false}
       />
-      {/* {cart.length > 0 && (
-        <Footer>
-          <FooterContainer>
-            <Carrinho />
-          </FooterContainer>
-        </Footer>
-      )} */}
     </>
   );
 };

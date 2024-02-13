@@ -6,49 +6,39 @@ import {
   useEffect,
 } from "react";
 
-import { useOrder } from "./orderContext";
 import { Item } from "../database/interfaces/Interface-Item";
 
-interface CartContextProps {
-  cart: Item[];
-  AdicionarItem: (novoItem: Item) => void;
+interface OrderContextProps {
+  order: Item[];
+  AdicionarItems: (cartItems: Item[]) => void;
   RemoverItem: (indexItem: number) => void;
   AdicionarQuantidade: (indexItem: number) => void;
   RemoverQuantidade: (indexItem: number) => void;
   LimparCarrinho: () => void;
-  ConfirmarCarrinho: () => void;
-  cartTotal: number;
+  orderTotal: number;
 }
 
-export const CartContext = createContext<CartContextProps>(
-  {} as CartContextProps
+export const OrderContext = createContext<OrderContextProps>(
+  {} as OrderContextProps
 );
 
 const initialState: Item[] = [];
 
 type Action =
-  | { type: "adicionarItem"; selectedItem: Item }
+  | { type: "adicionarItems"; cartItems: Item[] }
   | { type: "removerItem"; selectedItemIndex: number }
   | { type: "adicionarQuantidade"; selectedItemIndex: number }
   | { type: "removerQuantidade"; selectedItemIndex: number }
-  | { type: "limparCarrinho" }
-  | { type: "confirmarCarrinho" };
+  | { type: "limparCarrinho" };
 
-function reducer(cart: Item[], action: Action) {
+function reducer(order: Item[], action: Action) {
   switch (action.type) {
-    case "adicionarItem":
-      return [
-        ...cart,
-        {
-          ...action.selectedItem,
-          Amount: action.selectedItem.Amount + 1,
-          Total: action.selectedItem.VendaValor ?? 0,
-        },
-      ];
+    case "adicionarItems":
+      return [...order, ...action.cartItems];
     case "removerItem":
-      return cart.filter((item, index) => index !== action.selectedItemIndex);
+      return order.filter((item, index) => index !== action.selectedItemIndex);
     case "adicionarQuantidade":
-      return cart.map((item, index) => {
+      return order.map((item, index) => {
         if (index === action.selectedItemIndex) {
           return {
             ...item,
@@ -59,7 +49,7 @@ function reducer(cart: Item[], action: Action) {
         return item;
       });
     case "removerQuantidade":
-      return cart.map((item, index) => {
+      return order.map((item, index) => {
         if (index === action.selectedItemIndex && item.Amount > 1) {
           return {
             ...item,
@@ -71,22 +61,19 @@ function reducer(cart: Item[], action: Action) {
       });
     case "limparCarrinho":
       return [];
-    case "confirmarCarrinho":
-      return [...cart];
   }
 }
 
-export const CartProvaider = ({ children }: any) => {
-  const [cart, dispatch] = useReducer(reducer, initialState);
-  const [cartTotal, setTotal] = useState(0);
-  const { AdicionarItems } = useOrder();
+export const OrderProvaider = ({ children }: any) => {
+  const [order, dispatch] = useReducer(reducer, initialState);
+  const [orderTotal, setTotal] = useState(0);
 
   useEffect(() => {
-    resultCart(cart);
-  }, [cart]);
+    resultorder(order);
+  }, [order]);
 
-  function AdicionarItem(novoItem: Item) {
-    dispatch({ type: "adicionarItem", selectedItem: novoItem });
+  function AdicionarItems(itemsCart: Item[]) {
+    dispatch({ type: "adicionarItems", cartItems: itemsCart });
   }
   function RemoverItem(indexItem: number) {
     dispatch({ type: "removerItem", selectedItemIndex: indexItem });
@@ -100,12 +87,8 @@ export const CartProvaider = ({ children }: any) => {
   function LimparCarrinho() {
     dispatch({ type: "limparCarrinho" });
   }
-  function ConfirmarCarrinho() {
-    AdicionarItems(cart); // Passa o carrinho para a função AdicionarItems
-    LimparCarrinho();
-  }
 
-  function resultCart(items: Item[]) {
+  function resultorder(items: Item[]) {
     const result = items.reduce((acc, item) => {
       return acc + item.Total;
     }, 0);
@@ -113,24 +96,23 @@ export const CartProvaider = ({ children }: any) => {
   }
 
   return (
-    <CartContext.Provider
+    <OrderContext.Provider
       value={{
-        cart,
-        AdicionarItem,
+        order,
+        AdicionarItems,
         RemoverItem,
         AdicionarQuantidade,
         RemoverQuantidade,
         LimparCarrinho,
-        ConfirmarCarrinho,
-        cartTotal,
+        orderTotal,
       }}
     >
       {children}
-    </CartContext.Provider>
+    </OrderContext.Provider>
   );
 };
 
-export const useCart = () => {
-  const context = useContext(CartContext);
+export const useOrder = () => {
+  const context = useContext(OrderContext);
   return context;
 };

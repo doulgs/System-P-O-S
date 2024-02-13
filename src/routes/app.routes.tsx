@@ -1,23 +1,27 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "styled-components/native";
-import { TouchableOpacity, View } from "react-native";
+import { Alert, TouchableOpacity } from "react-native";
+
+import { useCart } from "../context/cartContext";
+import { useOrder } from "../context/orderContext";
 
 import Home from "../pages/app/Home";
-import Cart from "../pages/app/Cart";
 import ListaDeGrupo2 from "../pages/app/ListaDeGrupo2";
-
-import { More } from "../assets/icons/More";
 import ListaDeItens from "../pages/app/ListaDeItens";
-import { Storefont } from "../assets/icons/Storefont";
+import Order from "../pages/app/Order";
+
 import { Text } from "../components/Text";
-import { useCart } from "../context/cartContext";
+import { More } from "../assets/icons/More";
+
+import { Storefont } from "../assets/icons/Storefont";
 
 const Stack = createNativeStackNavigator();
 
 function AppRoutes() {
   const { colors, colorBase } = useTheme();
-  const { ConfirmarItens, LimparCarrinho } = useCart();
+  const { order } = useOrder();
+  const { cart, ConfirmarCarrinho } = useCart();
   const navigation = useNavigation();
 
   return (
@@ -36,6 +40,18 @@ function AppRoutes() {
           headerStyle: {
             backgroundColor: colors.Primary,
           },
+          headerRight: ({}) => {
+            return (
+              order.length >= 1 && (
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("Order")}
+                  style={{ marginHorizontal: 8 }}
+                >
+                  <Storefont />
+                </TouchableOpacity>
+              )
+            );
+          },
         }}
       />
       <Stack.Screen
@@ -50,31 +66,37 @@ function AppRoutes() {
 
           headerRight: ({ tintColor }) => {
             function handleConfirmarItens() {
-              ConfirmarItens();
-              LimparCarrinho();
+              if (cart.length !== 0) {
+                navigation.navigate("Order");
+                ConfirmarCarrinho();
+                return;
+              }
+              Alert.alert("O carrinho esta vazio");
             }
             return (
-              <TouchableOpacity
-                onPress={handleConfirmarItens}
-                style={{
-                  marginHorizontal: 8,
-                  backgroundColor: colorBase.Alert,
-                  paddingHorizontal: 12,
-                  paddingVertical: 4,
-                  borderRadius: 8,
-                }}
-              >
-                <Text weight="600" color={tintColor}>
-                  Confirmar
-                </Text>
-              </TouchableOpacity>
+              cart.length > 0 && (
+                <TouchableOpacity
+                  onPress={handleConfirmarItens}
+                  style={{
+                    marginHorizontal: 8,
+                    backgroundColor: colorBase.Alert,
+                    paddingHorizontal: 12,
+                    paddingVertical: 4,
+                    borderRadius: 8,
+                  }}
+                >
+                  <Text weight="600" color={tintColor}>
+                    Confirmar
+                  </Text>
+                </TouchableOpacity>
+              )
             );
           },
         }}
       />
       <Stack.Screen
-        name="Cart"
-        component={Cart}
+        name="Order"
+        component={Order}
         options={{
           headerTintColor: colors.MildScale[50],
           headerTitle: "Pedido",

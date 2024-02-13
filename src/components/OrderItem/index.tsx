@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { useCart } from "../../context/cartContext";
 import { formatarParaMoeda } from "../../helpers/utils/formatarParaMoeda";
-import { Text } from "../Text";
+
 import { Item } from "../../database/interfaces/Interface-Item";
+
+import { Text } from "../Text";
 import { ExcecoesModal } from "../Modal";
 import { IconTrash } from "../../assets/icons/Icon-Trash";
+
 import {
   Container,
   ContentInfo,
@@ -14,24 +16,20 @@ import {
   ActionQuantidade,
 } from "./styles";
 
-interface CardItemProps {
+interface OrderItemProps {
   item: Item;
-  index: number;
+  removerItemDoCarrinho: () => void;
+  adicionarQuantidade: () => void;
+  removerQuantidade: () => void;
 }
 
-export const CardItem = ({ item, index }: CardItemProps) => {
+export const OrderItem = ({
+  item,
+  removerItemDoCarrinho,
+  adicionarQuantidade,
+  removerQuantidade,
+}: OrderItemProps) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const { AdicionarQuantidade, RemoverQuantidade, RemoverItem } = useCart();
-
-  function AdicionarQuantidadeItemExistente(index: number) {
-    AdicionarQuantidade(index);
-  }
-  function RetirarQuantidadeItemExistente(index: number) {
-    if (item.Amount === 1) {
-      return;
-    }
-    RemoverQuantidade(index);
-  }
 
   return (
     <>
@@ -43,19 +41,13 @@ export const CardItem = ({ item, index }: CardItemProps) => {
 
         <ContentAction>
           <ActionQuantidade>
-            <Button
-              activeOpacity={0.8}
-              onPressIn={() => RetirarQuantidadeItemExistente(index)}
-            >
+            <Button activeOpacity={0.8} onPressIn={removerQuantidade}>
               <Text color="#fff" weight="600">
                 -
               </Text>
             </Button>
             <Text weight="700">{item?.Amount}</Text>
-            <Button
-              activeOpacity={0.8}
-              onPressIn={() => AdicionarQuantidadeItemExistente(index)}
-            >
+            <Button activeOpacity={0.8} onPressIn={adicionarQuantidade}>
               <Text color="#fff" weight="600">
                 +
               </Text>
@@ -72,7 +64,7 @@ export const CardItem = ({ item, index }: CardItemProps) => {
               </Text>
             </Button>
             <Button
-              onPress={() => RemoverItem(index)}
+              onPress={removerItemDoCarrinho}
               style={{ backgroundColor: "red" }}
             >
               <IconTrash />

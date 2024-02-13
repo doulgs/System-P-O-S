@@ -1,109 +1,95 @@
-import React, { useCallback, useState } from "react";
-import { Item as ItemProps } from "../../database/interfaces/Interface-Item";
+import React, { useState, useEffect } from "react";
 import { formatarParaMoeda } from "../../helpers/utils/formatarParaMoeda";
-import { Text } from "../Text";
+
 import {
-  Acao,
-  ActionContentAmount,
-  AddToCartButton,
-  ButtonActionAdd,
-  ButtonActionRemove,
+  Background,
+  Container,
+  Content,
   Image,
-  Product,
-  ProductDetails,
+  Header,
+  Footer,
+  Action,
+  ActionLeft,
+  ActionView,
+  ActionRight,
 } from "./styles";
-import { useCart } from "../../context/cartContext";
-import { useFocusEffect } from "@react-navigation/native";
 
-interface Props {
-  data: ItemProps;
-  index: number;
-}
+import { Item } from "../../database/interfaces/Interface-Item";
 
-export function ItemLayout({ data: item, index }: Props) {
-  const {
-    AddItemCart,
-    AddQuantidadeItem,
-    RetirarItemCart,
-    RetirarQuantidadeItem,
-  } = useCart();
+import { Text } from "../Text";
 
-  const [amount, setAmount] = useState(0);
+type ItemLayoutProps = {
+  data: Item;
+  adicionarItem: () => void;
+  removerItem: () => void;
+  adicionarQuantidade: () => void;
+  removerQuantidade: () => void;
+};
 
-  // Limpar quantidade quando o componente é focado
-  useFocusEffect(
-    useCallback(() => {
-      setAmount(0);
-    }, [])
-  );
+export const ItemLayout = ({
+  data,
+  adicionarItem,
+  removerItem,
+  adicionarQuantidade,
+  removerQuantidade,
+}: ItemLayoutProps) => {
+  const [amount, setAmount] = useState<number>(0);
 
-  // Adicionar quantidade de itens
-  const handleAddQuantidade = useCallback(() => {
-    if (!item) return;
+  function handleAdd() {
     if (amount === 0) {
-      AddItemCart(item);
-    } else {
-      AddQuantidadeItem(index);
+      adicionarItem();
+      setAmount(amount + 1);
+      return;
+    } else if (amount > 0) {
+      adicionarQuantidade();
+      setAmount(amount + 1);
+      return;
     }
-    setAmount((prevAmount) => prevAmount + 1);
-  }, [item, index, amount, AddItemCart, AddQuantidadeItem]);
+  }
 
-  // Remover quantidade de itens
-  const handleRemoveQuantidade = useCallback(() => {
-    if (!item) return;
-    if (amount === 0) {
-      RetirarItemCart(item);
-    } else {
-      RetirarQuantidadeItem(index);
+  function handleRemove() {
+    if (amount === 1) {
+      removerItem();
+      setAmount(amount - 1);
+      return;
+    } else if (amount > 1) {
+      removerQuantidade();
+      setAmount(amount - 1);
+      return;
     }
-    setAmount((prevAmount) => prevAmount - 1);
-  }, [item, index, RetirarItemCart, RetirarQuantidadeItem]);
+  }
 
   return (
-    <>
-      <Product>
-        <Image
-          source={
-            item?.FotoByte
-              ? { uri: `data:image/jpeg;base64,${item.FotoByte}` }
-              : require("../../assets/images/NoImage.jpg")
-          }
-        />
-        <ProductDetails>
-          <Text
-            weight="600"
-            style={{ textTransform: "uppercase" }}
-            numberOfLines={1}
-          >
-            {item?.Descricao || "N/A"}
-          </Text>
-          <Text
-            color="#666"
-            style={{ textTransform: "lowercase" }}
-            numberOfLines={2}
-          ></Text>
-          <Text weight="600" size={14}>
-            {formatarParaMoeda(item?.VendaValor ?? 0)}
-          </Text>
-        </ProductDetails>
-        <AddToCartButton>
-          <Acao>
-            <ButtonActionAdd onPressIn={handleRemoveQuantidade}>
-              <Text color="#fff" weight="600">
-                -
-              </Text>
-            </ButtonActionAdd>
-            <ActionContentAmount>
-              <Text weight="700">{amount}</Text>
-            </ActionContentAmount>
-            <ButtonActionRemove onPressIn={handleAddQuantidade}>
-              <Text color="#fff" weight="600">
-                +
-              </Text>
-            </ButtonActionRemove>
-          </Acao>
-        </AddToCartButton>
-      </Product>
-    </>
+    <Background style={{ elevation: 3 }}>
+      <Container>
+        <Image source={require("../../assets/images/NoImage.jpg")} />
+        <Content>
+          <Header>
+            <Text weight="700" numberOfLines={2}>
+              {data?.Descricao}
+            </Text>
+          </Header>
+
+          <Footer>
+            <Text weight="600">{formatarParaMoeda(data?.VendaValor ?? 0)}</Text>
+            <Action>
+              <ActionLeft onPress={handleRemove}>
+                <Text color="#fff" size={28}>
+                  -
+                </Text>
+              </ActionLeft>
+              <ActionView>
+                <Text weight="600">{amount}</Text>
+              </ActionView>
+              <ActionRight onPress={handleAdd}>
+                <Text color="#fff" size={28}>
+                  +
+                </Text>
+              </ActionRight>
+            </Action>
+          </Footer>
+        </Content>
+      </Container>
+    </Background>
   );
-}
+};
