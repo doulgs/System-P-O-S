@@ -8,6 +8,7 @@ export declare global {
       Order: undefined;
       ListaDeGrupo2: undefined;
       ListaDeItens: { handle: number };
+      Exceptions: { indexItem: number };
     }
   }
 }

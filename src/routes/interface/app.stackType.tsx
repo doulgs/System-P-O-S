@@ -8,6 +8,7 @@ export type propsNavigationStack = {
   Order: undefined;
   ListaDeGrupo2: undefined;
   ListaDeItens: { handle: number };
+  Exceptions: { indexItem: number };
 };
 
 export type propsStack = NativeStackNavigationProp<propsNavigationStack>;

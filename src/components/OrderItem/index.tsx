@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { formatarParaMoeda } from "../../helpers/utils/formatarParaMoeda";
 
 import { Item } from "../../database/interfaces/Interface-Item";
@@ -17,14 +16,14 @@ import {
   ActionRight,
   ActionMenu,
 } from "./styles";
-
-import ExcecoesModal from "../Modal";
+import { View } from "react-native";
 
 interface OrderItemProps {
   item: Item;
   removerItemDoCarrinho: () => void;
   adicionarQuantidade: () => void;
   removerQuantidade: () => void;
+  abrirExcecoes: () => void;
 }
 
 export const OrderItem = ({
@@ -32,25 +31,16 @@ export const OrderItem = ({
   removerItemDoCarrinho,
   adicionarQuantidade,
   removerQuantidade,
+  abrirExcecoes,
 }: OrderItemProps) => {
-  const [modalVisible, setModalVisible] = useState(false);
-
-  function exibirdados(item: Item) {
-    console.log("Item -->", item);
-    item.Excecoes.forEach((grupo2Excecao) => {
-      console.log("Grupo2 -->", grupo2Excecao.Grupo2);
-      //console.log("GrupoExcecao -->", grupo2Excecao.GrupoExcecao);
-      // Se GrupoExcecao é uma propriedade de Grupo2Excecao, você pode acessá-la aqui
-      // Por exemplo:
-      // console.log("Propriedade GrupoExcecao -->", grupo2Excecao.GrupoExcecao.Propriedade);
-    });
-  }
-
   return (
     <>
       <Container>
         <ContentInfo>
-          <Text>{item?.Descricao}</Text>
+          <View>
+            <Text>{item?.Descricao}</Text>
+            {/* TODO: Dar sequencia na exibição das excecoes */}
+          </View>
           <Text weight="600">{formatarParaMoeda(item?.VendaValor ?? 0)}</Text>
         </ContentInfo>
 
@@ -73,10 +63,7 @@ export const OrderItem = ({
 
           <ActionMenu>
             {item?.Excecoes.length > 0 && (
-              <Button
-                activeOpacity={0.8}
-                onPressIn={() => setModalVisible(!modalVisible)}
-              >
+              <Button activeOpacity={0.8} onPressIn={abrirExcecoes}>
                 <Text color="#fff" weight="600">
                   EX
                 </Text>
@@ -92,12 +79,6 @@ export const OrderItem = ({
           </ActionMenu>
         </ContentAction>
       </Container>
-
-      <ExcecoesModal
-        data={item.Excecoes}
-        visible={modalVisible}
-        onClose={() => setModalVisible(!modalVisible)}
-      />
     </>
   );
 };

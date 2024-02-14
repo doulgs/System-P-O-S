@@ -1,8 +1,14 @@
 import { FlatList } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+
+import { useOrder } from "../../../context/orderContext";
+
 import { OrderItem } from "../../../components/OrderItem";
 import { Button } from "../../../components/Button";
 import { Text } from "../../../components/Text";
+
 import { formatarParaMoeda } from "../../../helpers/utils/formatarParaMoeda";
+
 import {
   Container,
   ContainerTotal,
@@ -10,7 +16,6 @@ import {
   FooterContainer,
   MenuContainer,
 } from "./styles";
-import { useOrder } from "../../../context/orderContext";
 
 const Order = () => {
   const {
@@ -20,6 +25,13 @@ const Order = () => {
     RemoverQuantidade,
     orderTotal,
   } = useOrder();
+
+  const navigation = useNavigation();
+
+  function abrirExceptions(indexItem: number) {
+    navigation.navigate("Exceptions", { indexItem });
+  }
+
   return (
     <>
       <Container>
@@ -42,6 +54,7 @@ const Order = () => {
                 removerItemDoCarrinho={() => RemoverItem(index)}
                 adicionarQuantidade={() => AdicionarQuantidade(index)}
                 removerQuantidade={() => RemoverQuantidade(index)}
+                abrirExcecoes={() => abrirExceptions(index)}
               />
             )}
           />

@@ -10,6 +10,7 @@ import Home from "../pages/app/Home";
 import ListaDeGrupo2 from "../pages/app/ListaDeGrupo2";
 import ListaDeItens from "../pages/app/ListaDeItens";
 import Order from "../pages/app/Order";
+import Exceptions from "../pages/app/Exceptions";
 
 import { Text } from "../components/Text";
 import { More } from "../assets/icons/More";
@@ -25,7 +26,18 @@ function AppRoutes() {
   const navigation = useNavigation();
 
   return (
-    <Stack.Navigator screenOptions={{}}>
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: colors.Primary,
+        },
+        headerTitleAlign: "center",
+        headerTintColor: "#fff",
+        headerTitleStyle: {
+          fontWeight: "bold",
+        },
+      }}
+    >
       <Stack.Screen
         name="Home"
         component={Home}
@@ -35,11 +47,7 @@ function AppRoutes() {
         name="ListaDeGrupo2"
         component={ListaDeGrupo2}
         options={{
-          headerTintColor: colors.MildScale[50],
-          headerTitle: "Selecione um grupo",
-          headerStyle: {
-            backgroundColor: colors.Primary,
-          },
+          headerTitle: "SELECIONE UM GRUPO",
           headerRight: ({}) => {
             return (
               order.length >= 1 && (
@@ -58,12 +66,7 @@ function AppRoutes() {
         name="ListaDeItens"
         component={ListaDeItens}
         options={{
-          headerTintColor: colors.MildScale[50],
           headerTitle: "ITENS",
-          headerStyle: {
-            backgroundColor: colors.Primary,
-          },
-
           headerRight: ({ tintColor }) => {
             function handleConfirmarItens() {
               if (cart.length !== 0) {
@@ -98,11 +101,7 @@ function AppRoutes() {
         name="Order"
         component={Order}
         options={{
-          headerTintColor: colors.MildScale[50],
-          headerTitle: "Pedido",
-          headerStyle: {
-            backgroundColor: colors.Primary,
-          },
+          headerTitle: "PEDIDO",
           headerRight: () => {
             return (
               <TouchableOpacity
@@ -113,6 +112,11 @@ function AppRoutes() {
             );
           },
         }}
+      />
+      <Stack.Screen
+        name="Exceptions"
+        component={Exceptions}
+        options={{ headerTitle: "ADICIONAIS" }}
       />
     </Stack.Navigator>
   );
