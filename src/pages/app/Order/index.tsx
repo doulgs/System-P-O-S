@@ -33,42 +33,43 @@ const Order = () => {
   }
 
   return (
-    <>
-      <Container>
-        <MenuContainer>
-          <ContainerTotal>
-            <Text weight="700" size={20}>
-              Valor Total do Pedido
-            </Text>
-            <Text weight="700" size={20}>
-              {formatarParaMoeda(orderTotal)}
-            </Text>
-          </ContainerTotal>
+    <Container>
+      <MenuContainer>
+        <ContainerTotal>
+          <Text weight="700" size={20}>
+            Total do Pedido
+          </Text>
+          <Text weight="700" size={20}>
+            {formatarParaMoeda(orderTotal)}
+          </Text>
+        </ContainerTotal>
 
-          <FlatList
-            data={order}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item, index }) => (
-              <OrderItem
-                item={item}
-                removerItemDoCarrinho={() => RemoverItem(index)}
-                adicionarQuantidade={() => AdicionarQuantidade(index)}
-                removerQuantidade={() => RemoverQuantidade(index)}
-                abrirExcecoes={() => abrirExceptions(index)}
-              />
-            )}
-          />
-        </MenuContainer>
+        <FlatList
+          data={order}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item, index }) => (
+            <OrderItem
+              item={item}
+              removerItemDoCarrinho={() => RemoverItem(index)}
+              adicionarQuantidade={() => AdicionarQuantidade(index)}
+              removerQuantidade={() => RemoverQuantidade(index)}
+              abrirExcecoes={() => abrirExceptions(index)}
+            />
+          )}
+        />
+      </MenuContainer>
 
-        <Footer>
-          <FooterContainer>
-            <Button onPress={() => {}} disabled={order.length === 0}>
-              Realizar Pagamento
-            </Button>
-          </FooterContainer>
-        </Footer>
-      </Container>
-    </>
+      <Footer>
+        <FooterContainer>
+          <Button
+            onPress={() => navigation.navigate("Payment")}
+            disabled={order.length === 0}
+          >
+            Realizar Pagamento
+          </Button>
+        </FooterContainer>
+      </Footer>
+    </Container>
   );
 };
 

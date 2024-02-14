@@ -77,16 +77,24 @@ function reducer(order: Item[], action: Action) {
     case "adicionarQuantidadeExcecao":
       return order.map((item, index) => {
         if (index === action.selectedItemIndex) {
+          const updatedExcecoes = item.Excecoes.map((excecao, excecaoIndex) =>
+            excecao.Handle === action.selectedExcecaoHandle
+              ? {
+                  ...excecao,
+                  Amount: (excecao.Amount ?? 0) + 1,
+                }
+              : excecao
+          );
+
+          const exceptionsTotal = updatedExcecoes.reduce((acc, excecao) => {
+            return acc + (excecao.Valor ?? 0) * (excecao.Amount ?? 0);
+          }, 0);
+
           return {
             ...item,
-            Excecoes: item.Excecoes.map((excecao, excecaoIndex) =>
-              excecao.Handle === action.selectedExcecaoHandle
-                ? {
-                    ...excecao,
-                    Amount: (excecao.Amount ?? 0) + 1,
-                  }
-                : excecao
-            ),
+            Excecoes: updatedExcecoes,
+            Total:
+              (item.VendaValor ?? 0) * (item.Amount ?? 0) + exceptionsTotal, // Calculate total with exceptions
           };
         }
         return item;
@@ -94,17 +102,24 @@ function reducer(order: Item[], action: Action) {
     case "removerQuantidadeExcecao":
       return order.map((item, index) => {
         if (index === action.selectedItemIndex) {
+          const updatedExcecoes = item.Excecoes.map((excecao, excecaoIndex) =>
+            excecao.Handle === action.selectedExcecaoHandle
+              ? {
+                  ...excecao,
+                  Amount: Math.max(0, (excecao.Amount ?? 0) - 1), // Ensure non-negative amount
+                }
+              : excecao
+          );
+
+          const exceptionsTotal = updatedExcecoes.reduce((acc, excecao) => {
+            return acc + (excecao.Valor ?? 0) * (excecao.Amount ?? 0);
+          }, 0);
+
           return {
             ...item,
-            Excecoes: item.Excecoes.map((excecao, excecaoIndex) =>
-              excecao.Handle === action.selectedExcecaoHandle &&
-              excecao.Amount !== 0
-                ? {
-                    ...excecao,
-                    Amount: (excecao.Amount ?? 0) - 1,
-                  }
-                : excecao
-            ),
+            Excecoes: updatedExcecoes,
+            Total:
+              (item.VendaValor ?? 0) * (item.Amount ?? 0) + exceptionsTotal, // Update total with new exceptions
           };
         }
         return item;
@@ -160,18 +175,7 @@ export const OrderProvaider = ({ children }: any) => {
       return acc + (item.Total ?? 0);
     }, 0);
 
-    const exceptionsTotal = items.reduce((acc, item) => {
-      return (
-        acc +
-        item.Excecoes.reduce((acc2, excecao) => {
-          return acc2 + (excecao.Amount ?? 0) * (excecao.Valor ?? 0);
-        }, 0)
-      );
-    }, 0);
-
-    const finalTotal = baseTotal + exceptionsTotal;
-
-    setTotal(finalTotal);
+    setTotal(baseTotal);
   }
 
   return (

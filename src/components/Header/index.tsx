@@ -31,7 +31,7 @@ export const Header = ({ realizarSync }: HeaderProps) => {
         <Action onPress={() => realizarSync()}>
           <SyncIcon />
         </Action>
-        <Action onPress={() => signOut}>
+        <Action onPress={() => signOut()}>
           <SignOut />
         </Action>
       </ContentAction>

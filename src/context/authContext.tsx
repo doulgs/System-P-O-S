@@ -27,6 +27,12 @@ interface UsuarioProp {
   Senha: string | null | undefined;
   NomeSite: string | null | undefined;
   NomeEmpresa: string | null | undefined;
+  EnderecoEmpresa: string | null | undefined;
+  NumeroEmpresa: string | null | undefined;
+  CepEmpresa: string | null | undefined;
+  ComplementoEmpresa: string | null | undefined;
+  FoneEmpresa: string | null | undefined;
+  CidadeEmpresa: string | null | undefined;
 }
 
 export const AuthContext = createContext<AuthContextProps>(
@@ -126,6 +132,12 @@ export const AuthProvaider = ({ children }: any) => {
           Senha: response.Senha,
           NomeSite: response.Filial?.NomeSite,
           NomeEmpresa: response.Filial?.Nome,
+          EnderecoEmpresa: response.Filial?.Endereco,
+          NumeroEmpresa: response.Filial?.Numero,
+          CepEmpresa: response.Filial?.Cep,
+          ComplementoEmpresa: response.Filial?.Complemento,
+          FoneEmpresa: response.Filial?.Fone,
+          CidadeEmpresa: response.Filial?.Cidade,
         });
       }
     } catch (error) {
