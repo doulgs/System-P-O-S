@@ -16,6 +16,7 @@ import { Text } from "../components/Text";
 import { More } from "../assets/icons/More";
 
 import { Storefont } from "../assets/icons/Storefont";
+import Payment from "../pages/app/Payment";
 
 const Stack = createNativeStackNavigator();
 
@@ -117,6 +118,11 @@ function AppRoutes() {
         name="Exceptions"
         component={Exceptions}
         options={{ headerTitle: "ADICIONAIS" }}
+      />
+      <Stack.Screen
+        name="Payment"
+        component={Payment}
+        options={{ headerTitle: "PAGAMENTO" }}
       />
     </Stack.Navigator>
   );

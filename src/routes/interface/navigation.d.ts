@@ -9,6 +9,7 @@ export declare global {
       ListaDeGrupo2: undefined;
       ListaDeItens: { handle: number };
       Exceptions: { indexItem: number };
+      Payment: undefined;
     }
   }
 }
