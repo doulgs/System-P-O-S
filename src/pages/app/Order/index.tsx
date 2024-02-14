@@ -63,7 +63,7 @@ const Order = () => {
         <Footer>
           <FooterContainer>
             <Button onPress={() => {}} disabled={order.length === 0}>
-              Finalizar
+              Realizar Pagamento
             </Button>
           </FooterContainer>
         </Footer>

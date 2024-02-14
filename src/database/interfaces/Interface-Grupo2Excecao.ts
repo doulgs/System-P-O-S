@@ -26,6 +26,7 @@ export interface Grupo2Excecao {
   HandleTrade?: number;
   Plataforma?: number;
   Amount: number; //Utilizada para controle do Item
+  Total: number; //Utilizada para controle do Item
 }
 
 export type Grupo2ExcecaoObject = Grupo2Excecao & Realm.Object;

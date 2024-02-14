@@ -15,6 +15,11 @@ interface OrderContextProps {
   AdicionarQuantidade: (indexItem: number) => void;
   RemoverQuantidade: (indexItem: number) => void;
   LimparCarrinho: () => void;
+  AdicionarQuantidadeExcecao: (
+    indexItem: number,
+    handleExcecao: number
+  ) => void;
+  RemoverQuantidadeExcecao: (indexItem: number, handleExcecao: number) => void;
   orderTotal: number;
 }
 
@@ -29,7 +34,17 @@ type Action =
   | { type: "removerItem"; selectedItemIndex: number }
   | { type: "adicionarQuantidade"; selectedItemIndex: number }
   | { type: "removerQuantidade"; selectedItemIndex: number }
-  | { type: "limparCarrinho" };
+  | { type: "limparCarrinho" }
+  | {
+      type: "adicionarQuantidadeExcecao";
+      selectedItemIndex: number;
+      selectedExcecaoHandle: number;
+    }
+  | {
+      type: "removerQuantidadeExcecao";
+      selectedItemIndex: number;
+      selectedExcecaoHandle: number;
+    };
 
 function reducer(order: Item[], action: Action) {
   switch (action.type) {
@@ -55,6 +70,41 @@ function reducer(order: Item[], action: Action) {
             ...item,
             Amount: item.Amount - 1,
             Total: item.Total - (item.VendaValor ?? 0),
+          };
+        }
+        return item;
+      });
+    case "adicionarQuantidadeExcecao":
+      return order.map((item, index) => {
+        if (index === action.selectedItemIndex) {
+          return {
+            ...item,
+            Excecoes: item.Excecoes.map((excecao, excecaoIndex) =>
+              excecao.Handle === action.selectedExcecaoHandle
+                ? {
+                    ...excecao,
+                    Amount: (excecao.Amount ?? 0) + 1,
+                  }
+                : excecao
+            ),
+          };
+        }
+        return item;
+      });
+    case "removerQuantidadeExcecao":
+      return order.map((item, index) => {
+        if (index === action.selectedItemIndex) {
+          return {
+            ...item,
+            Excecoes: item.Excecoes.map((excecao, excecaoIndex) =>
+              excecao.Handle === action.selectedExcecaoHandle &&
+              excecao.Amount !== 0
+                ? {
+                    ...excecao,
+                    Amount: (excecao.Amount ?? 0) - 1,
+                  }
+                : excecao
+            ),
           };
         }
         return item;
@@ -87,12 +137,41 @@ export const OrderProvaider = ({ children }: any) => {
   function LimparCarrinho() {
     dispatch({ type: "limparCarrinho" });
   }
+  function AdicionarQuantidadeExcecao(
+    indexItem: number,
+    handleExcecao: number
+  ) {
+    dispatch({
+      type: "adicionarQuantidadeExcecao",
+      selectedItemIndex: indexItem,
+      selectedExcecaoHandle: handleExcecao,
+    });
+  }
+  function RemoverQuantidadeExcecao(indexItem: number, handleExcecao: number) {
+    dispatch({
+      type: "removerQuantidadeExcecao",
+      selectedItemIndex: indexItem,
+      selectedExcecaoHandle: handleExcecao,
+    });
+  }
 
   function resultorder(items: Item[]) {
-    const result = items.reduce((acc, item) => {
-      return acc + item.Total;
+    const baseTotal = items.reduce((acc, item) => {
+      return acc + (item.Total ?? 0);
     }, 0);
-    setTotal(result);
+
+    const exceptionsTotal = items.reduce((acc, item) => {
+      return (
+        acc +
+        item.Excecoes.reduce((acc2, excecao) => {
+          return acc2 + (excecao.Amount ?? 0) * (excecao.Valor ?? 0);
+        }, 0)
+      );
+    }, 0);
+
+    const finalTotal = baseTotal + exceptionsTotal;
+
+    setTotal(finalTotal);
   }
 
   return (
@@ -104,6 +183,8 @@ export const OrderProvaider = ({ children }: any) => {
         AdicionarQuantidade,
         RemoverQuantidade,
         LimparCarrinho,
+        AdicionarQuantidadeExcecao,
+        RemoverQuantidadeExcecao,
         orderTotal,
       }}
     >

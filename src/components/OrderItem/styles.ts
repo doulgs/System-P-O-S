@@ -7,6 +7,10 @@ export const Container = styled.View`
   background-color: ${(props) => props.theme.colors.MildScale[50]};
 `;
 export const ContentInfo = styled.View`
+  justify-content: space-between;
+  margin-bottom: 8px;
+`;
+export const ContentDescription = styled.View`
   flex-direction: row;
   justify-content: space-between;
   margin-bottom: 8px;

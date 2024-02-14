@@ -19,11 +19,18 @@ import {
 
 type ExceptionLayoutProps = {
   item: Grupo2Excecao;
+  addQuantidade: () => void;
+  removeQuantidade: () => void;
 };
 
-export const ExceptionLayout: React.FC<ExceptionLayoutProps> = ({ item }) => {
+export const ExceptionLayout: React.FC<ExceptionLayoutProps> = ({
+  item,
+  addQuantidade,
+  removeQuantidade,
+}) => {
   return (
     <Container>
+      <Text>{item.Total}</Text>
       <Header>
         <CheckBoox onPress={() => {}}>
           {item?.Amount >= 1 && <CheckIcon />}
@@ -38,15 +45,15 @@ export const ExceptionLayout: React.FC<ExceptionLayoutProps> = ({ item }) => {
 
       <Footer>
         <Action>
-          <ActionLeft onPress={() => {}}>
+          <ActionLeft onPress={removeQuantidade}>
             <Text color="#fff" size={28}>
               -
             </Text>
           </ActionLeft>
           <ActionView>
-            <Text weight="600">{0}</Text>
+            <Text weight="600">{item.Amount ?? 0}</Text>
           </ActionView>
-          <ActionRight onPress={() => {}}>
+          <ActionRight onPress={addQuantidade}>
             <Text color="#fff" size={28}>
               +
             </Text>

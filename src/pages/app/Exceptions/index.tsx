@@ -16,7 +16,8 @@ type ExceptionsProps = {
 
 const Exceptions: React.FC = () => {
   const { indexItem } = useRoute().params as ExceptionsProps;
-  const { order } = useOrder();
+  const { order, AdicionarQuantidadeExcecao, RemoverQuantidadeExcecao } =
+    useOrder();
   const exception = order[indexItem].Excecoes;
 
   // Agrupando as exceções com base no Grupo2
@@ -42,7 +43,17 @@ const Exceptions: React.FC = () => {
     <SectionList
       sections={sections} // Passando as seções para a SectionList
       keyExtractor={(item, index) => String(item.Handle + index)}
-      renderItem={({ item }) => <ExceptionLayout item={item} />}
+      renderItem={({ item, index }) => (
+        <ExceptionLayout
+          item={item}
+          addQuantidade={() =>
+            AdicionarQuantidadeExcecao(indexItem, item.Handle)
+          }
+          removeQuantidade={() =>
+            RemoverQuantidadeExcecao(indexItem, item.Handle)
+          }
+        />
+      )}
       renderSectionHeader={({ section: { title } }) => (
         <Text weight="700" style={{ marginVertical: 8 }}>
           {"\u2022"}

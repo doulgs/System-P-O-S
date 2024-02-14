@@ -8,6 +8,7 @@ import { IconTrash } from "../../assets/icons/Icon-Trash";
 import {
   Container,
   ContentInfo,
+  ContentDescription,
   ContentAction,
   Button,
   Action,
@@ -37,11 +38,24 @@ export const OrderItem = ({
     <>
       <Container>
         <ContentInfo>
-          <View>
+          <ContentDescription>
             <Text>{item?.Descricao}</Text>
-            {/* TODO: Dar sequencia na exibição das excecoes */}
-          </View>
-          <Text weight="600">{formatarParaMoeda(item?.VendaValor ?? 0)}</Text>
+            <Text weight="600">{formatarParaMoeda(item?.VendaValor ?? 0)}</Text>
+          </ContentDescription>
+          {item?.Excecoes.map((value, index, array) => {
+            if (value.Amount >= 1) {
+              return (
+                <Text
+                  key={index}
+                  style={{ marginVertical: 4 }}
+                  numberOfLines={2}
+                >
+                  {" "}
+                  {"\u2022"} x{value.Amount ?? 0} {value.Excecao}
+                </Text>
+              );
+            }
+          })}
         </ContentInfo>
 
         <ContentAction>

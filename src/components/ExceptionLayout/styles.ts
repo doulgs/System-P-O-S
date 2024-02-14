@@ -18,7 +18,9 @@ export const Header = styled.View`
   gap: 8px;
 `;
 
-export const HeaderInfo = styled.View``;
+export const HeaderInfo = styled.View`
+  flex: 1;
+`;
 
 export const CheckBoox = styled.TouchableOpacity.attrs({
   activeOpacity: 0.9,
