@@ -67,7 +67,7 @@ export const ItemLayout = ({
         <Image source={require("../../assets/images/NoImage.jpg")} />
         <Content>
           <Header>
-            <Text weight="700" numberOfLines={2}>
+            <Text weight="700" numberOfLines={2} style={{ maxWidth: "90%" }}>
               {data?.Descricao}
             </Text>
             <CheckBoox onPress={handleAdd}>
