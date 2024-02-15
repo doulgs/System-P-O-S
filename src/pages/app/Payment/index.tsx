@@ -1,12 +1,13 @@
-import React from "react";
-import { FlatList } from "react-native";
+import React, { useState } from "react";
+
 import { useNavigation } from "@react-navigation/native";
 
 import { useAuth } from "../../../context/authContext";
 import { useOrder } from "../../../context/orderContext";
 
-import { Button } from "../../../components/Button";
 import { Text } from "../../../components/Text";
+import { Button } from "../../../components/Button";
+import { Select } from "../../../components/Select";
 
 import { formatarParaMoeda } from "../../../helpers/utils/formatarParaMoeda";
 
@@ -28,10 +29,19 @@ import {
   ExtractScrollView,
 } from "./styles";
 
+import {
+  CondicoesDePagamento,
+  CondicoesDePagamentoProps,
+} from "../../../helpers/condicoesDePagamento";
+
 const Payment = () => {
   const { user } = useAuth();
   const { order, orderTotal } = useOrder();
   const navigation = useNavigation();
+
+  const [pgmt, setPgmt] = useState<CondicoesDePagamentoProps | null>(null);
+
+  function finalizarPedido() {}
 
   return (
     <Container>
@@ -66,7 +76,7 @@ const Payment = () => {
           <ExtractScrollView>
             {order.map((value, index) => {
               return (
-                <BodyExtractItens>
+                <BodyExtractItens key={index}>
                   <ContentQtd>
                     <Text weight="600">{value.Amount}x</Text>
                   </ContentQtd>
@@ -87,7 +97,14 @@ const Payment = () => {
           </ExtractScrollView>
         </BodyExtract>
       </Extract>
+
       <FooterExtract>
+        <Select
+          text="Forma de pagamento"
+          optins={CondicoesDePagamento}
+          onChangeSelect={(codicao) => setPgmt(codicao)}
+        />
+
         <ContainerTotal>
           <Text weight="700" size={20}>
             Total : {formatarParaMoeda(orderTotal)}
@@ -97,7 +114,9 @@ const Payment = () => {
 
       <Footer>
         <FooterContainer>
-          <Button onPress={() => {}}>Finalizar</Button>
+          <Button onPress={() => {}} disabled={pgmt === null}>
+            Finalizar
+          </Button>
         </FooterContainer>
       </Footer>
     </Container>

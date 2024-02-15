@@ -31,8 +31,7 @@ export const FooterContainer = styled.SafeAreaView``;
 export const Extract = styled.View`
   flex: 1;
   margin: 24px 16px;
-  border-top-right-radius: 16px;
-  border-top-left-radius: 16px;
+  border-radius: 8px;
   border-width: 1px;
 `;
 
