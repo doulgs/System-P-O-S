@@ -3,10 +3,10 @@ import styled from "styled-components/native";
 export const Background = styled.View`
   border-radius: 8px;
   background-color: ${(props) => props.theme.colors.MildScale[50]};
+  overflow: hidden; /* Garante que os elementos não ultrapassem os limites do contêiner */
 `;
 
 export const Container = styled.View`
-  flex: 1;
   flex-direction: row;
 `;
 
@@ -23,9 +23,10 @@ export const Image = styled.Image`
 `;
 
 export const Header = styled.View`
-  flex: 1;
   flex-direction: row;
+  align-items: center;
   justify-content: space-between;
+  padding: 8px;
 `;
 
 export const CheckBoox = styled.TouchableOpacity.attrs({
@@ -43,6 +44,7 @@ export const Footer = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  padding: 8px;
 `;
 
 export const Action = styled.View`
