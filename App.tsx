@@ -13,7 +13,7 @@ import "intl/locale-data/jsonp/pt-BR";
 
 import { AuthProvaider } from "./src/context/authContext";
 import { OrderProvaider } from "./src/context/orderContext";
-import { CartProvaider } from "./src/context/cartContext";
+import { CartProvider } from "./src/context/cartContext";
 import { Loading } from "./src/components/Loading";
 
 export default function App() {
@@ -32,10 +32,10 @@ export default function App() {
       <NavigationContainer>
         <AuthProvaider>
           <OrderProvaider>
-            <CartProvaider>
+            <CartProvider>
               <StatusBar style="dark" />
               <Routes />
-            </CartProvaider>
+            </CartProvider>
           </OrderProvaider>
         </AuthProvaider>
       </NavigationContainer>

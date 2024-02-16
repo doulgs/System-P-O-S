@@ -85,12 +85,12 @@ const ListaDeItens = () => {
           <ItemLayout
             data={item}
             adicionarItem={() => AdicionarItem(item)}
-            removerItem={() => RemoverItem(index)}
+            removerItem={() => RemoverItem(item.Handle)}
             adicionarQuantidade={() => AdicionarQuantidade(index)}
             removerQuantidade={() => RemoverQuantidade(index)}
           />
         )}
-        estimatedItemSize={200}
+        estimatedItemSize={10}
         ItemSeparatorComponent={() => <Separator />}
         showsVerticalScrollIndicator={false}
       />

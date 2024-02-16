@@ -28,7 +28,7 @@ const initialState: Item[] = [];
 
 type Action =
   | { type: "adicionarItem"; selectedItem: Item }
-  | { type: "removerItem"; selectedItemIndex: number }
+  | { type: "removerItem"; selectedItemHandle: number }
   | { type: "adicionarQuantidade"; selectedItemIndex: number }
   | { type: "removerQuantidade"; selectedItemIndex: number }
   | { type: "limparCarrinho" }
@@ -46,7 +46,9 @@ function reducer(cart: Item[], action: Action) {
         },
       ];
     case "removerItem":
-      return cart.filter((item, index) => index !== action.selectedItemIndex);
+      return cart.filter(
+        (item, index) => item.Handle !== action.selectedItemHandle
+      );
     case "adicionarQuantidade":
       return cart.map((item, index) => {
         if (index === action.selectedItemIndex) {
@@ -76,7 +78,7 @@ function reducer(cart: Item[], action: Action) {
   }
 }
 
-export const CartProvaider = ({ children }: any) => {
+export const CartProvider = ({ children }: any) => {
   const [cart, dispatch] = useReducer(reducer, initialState);
   const [cartTotal, setTotal] = useState(0);
   const { AdicionarItems } = useOrder();
@@ -88,8 +90,8 @@ export const CartProvaider = ({ children }: any) => {
   function AdicionarItem(novoItem: Item) {
     dispatch({ type: "adicionarItem", selectedItem: novoItem });
   }
-  function RemoverItem(indexItem: number) {
-    dispatch({ type: "removerItem", selectedItemIndex: indexItem });
+  function RemoverItem(itemHandle: number) {
+    dispatch({ type: "removerItem", selectedItemHandle: itemHandle });
   }
   function AdicionarQuantidade(indexItem: number) {
     dispatch({ type: "adicionarQuantidade", selectedItemIndex: indexItem });

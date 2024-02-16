@@ -78,7 +78,7 @@ function AppRoutes() {
               Alert.alert("O carrinho esta vazio");
             }
             return (
-              cart.length > 0 && (
+              cart.length >= 1 && (
                 <TouchableOpacity
                   onPress={handleConfirmarItens}
                   style={{
