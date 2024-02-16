@@ -172,7 +172,16 @@ export const OrderProvaider = ({ children }: any) => {
 
   function resultorder(items: Item[]) {
     const baseTotal = items.reduce((acc, item) => {
-      return acc + (item.Total ?? 0);
+      const itemTotal = (item.VendaValor ?? 0) * (item.Amount ?? 0);
+
+      const exceptionsTotal = item.Excecoes.reduce((acc, excecao) => {
+        return (
+          acc +
+          (excecao.Valor ?? 0) * (excecao.Amount ?? 0) * (item.Amount ?? 0)
+        );
+      }, 0);
+
+      return acc + itemTotal + exceptionsTotal;
     }, 0);
 
     setTotal(baseTotal);

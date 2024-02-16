@@ -11,7 +11,7 @@ import { Grupo2Excecao } from "../../../database/interfaces/Interface-Grupo2Exce
 
 import { Loading } from "../../../components/Loading";
 import { ItemLayout } from "../../../components/ItemLayout";
-import { Separator } from "./styles";
+import { Container, Separator } from "./styles";
 
 type ScreenProps = {
   handle: number;
@@ -19,6 +19,7 @@ type ScreenProps = {
 
 const ListaDeItens = () => {
   const { handle } = useRoute().params as ScreenProps;
+  const navigation = useNavigation();
   const {
     AdicionarItem,
     RemoverItem,
@@ -28,11 +29,7 @@ const ListaDeItens = () => {
   } = useCart();
 
   const [itens, setItens] = useState<Item[]>([]);
-  const [buscarItens, setBuscarItens] = useState("");
-  const [resultadosBusca, setResultadosBusca] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
-
-  const navigation = useNavigation();
 
   useFocusEffect(
     useCallback(() => {
@@ -71,33 +68,19 @@ const ListaDeItens = () => {
         }
       };
       recuperarItens();
+      LimparCarrinho();
     }, [handle])
   );
-
-  useEffect(() => {
-    realizarBusca();
-  }, [buscarItens, itens]);
-
-  const realizarBusca = () => {
-    const resultados = itens.filter((item) =>
-      item.Descricao?.toLowerCase().includes(buscarItens.toLowerCase())
-    );
-    setResultadosBusca(resultados);
-  };
-
-  useEffect(() => {
-    LimparCarrinho(); // Move LimparCarrinho outside of useFocusEffect
-  }, []);
 
   if (loading) {
     return <Loading />;
   }
 
   return (
-    <>
+    <Container>
       <FlashList
         data={itens}
-        keyExtractor={(item) => String(item.Handle)}
+        keyExtractor={(item, index) => String(item.Handle + index)}
         renderItem={({ item, index }) => (
           <ItemLayout
             data={item}
@@ -108,11 +91,10 @@ const ListaDeItens = () => {
           />
         )}
         estimatedItemSize={200}
-        contentContainerStyle={{ padding: 16 }}
         ItemSeparatorComponent={() => <Separator />}
         showsVerticalScrollIndicator={false}
       />
-    </>
+    </Container>
   );
 };
 
