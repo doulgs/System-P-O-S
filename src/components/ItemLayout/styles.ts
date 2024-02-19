@@ -1,9 +1,10 @@
 import styled from "styled-components/native";
 
 export const Background = styled.View`
-  border-radius: 8px;
-  background-color: ${(props) => props.theme.colors.MildScale[50]};
   overflow: hidden; /* Garante que os elementos não ultrapassem os limites do contêiner */
+  background-color: ${(props) => props.theme.colors.MildScale[50]};
+  margin: 8px 12px 8px 12px;
+  border-radius: 8px;
 `;
 
 export const Container = styled.View`
@@ -12,7 +13,7 @@ export const Container = styled.View`
 
 export const Content = styled.View`
   flex: 1;
-  margin: 8px;
+  justify-content: space-between;
 `;
 
 export const Image = styled.Image`

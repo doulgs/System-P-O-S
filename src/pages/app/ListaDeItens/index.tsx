@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useCallback, useState } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import { useRoute } from "@react-navigation/native";
 import { useCart } from "../../../context/cartContext";
 import { FlashList } from "@shopify/flash-list";
@@ -19,22 +19,20 @@ type ScreenProps = {
 
 const ListaDeItens = () => {
   const { handle } = useRoute().params as ScreenProps;
-  const navigation = useNavigation();
   const {
-    AdicionarItem,
-    RemoverItem,
+    cart,
+    Adicionar,
     AdicionarQuantidade,
     RemoverQuantidade,
     LimparCarrinho,
   } = useCart();
 
-  const [itens, setItens] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
 
   useFocusEffect(
     useCallback(() => {
       const recuperarItens = async () => {
-        setLoading(true); // Set loading to true when refocusing
+        setLoading(true);
         const realm = await getRealm();
         try {
           const result = realm
@@ -60,7 +58,7 @@ const ListaDeItens = () => {
             });
           });
 
-          setItens(Array.from(result));
+          Adicionar(Array.from(result));
           setLoading(false);
         } catch (error) {
           console.error("Erro ao realizar a consulta dos Itens:", error);
@@ -77,24 +75,20 @@ const ListaDeItens = () => {
   }
 
   return (
-    <Container>
-      <FlashList
-        data={itens}
-        keyExtractor={(item, index) => String(item.Handle + index)}
-        renderItem={({ item, index }) => (
-          <ItemLayout
-            data={item}
-            adicionarItem={() => AdicionarItem(item)}
-            removerItem={() => RemoverItem(item.Handle)}
-            adicionarQuantidade={() => AdicionarQuantidade(index)}
-            removerQuantidade={() => RemoverQuantidade(index)}
-          />
-        )}
-        estimatedItemSize={10}
-        ItemSeparatorComponent={() => <Separator />}
-        showsVerticalScrollIndicator={false}
-      />
-    </Container>
+    <FlashList
+      data={cart}
+      keyExtractor={(item, index) => String(item.Handle + index)}
+      renderItem={({ item, index }) => (
+        <ItemLayout
+          data={item}
+          adicionarQuantidade={() => AdicionarQuantidade(index)}
+          removerQuantidade={() => RemoverQuantidade(index)}
+        />
+      )}
+      estimatedItemSize={153}
+      ItemSeparatorComponent={() => <Separator />}
+      showsVerticalScrollIndicator={false}
+    />
   );
 };
 

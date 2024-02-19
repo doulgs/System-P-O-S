@@ -8,8 +8,6 @@ import { ExceptionLayout } from "../../../components/ExceptionLayout";
 import { Grupo2Excecao } from "../../../database/interfaces/Interface-Grupo2Excecao";
 import { Text } from "../../../components/Text";
 
-import { Container } from "./styles";
-
 type ExceptionsProps = {
   indexItem: number;
 };
