@@ -6,6 +6,7 @@ import { SchemaGrupo2Excecao } from "./Schema-Grupo2Excecao";
 import { SchemaGrupo3 } from "./Schema-Grupo3";
 import { SchemaGrupoExcecao } from "./Schema-GrupoExcecao";
 import { SchemaIteTabFor } from "./Schema-IteTabFor";
+import { SchemaPedido } from "./Schema-Pedido";
 import { SchemaItem } from "./Schema-Item";
 import { ItemExcecaoAuto } from "./Schema-ItemExcecaoAuto";
 import { SchemaPromocaoItem } from "./Schema-PromocaoItem";
@@ -23,6 +24,7 @@ export {
   SchemaGrupo3,
   SchemaGrupoExcecao,
   SchemaIteTabFor,
+  SchemaPedido,
   SchemaItem,
   ItemExcecaoAuto,
   SchemaPromocaoItem,

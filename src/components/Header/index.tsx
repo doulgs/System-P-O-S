@@ -4,12 +4,15 @@ import { Action, Container, Content, ContentAction } from "./styles";
 
 import { SignOut } from "../../assets/icons/SignOut";
 import { SyncIcon } from "../../assets/icons/Sync";
+import { Sale } from "../../assets/icons/Sale";
+import { useNavigation } from "@react-navigation/native";
 
 interface HeaderProps {
   realizarSync: Function;
 }
 
 export const Header = ({ realizarSync }: HeaderProps) => {
+  const navigation = useNavigation();
   const { user, signOut } = useAuth();
 
   return (
@@ -28,6 +31,9 @@ export const Header = ({ realizarSync }: HeaderProps) => {
       </Content>
 
       <ContentAction>
+        <Action onPress={() => navigation.navigate("Sales")}>
+          <Sale />
+        </Action>
         <Action onPress={() => realizarSync()}>
           <SyncIcon />
         </Action>

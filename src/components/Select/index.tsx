@@ -34,13 +34,13 @@ export const Select: React.FC<SelectProps> = ({
     return (
       <Touchable
         onPress={() => {
-          setTxt(item.name);
+          setTxt(item.description);
           onChangeSelect(item);
           setModalVisible(false);
         }}
       >
-        <Text weight="600">{item.name}</Text>
-        <Box>{txt === item.name && <CheckIcon />}</Box>
+        <Text weight="600">{item.description}</Text>
+        <Box>{txt === item.description && <CheckIcon />}</Box>
       </Touchable>
     );
   }
@@ -72,7 +72,7 @@ export const Select: React.FC<SelectProps> = ({
           <BodyModal>
             <FlatList
               data={optins}
-              keyExtractor={(item) => String(item.id)}
+              keyExtractor={(item) => String(item.Handle)}
               renderItem={rendezirarLista}
             />
           </BodyModal>

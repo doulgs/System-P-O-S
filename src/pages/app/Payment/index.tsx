@@ -35,229 +35,244 @@ import {
   CondicoesDePagamento,
   CondicoesDePagamentoProps,
 } from "../../../helpers/condicoesDePagamento";
+import { RegistrarPedido } from "../../../helpers/functions/registrarPedidoDB";
+import { ActivityIndicator } from "react-native";
 
 const Payment = () => {
   const { user } = useAuth();
   const { order, orderTotal, LimparCarrinho } = useOrder();
   const navigation = useNavigation();
+  const [isLoading, setIsLoading] = useState(false);
 
   const [pgmt, setPgmt] = useState<CondicoesDePagamentoProps | null>(null);
 
-  //Escala de 0.33
-  const html = `<!DOCTYPE html>
-  <html lang="pt-BR">
-  <head>
-      <meta charset="UTF-8">
-      <title>Extrato de Pedido</title>
-      <style>
-          /* Estilos para tela */
-          body {
-              font-family: Arial, sans-serif;
-              padding: 0;
-              margin: 0;
-          }
-          .container {
-              border: 1px solid #ccc;
-              padding: 10px;
-              border-radius: 5px;
-              background-color: #f9f9f9;
-              text-align: center; /* Centralizando o conteúdo */
-              font-size: 40px; /* Tamanho de fonte geral */
-          }
-          h1, h2, p {
-              margin: 0;
-          }
-          .header {
-              margin-bottom: 20px; /* Espaçamento abaixo do cabeçalho */
-          }
-          .body-extract-header {
-              display: flex;
-              flex-direction: row;
-              padding: 10px 2px; /* Adicionando espaçamento interno superior e inferior */
-              border-bottom: 0.5px solid black;
-          }
-          .content-qtd, .content-descricao, .content-valor, .content-total {
-              flex: 1;
-              text-align: center; /* Centralizando o texto */
-          }
-          .item {
-              margin-top: 10px; /* Espaçamento entre os itens */
-              display: flex;
-              flex-direction: row;
-              justify-content: space-between;
-              align-items: center;
-              padding: 5px;
-          }
-          .descricao {
-              flex: 1; /* Ocupa o espaço restante */
-              max-width: 200px; /* Tamanho máximo para a descrição */
-              overflow-wrap: break-word; /* Permite que o texto quebre quando ultrapassar o tamanho máximo */
-          }
-          .total {
-              font-weight: bold;
-              margin-top: 20px; /* Espaçamento acima do total */
-          }
-      </style>
-  </head>
-  <body>
-  <div class="container">
-      <div class="header">
-          <h1>${user?.NomeEmpresa}</h1>
-          <p>
-              ${user?.EnderecoEmpresa} |
-              ${user?.NumeroEmpresa} |
-              ${user?.CepEmpresa}
-              ${user?.ComplementoEmpresa}
-          </p>
-          <p>
-              ${user?.FoneEmpresa} |
-              ${user?.CidadeEmpresa}
-          </p>
-      </div>
-      <div class="body-extract-header">
-          <div class="content-descricao">Descrição</div>
-          <div class="content-qtd">Qtd</div>
-          <div class="content-valor">Valor</div>
-          <div class="content-total">Total</div>
-      </div>
-      <div>
-          ${order
-            .map((value) => {
-              return `
-                  <div class="item">
-                      <p class="descricao">${value.Descricao}</p>
-                      <p>${value.Amount}x</p>
-                      <p>${formatarParaMoeda(value.VendaValor ?? 0)}</p>
-                      <p>${formatarParaMoeda(value.Total)}</p>
-                  </div>
-                  `;
-            })
-            .join("")}
-      </div>
-      <div class="total">
-          <p>Forma de Pagamento: ${pgmt?.name}</p>
-          <p>Total do Pedido: ${formatarParaMoeda(orderTotal)}</p>
-      </div>
-  </div>
-  </body>
-  </html>
+  //   Escala de 0.33
+  //   const html = `<!DOCTYPE html>
+  //   <html lang="pt-BR">
+  //   <head>
+  //       <meta charset="UTF-8">
+  //       <title>Extrato de Pedido</title>
+  //       <style>
+  //           /* Estilos para tela */
+  //           body {
+  //               font-family: Arial, sans-serif;
+  //               padding: 0;
+  //               margin: 0;
+  //           }
+  //           .container {
+  //               border: 1px solid #ccc;
+  //               padding: 10px;
+  //               border-radius: 5px;
+  //               background-color: #f9f9f9;
+  //               text-align: center; /* Centralizando o conteúdo */
+  //               font-size: 40px; /* Tamanho de fonte geral */
+  //           }
+  //           h1, h2, p {
+  //               margin: 0;
+  //           }
+  //           .header {
+  //               margin-bottom: 20px; /* Espaçamento abaixo do cabeçalho */
+  //           }
+  //           .body-extract-header {
+  //               display: flex;
+  //               flex-direction: row;
+  //               padding: 10px 2px; /* Adicionando espaçamento interno superior e inferior */
+  //               border-bottom: 0.5px solid black;
+  //           }
+  //           .content-qtd, .content-descricao, .content-valor, .content-total {
+  //               flex: 1;
+  //               text-align: center; /* Centralizando o texto */
+  //           }
+  //           .item {
+  //               margin-top: 10px; /* Espaçamento entre os itens */
+  //               display: flex;
+  //               flex-direction: row;
+  //               justify-content: space-between;
+  //               align-items: center;
+  //               padding: 5px;
+  //           }
+  //           .descricao {
+  //               flex: 1; /* Ocupa o espaço restante */
+  //               max-width: 200px; /* Tamanho máximo para a descrição */
+  //               overflow-wrap: break-word; /* Permite que o texto quebre quando ultrapassar o tamanho máximo */
+  //           }
+  //           .total {
+  //               font-weight: bold;
+  //               margin-top: 20px; /* Espaçamento acima do total */
+  //           }
+  //       </style>
+  //   </head>
+  //   <body>
+  //   <div class="container">
+  //       <div class="header">
+  //           <h1>${user?.NomeEmpresa}</h1>
+  //           <p>
+  //               ${user?.EnderecoEmpresa} |
+  //               ${user?.NumeroEmpresa} |
+  //               ${user?.CepEmpresa}
+  //               ${user?.ComplementoEmpresa}
+  //           </p>
+  //           <p>
+  //               ${user?.FoneEmpresa} |
+  //               ${user?.CidadeEmpresa}
+  //           </p>
+  //       </div>
+  //       <div class="body-extract-header">
+  //           <div class="content-descricao">Descrição</div>
+  //           <div class="content-qtd">Qtd</div>
+  //           <div class="content-valor">Valor</div>
+  //           <div class="content-total">Total</div>
+  //       </div>
+  //       <div>
+  //           ${order
+  //             .map((value) => {
+  //               return `
+  //                   <div class="item">
+  //                       <p class="descricao">${value.Descricao}</p>
+  //                       <p>${value.Amount}x</p>
+  //                       <p>${formatarParaMoeda(value.VendaValor ?? 0)}</p>
+  //                       <p>${formatarParaMoeda(value.Total)}</p>
+  //                   </div>
+  //                   `;
+  //             })
+  //             .join("")}
+  //       </div>
+  //       <div class="total">
+  //           <p>Forma de Pagamento: ${pgmt?.name}</p>
+  //           <p>Total do Pedido: ${formatarParaMoeda(orderTotal)}</p>
+  //       </div>
+  //   </div>
+  //   </body>
+  //   </html>
 
-     `;
-  //Escala de 0.33
-  // const html = `
-  // <!DOCTYPE html>
-  // <html lang="pt-BR">
-  // <head>
-  //   <meta charset="UTF-8">
-  //   <title>Extrato de Pedido</title>
-  //   <style>
-  //     @media print {
-  //       body {
-  //         transform: scale(0.33);
-  //         transform-origin: left top;
+  //      `;
+  //  Escala de 0.33
+  //   const html = `
+  //   <!DOCTYPE html>
+  //   <html lang="pt-BR">
+  //   <head>
+  //     <meta charset="UTF-8">
+  //     <title>Extrato de Pedido</title>
+  //     <style>
+  //       @media print {
+  //         body {
+  //           transform: scale(0.33);
+  //           transform-origin: left top;
+  //         }
   //       }
-  //     }
-  //     /* Estilos para tela */
-  //     body {
-  //       font-family: Arial, sans-serif;
-  //       padding: 0;
-  //       margin: 0;
-  //     }
-  //     .container {
-  //       border: 1px solid #ccc;
-  //       padding: 10px;
-  //       border-radius: 5px;
-  //       background-color: #f9f9f9;
-  //       text-align: center; /* Centralizando o conteúdo */
-  //       font-size: 40px; /* Tamanho de fonte geral */
-  //     }
-  //     h1, h2, p {
-  //       margin: 0;
-  //     }
-  //     .header {
-  //       margin-bottom: 20px; /* Espaçamento abaixo do cabeçalho */
-  //     }
-  //     .body-extract-header {
-  //       display: flex;
-  //       flex-direction: row;
-  //       padding: 10px 2px; /* Adicionando espaçamento interno superior e inferior */
-  //       border-bottom: 0.5px solid black;
-  //     }
-  //     .content-qtd, .content-descricao, .content-valor, .content-total {
-  //       flex: 1;
-  //       text-align: center; /* Centralizando o texto */
-  //     }
-  //     .item {
-  //       margin-top: 10px; /* Espaçamento entre os itens */
-  //       display: flex;
-  //       flex-direction: row;
-  //       justify-content: space-between;
-  //       align-items: center;
-  //       padding: 5px;
-  //     }
-  //     .descricao {
-  //       flex: 1; /* Ocupa o espaço restante */
-  //       max-width: 200px; /* Tamanho máximo para a descrição */
-  //       overflow-wrap: break-word; /* Permite que o texto quebre quando ultrapassar o tamanho máximo */
-  //     }
-  //     .total {
-  //       font-weight: bold;
-  //       margin-top: 20px; /* Espaçamento acima do total */
-  //     }
-  //   </style>
-  // </head>
-  // <body>
-  // <div class="container">
-  //   <div class="header">
-  //     <h1>${user?.NomeEmpresa}</h1>
-  //     <p>
-  //       ${user?.EnderecoEmpresa} |
-  //       ${user?.NumeroEmpresa} |
-  //       ${user?.CepEmpresa}
-  //       ${user?.ComplementoEmpresa}
-  //     </p>
-  //     <p>
-  //       ${user?.FoneEmpresa} |
-  //       ${user?.CidadeEmpresa}
-  //     </p>
+  //       /* Estilos para tela */
+  //       body {
+  //         font-family: Arial, sans-serif;
+  //         padding: 0;
+  //         margin: 0;
+  //       }
+  //       .container {
+  //         border: 1px solid #ccc;
+  //         padding: 10px;
+  //         border-radius: 5px;
+  //         background-color: #f9f9f9;
+  //         text-align: center; /* Centralizando o conteúdo */
+  //         font-size: 40px; /* Tamanho de fonte geral */
+  //       }
+  //       h1, h2, p {
+  //         margin: 0;
+  //       }
+  //       .header {
+  //         margin-bottom: 20px; /* Espaçamento abaixo do cabeçalho */
+  //       }
+  //       .body-extract-header {
+  //         display: flex;
+  //         flex-direction: row;
+  //         padding: 10px 2px; /* Adicionando espaçamento interno superior e inferior */
+  //         border-bottom: 0.5px solid black;
+  //       }
+  //       .content-qtd, .content-descricao, .content-valor, .content-total {
+  //         flex: 1;
+  //         text-align: center; /* Centralizando o texto */
+  //       }
+  //       .item {
+  //         margin-top: 10px; /* Espaçamento entre os itens */
+  //         display: flex;
+  //         flex-direction: row;
+  //         justify-content: space-between;
+  //         align-items: center;
+  //         padding: 5px;
+  //       }
+  //       .descricao {
+  //         flex: 1; /* Ocupa o espaço restante */
+  //         max-width: 200px; /* Tamanho máximo para a descrição */
+  //         overflow-wrap: break-word; /* Permite que o texto quebre quando ultrapassar o tamanho máximo */
+  //       }
+  //       .total {
+  //         font-weight: bold;
+  //         margin-top: 20px; /* Espaçamento acima do total */
+  //       }
+  //     </style>
+  //   </head>
+  //   <body>
+  //   <div class="container">
+  //     <div class="header">
+  //       <h1>${user?.NomeEmpresa}</h1>
+  //       <p>
+  //         ${user?.EnderecoEmpresa} |
+  //         ${user?.NumeroEmpresa} |
+  //         ${user?.CepEmpresa}
+  //         ${user?.ComplementoEmpresa}
+  //       </p>
+  //       <p>
+  //         ${user?.FoneEmpresa} |
+  //         ${user?.CidadeEmpresa}
+  //       </p>
+  //     </div>
+  //     <div class="body-extract-header">
+  //       <div class="content-descricao">Descrição</div>
+  //       <div class="content-qtd">Qtd</div>
+  //       <div class="content-valor">Valor</div>
+  //       <div class="content-total">Total</div>
+  //     </div>
+  //     <div>
+  //       ${order
+  //         .map((value) => {
+  //           return `
+  //           <div class="item">
+  //             <p class="descricao">${value.Descricao}</p>
+  //             <p>${value.Amount}x</p>
+  //             <p>${formatarParaMoeda(value.VendaValor ?? 0)}</p>
+  //             <p>${formatarParaMoeda(value.Total)}</p>
+  //           </div>
+  //           `;
+  //         })
+  //         .join("")}
+  //     </div>
+  //     <div class="total">
+  //       <p>Forma de Pagamento: ${pgmt?.name}</p>
+  //       <p>Total do Pedido: ${formatarParaMoeda(orderTotal)}</p>
+  //     </div>
   //   </div>
-  //   <div class="body-extract-header">
-  //     <div class="content-descricao">Descrição</div>
-  //     <div class="content-qtd">Qtd</div>
-  //     <div class="content-valor">Valor</div>
-  //     <div class="content-total">Total</div>
-  //   </div>
-  //   <div>
-  //     ${order
-  //       .map((value) => {
-  //         return `
-  //         <div class="item">
-  //           <p class="descricao">${value.Descricao}</p>
-  //           <p>${value.Amount}x</p>
-  //           <p>${formatarParaMoeda(value.VendaValor ?? 0)}</p>
-  //           <p>${formatarParaMoeda(value.Total)}</p>
-  //         </div>
-  //         `;
-  //       })
-  //       .join("")}
-  //   </div>
-  //   <div class="total">
-  //     <p>Forma de Pagamento: ${pgmt?.name}</p>
-  //     <p>Total do Pedido: ${formatarParaMoeda(orderTotal)}</p>
-  //   </div>
-  // </div>
-  // </body>
-  // </html>
+  //   </body>
+  //   </html>
 
-  //    `;
+  //      `;
+
+  //   const finalizarPedido = async () => {
+  //     const { uri } = await printToFileAsync({
+  //       html: html,
+  //       base64: true,
+  //     });
+
+  //     await shareAsync(uri);
+  //     LimparCarrinho();
+  //     navigation.navigate("Home");
+  //   };
 
   const finalizarPedido = async () => {
-    const { uri } = await printToFileAsync({
-      html: html,
-      base64: true,
-    });
-
-    await shareAsync(uri);
+    setIsLoading(true);
+    // Registrar o pedido
+    //const NOMECLIENTE = "*** CONSUMIDOR ***";
+    const NOMECLIENTE = "*** CONSUMIDOR-TESTE ***";
+    const condicao = pgmt ? pgmt.Handle : 0;
+    await RegistrarPedido(order, orderTotal, condicao, NOMECLIENTE);
+    setIsLoading(false);
     LimparCarrinho();
     navigation.navigate("Home");
   };
@@ -334,7 +349,7 @@ const Payment = () => {
       <Footer>
         <FooterContainer>
           <Button onPress={() => finalizarPedido()} disabled={pgmt === null}>
-            Finalizar
+            {isLoading ? <ActivityIndicator /> : "Finalizar"}
           </Button>
         </FooterContainer>
       </Footer>

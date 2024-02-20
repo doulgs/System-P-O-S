@@ -11,12 +11,13 @@ import ListaDeGrupo2 from "../pages/app/ListaDeGrupo2";
 import ListaDeItens from "../pages/app/ListaDeItens";
 import Order from "../pages/app/Order";
 import Exceptions from "../pages/app/Exceptions";
+import Payment from "../pages/app/Payment";
+import Sales from "../pages/app/Sales";
 
 import { Text } from "../components/Text";
 import { More } from "../assets/icons/More";
 
 import { Storefont } from "../assets/icons/Storefont";
-import Payment from "../pages/app/Payment";
 
 const Stack = createNativeStackNavigator();
 
@@ -123,6 +124,11 @@ function AppRoutes() {
         name="Payment"
         component={Payment}
         options={{ headerTitle: "PAGAMENTO" }}
+      />
+      <Stack.Screen
+        name="Sales"
+        component={Sales}
+        options={{ headerTitle: "VENDAS" }}
       />
     </Stack.Navigator>
   );

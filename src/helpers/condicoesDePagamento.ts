@@ -2,19 +2,15 @@ export type CondicoesDePagamentoProps = (typeof CondicoesDePagamento)[0];
 
 export const CondicoesDePagamento = [
   {
-    id: 1,
-    name: "CRÉDITO",
+    Handle: 1549,
+    description: "CRÉDITO",
   },
   {
-    id: 2,
-    name: "DÉBITO",
+    Handle: 2,
+    description: "DÉBITO",
   },
   {
-    id: 3,
-    name: "PIX",
-  },
-  {
-    id: 4,
-    name: "DINHEIRO",
+    Handle: 3,
+    description: "PIX",
   },
 ];

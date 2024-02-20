@@ -10,6 +10,7 @@ export type propsNavigationStack = {
   ListaDeItens: { handle: number };
   Exceptions: { indexItem: number };
   Payment: undefined;
+  Sales: undefined;
 };
 
 export type propsStack = NativeStackNavigationProp<propsNavigationStack>;
