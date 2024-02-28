@@ -5,5 +5,15 @@ const isAndroid = Platform.OS === "android";
 
 export const Container = styled.SafeAreaView`
   flex: 1;
-  background-color: ${(props) => props.theme.colors.Background[100]};
+  padding: 8px;
 `;
+export const Content = styled.TouchableOpacity`
+  background-color: ${(props) => props.theme.colors.Background[50]};
+  margin-bottom: 16px;
+  border-radius: 8px;
+  padding: 8px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`;
+export const Box = styled.View``;

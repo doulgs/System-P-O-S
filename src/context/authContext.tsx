@@ -139,9 +139,14 @@ export const AuthProvaider = ({ children }: any) => {
           FoneEmpresa: response.Filial?.Fone,
           CidadeEmpresa: response.Filial?.Cidade,
         });
+      } else {
+        Alert.alert("Informações", `Usuário/Senha inválido!`, [{ text: "OK" }]);
       }
     } catch (error) {
-      console.log("Erro fazer Login", error);
+      Alert.alert("Informações", `Erro ao realizar fazer Login, ${error}`, [
+        { text: "OK" },
+      ]);
+      console.log("Erro ao realizar fazer Login", error);
     } finally {
       realm.close();
     }

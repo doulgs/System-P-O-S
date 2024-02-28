@@ -35,8 +35,8 @@ import {
   CondicoesDePagamento,
   CondicoesDePagamentoProps,
 } from "../../../helpers/condicoesDePagamento";
-import { RegistrarPedido } from "../../../helpers/functions/registrarPedidoDB";
 import { ActivityIndicator } from "react-native";
+import { RegistrarPedido } from "../../../helpers/functions/Pedidos/registrarPedido";
 
 const Payment = () => {
   const { user } = useAuth();
@@ -270,6 +270,9 @@ const Payment = () => {
     // Registrar o pedido
     //const NOMECLIENTE = "*** CONSUMIDOR ***";
     const NOMECLIENTE = "*** CONSUMIDOR-TESTE ***";
+
+    // "Pago" | "A confirmar" | "Previsto" | "Rejeitado"
+
     const condicao = pgmt ? pgmt.Handle : 0;
     await RegistrarPedido(order, orderTotal, condicao, NOMECLIENTE);
     setIsLoading(false);
