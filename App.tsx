@@ -16,6 +16,8 @@ import { OrderProvaider } from "./src/context/orderContext";
 import { CartProvider } from "./src/context/cartContext";
 import { Loading } from "./src/components/Loading";
 
+import { Text } from "react-native";
+
 export default function App() {
   const [isFontsLoaded] = useFonts({
     "GeneralSans-400": require("./src/assets/fonts/GeneralSans-Regular.otf"),
@@ -27,9 +29,26 @@ export default function App() {
     return <Loading />;
   }
 
+  const linking = {
+    prefixes: ["linkpublipos://"],
+    config: {
+      screens: {
+        Home: { path: "Home" },
+        ListaDeGrupo2: { path: "ListaDeGrupo2" },
+        ListaDeItens: { path: "ListaDeItens" },
+        Order: { path: "Order" },
+        Exceptions: { path: "Exceptions" },
+        Payment: { path: "Payment" },
+        Sales: { path: "Sales" },
+        AcessarApp: { path: "AcessarApp" },
+        CadDispositivo: { path: "CadDispositivo" },
+      },
+    },
+  };
+
   return (
     <ThemeProvider theme={THEME}>
-      <NavigationContainer>
+      <NavigationContainer linking={linking} fallback={<Text>Loading...</Text>}>
         <AuthProvaider>
           <OrderProvaider>
             <CartProvider>
