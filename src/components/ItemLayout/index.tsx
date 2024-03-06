@@ -28,18 +28,20 @@ export const ItemLayout = ({
   adicionarQuantidade,
   removerQuantidade,
 }: ItemLayoutProps) => {
+  const backColor = data.Amount >= 1 ? "rgba(10,55,80,0.13)" : "#fcfcfc";
+
   return (
     <Background style={{ elevation: 3 }}>
-      <Container>
+      <Container style={{ backgroundColor: backColor }}>
         <Image source={require("../../assets/images/NoImage.jpg")} />
         <Content>
           <Header>
             <Text weight="700" numberOfLines={2} style={{ maxWidth: "90%" }}>
               {data?.Descricao}
             </Text>
-            <CheckBoox onPress={adicionarQuantidade}>
+            {/* <CheckBoox onPress={adicionarQuantidade}>
               {data.Amount >= 1 && <CheckIcon />}
-            </CheckBoox>
+            </CheckBoox> */}
           </Header>
 
           <Footer>
