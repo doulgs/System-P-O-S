@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ActivityIndicator, Alert } from "react-native";
+import { ActivityIndicator, Alert, Linking } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import { useAuth } from "../../../context/authContext";
@@ -29,6 +29,12 @@ import {
   FooterContainer,
 } from "./styles";
 
+import {
+  CondicoesDePagamento,
+  CondicoesDePagamentoProps,
+} from "../../../helpers/condicoesDePagamento";
+import { Select } from "../../../components/Select";
+
 interface ParsedURL {
   protocol: string;
   host: string;
@@ -42,59 +48,70 @@ const Payment = () => {
 
   const { user } = useAuth();
   const { order, orderTotal, LimparCarrinho } = useOrder();
-
+  const [pgmt, setPgmt] = useState<CondicoesDePagamentoProps | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  // useEffect(() => {
+  //   const parseURL = (url: string): ParsedURL => {
+  //     const result: ParsedURL = {} as ParsedURL;
+  //     const [fullPath, queryString] = url.split("?");
+  //     const [protocol, host, ...pathParts] = fullPath.split("/");
+
+  //     result.protocol = protocol.replace(/:$/, "");
+  //     result.host = host;
+  //     result.pathname = "/" + pathParts.join("/");
+
+  //     if (queryString) {
+  //       result.queryParams = {};
+  //       queryString.split("&").forEach((param) => {
+  //         const [key, value] = param.split("=");
+  //         result.queryParams![key] = decodeURIComponent(
+  //           value.replace(/\+/g, " ")
+  //         );
+  //       });
+  //     }
+
+  //     return result;
+  //   };
+
+  //   const parsedURL = redirectURL ? parseURL(redirectURL) : null;
+
+  //   if (parsedURL?.queryParams?.code === "0") {
+  //     console.log("teste", parsedURL);
+  //     LimparCarrinho();
+  //     navigation.navigate("Home");
+  //   } else if (parsedURL?.queryParams?.code === "2") {
+  //     Alert.alert("Pagamento cancelado");
+  //   }
+  // }, [redirectURL, LimparCarrinho, navigation]);
+
   useEffect(() => {
-    const parseURL = (url: string): ParsedURL => {
-      const result: ParsedURL = {} as ParsedURL;
-      const [fullPath, queryString] = url.split("?");
-      const [protocol, host, ...pathParts] = fullPath.split("/");
-
-      result.protocol = protocol.replace(/:$/, "");
-      result.host = host;
-      result.pathname = "/" + pathParts.join("/");
-
-      if (queryString) {
-        result.queryParams = {};
-        queryString.split("&").forEach((param) => {
-          const [key, value] = param.split("=");
-          result.queryParams![key] = decodeURIComponent(
-            value.replace(/\+/g, " ")
-          );
-        });
-      }
-
-      return result;
+    const handleOpenURL = (event: { url: string }) => {
+      console.log("Deep link recebido:", event.url);
+      Alert.alert("Deep link recebido", event.url);
     };
 
-    const parsedURL = redirectURL ? parseURL(redirectURL) : null;
+    Linking.addEventListener("url", handleOpenURL);
 
-    if (parsedURL?.queryParams?.code === "0") {
-      console.log("teste", parsedURL);
-      LimparCarrinho();
-      navigation.navigate("Home");
-    } else if (parsedURL?.queryParams?.code === "2") {
-      Alert.alert("Pagamento cancelado");
-    }
-  }, [redirectURL, LimparCarrinho, navigation]);
+    Linking.getInitialURL().then((url) => {
+      if (url) {
+        console.log("O aplicativo foi aberto por um deep link:", url);
+        Alert.alert("O aplicativo foi aberto por um deep link", url);
+      }
+    });
+
+    return () => {
+      // Remova todos os listeners do evento 'url'
+      Linking.removeAllListeners("url");
+    };
+  }, []);
 
   const finalizarPedido = async () => {
-    const amount = 150;
-    const editable_amount = "0";
-    const transaction_type = "CREDIT";
-    const installment_type = "NONE";
-    const installment_count = "0";
-    const order_id = 120;
-
     setIsLoading(true);
+
     openPaymentApp({
-      amount,
-      editable_amount,
-      transaction_type,
-      installment_type,
-      installment_count,
-      order_id,
+      amount: formatarParaMoeda(orderTotal).replace(/[^0-9]/g, ""),
+      transaction_type: pgmt?.type ?? "DEBIT",
     });
     setIsLoading(false);
   };
@@ -153,6 +170,11 @@ const Payment = () => {
       </Extract>
 
       <FooterExtract>
+        <Select
+          text="Forma de pagamento"
+          optins={CondicoesDePagamento}
+          onChangeSelect={(codicao) => setPgmt(codicao)}
+        />
         <ContainerTotal>
           <Text weight="700" size={20}>
             Total : {formatarParaMoeda(orderTotal)}

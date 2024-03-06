@@ -72,7 +72,7 @@ export const Select: React.FC<SelectProps> = ({
           <BodyModal>
             <FlatList
               data={optins}
-              keyExtractor={(item) => String(item.Handle)}
+              keyExtractor={(item, index) => index.toString()}
               renderItem={rendezirarLista}
             />
           </BodyModal>
