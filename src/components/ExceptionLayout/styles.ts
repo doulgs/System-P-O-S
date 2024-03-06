@@ -6,7 +6,7 @@ export const Container = styled.View`
   align-items: center;
   border-width: 0.4px;
   padding: 8px;
-  border-radius: 8px;
+  border-radius: ${(props) => props.theme.size.borderRadius.sm}px;
   margin-top: 8px;
   background-color: ${(props) => props.theme.colors.Background[50]};
 `;
@@ -43,7 +43,7 @@ export const Action = styled.View`
   height: 40px;
   width: 110px;
   justify-content: center;
-  border-radius: 8px;
+  border-radius: ${(props) => props.theme.size.borderRadius.sm}px;
   border-width: 0.4px;
   background-color: ${(props) => props.theme.colors.Secondary};
 `;

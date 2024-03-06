@@ -10,7 +10,7 @@ export const Container = styled.SafeAreaView`
 export const Content = styled.TouchableOpacity`
   background-color: ${(props) => props.theme.colors.Background[50]};
   margin-bottom: 16px;
-  border-radius: 8px;
+  border-radius: ${(props) => props.theme.size.borderRadius.sm}px;
   padding: 8px;
   flex-direction: row;
   align-items: center;

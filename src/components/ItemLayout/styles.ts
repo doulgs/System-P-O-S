@@ -4,7 +4,7 @@ export const Background = styled.View`
   overflow: hidden; /* Garante que os elementos não ultrapassem os limites do contêiner */
   background-color: ${(props) => props.theme.colors.MildScale[50]};
   margin: 8px 12px 8px 12px;
-  border-radius: 8px;
+  border-radius: ${(props) => props.theme.size.borderRadius.sm}px;
 `;
 
 export const Container = styled.View`
@@ -19,7 +19,7 @@ export const Content = styled.View`
 export const Image = styled.Image`
   width: 120px;
   height: 110px;
-  border-radius: 8px;
+  border-radius: ${(props) => props.theme.size.borderRadius.sm}px;
   margin: 4px;
 `;
 
@@ -53,7 +53,7 @@ export const Action = styled.View`
   height: 40px;
   width: 110px;
   justify-content: center;
-  border-radius: 8px;
+  border-radius: ${(props) => props.theme.size.borderRadius.sm}px;
   border-width: 0.4px;
   background-color: ${(props) => props.theme.colors.Secondary};
 `;

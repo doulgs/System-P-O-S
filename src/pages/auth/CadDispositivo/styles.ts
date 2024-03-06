@@ -10,7 +10,7 @@ export const Input = styled.TextInput`
   border-color: ${(props) => props.theme.colorBase.Black};
   background: ${(props) => props.theme.colors.Background[50]};
   border: 1px solid rgba(204, 204, 204, 0.5);
-  border-radius: 8px;
+  border-radius: ${(props) => props.theme.size.borderRadius.sm}px;
   padding: 16px;
 `;
 export const ContentLine = styled.View`
@@ -18,7 +18,7 @@ export const ContentLine = styled.View`
   border-color: ${(props) => props.theme.colorBase.Black};
   background: ${(props) => props.theme.colors.Background[50]};
   border: 1px solid rgba(204, 204, 204, 0.5);
-  border-radius: 8px;
+  border-radius: ${(props) => props.theme.size.borderRadius.sm}px;
   padding: 16px;
   justify-content: center;
 `;

@@ -10,7 +10,7 @@ export const Container = styled.SafeAreaView`
 export const ContainerTotal = styled.SafeAreaView`
   margin: 8px 16px;
   padding: 8px;
-  border-radius: 8px;
+  border-radius: ${(props) => props.theme.size.borderRadius.sm}px;
   flex-direction: row;
   justify-content: space-between;
   background-color: ${(props) => props.theme.colors.Background[50]};

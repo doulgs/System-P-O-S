@@ -28,7 +28,7 @@ export const Input = styled.TextInput`
   height: 45px;
   padding: 8px;
   margin-bottom: 16px;
-  border-radius: 16px;
+  border-radius: ${(props) => props.theme.size.borderRadius.sm}px;
   background-color: ${(props) => props.theme.colors.Background[50]};
   color: ${(props) => props.theme.colors.Background[900]};
 `;
@@ -39,7 +39,7 @@ export const Button = styled.TouchableOpacity`
   height: 45px;
   padding: 8px;
   margin-bottom: 16px;
-  border-radius: 16px;
+  border-radius: ${(props) => props.theme.size.borderRadius.sm}px;
   align-items: center;
   justify-content: center;
 `;

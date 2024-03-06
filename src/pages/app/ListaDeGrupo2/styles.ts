@@ -13,7 +13,7 @@ export const Touchable = styled.TouchableOpacity`
   margin: 6px;
   width: 112px;
   height: 112px;
-  border-radius: 8px;
+  border-radius: ${(props) => props.theme.size.borderRadius.sm}px;
   background-color: ${(props) => props.theme.colors.MildScale[50]};
 `;
 

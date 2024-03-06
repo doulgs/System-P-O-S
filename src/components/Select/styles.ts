@@ -4,7 +4,7 @@ export const Container = styled.TouchableOpacity`
   height: 50px;
   padding: 0 12px;
   margin: 0 16px;
-  border-radius: 8px;
+  border-radius: ${(props) => props.theme.size.borderRadius.sm}px;
   font-size: 18px;
   border-color: #000;
   border-width: 1px;
@@ -42,13 +42,13 @@ export const Touchable = styled.TouchableOpacity`
   flex-direction: row;
   border-width: 0.5px;
   margin: 8px;
-  border-radius: 8px;
+  border-radius: ${(props) => props.theme.size.borderRadius.sm}px;
 `;
 export const Box = styled.View`
   margin: 8px;
   width: 24px;
   height: 24px;
-  border-radius: 8px;
+  border-radius: ${(props) => props.theme.size.borderRadius.sm}px;
   border-width: 0.5px;
   align-items: center;
   justify-content: center;

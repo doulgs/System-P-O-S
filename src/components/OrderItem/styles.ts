@@ -3,7 +3,7 @@ import styled from "styled-components/native";
 export const Container = styled.View`
   margin: 8px 16px;
   padding: 8px;
-  border-radius: 8px;
+  border-radius: ${(props) => props.theme.size.borderRadius.sm}px;
   background-color: ${(props) => props.theme.colors.MildScale[50]};
 `;
 export const ContentInfo = styled.View`
@@ -31,7 +31,7 @@ export const Button = styled.TouchableOpacity`
   background-color: ${(props) => props.theme.colors.Secondary};
   width: 36px;
   height: 36px;
-  border-radius: 8px;
+  border-radius: ${(props) => props.theme.size.borderRadius.sm}px;
   align-items: center;
   justify-content: center;
 `;
@@ -41,7 +41,7 @@ export const Action = styled.View`
   height: 40px;
   width: 110px;
   justify-content: center;
-  border-radius: 8px;
+  border-radius: ${(props) => props.theme.size.borderRadius.sm}px;
   border-width: 0.4px;
   background-color: ${(props) => props.theme.colors.Secondary};
 `;

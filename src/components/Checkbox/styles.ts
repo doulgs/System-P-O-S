@@ -4,7 +4,7 @@ export const Container = styled.View``;
 
 export const Touchable = styled.TouchableOpacity`
   border-width: 0.5px;
-  border-radius: 4px;
+  border-radius: ${(props) => props.theme.size.borderRadius.sm}px;
   width: 24px;
   height: 24px;
   align-items: center;
