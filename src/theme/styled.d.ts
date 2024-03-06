@@ -40,5 +40,12 @@ declare module "styled-components/native" {
       Alert: string;
       Error: string;
     };
+    size: {
+      borderRadius: {
+        sm: number;
+        md: number;
+        lg: number;
+      };
+    };
   }
 }

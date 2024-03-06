@@ -37,4 +37,11 @@ export const THEME = {
     Alert: "#dba358",
     Error: "#ff5252",
   },
+  size: {
+    borderRadius: {
+      sm: 6,
+      md: 8,
+      lg: 16,
+    },
+  },
 };

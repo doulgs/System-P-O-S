@@ -20,7 +20,6 @@ export const Image = styled.Image`
 export const ContainerInput = styled.View`
   flex: 1;
   align-items: center;
-
   width: 90%;
 `;
 

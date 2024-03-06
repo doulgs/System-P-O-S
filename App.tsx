@@ -52,7 +52,7 @@ export default function App() {
         <AuthProvaider>
           <OrderProvaider>
             <CartProvider>
-              <StatusBar style="dark" />
+              <StatusBar style="light" />
               <Routes />
             </CartProvider>
           </OrderProvaider>
