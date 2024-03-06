@@ -18,7 +18,11 @@ interface OpenPaymentApp {
   order_id?: number; //Identificador do pedido. Aceita valores até 9223372036854775807. Caso queira utilizá-lo, habilitar a funcionalidade no aplicativo de Ajustes do POS.
 }
 
-const openPaymentApp = ({
+/**
+ * Abre o aplicativo de pagamento com os parâmetros fornecidos.
+ * @param {OpenPaymentApp} params Parâmetros para abrir o aplicativo de pagamento.
+ */
+const openPaymentApp = async ({
   return_scheme = "linkpublipos",
   amount,
   editable_amount = "0",
@@ -27,21 +31,34 @@ const openPaymentApp = ({
   installment_count = "0",
   order_id = 12,
 }: OpenPaymentApp) => {
-  // Construa a URL com os parâmetros desejados
-  console.log(amount, transaction_type);
-  const url = `payment-app://pay?return_scheme=${return_scheme}&amount=${amount}&editable_amount=${editable_amount}/1&transaction_type=${transaction_type}&installment_type=${installment_type}&order_id=${order_id}`;
-  //Campos não mencionados que podem ser utilziados &installment_type=${installment_type}&installment_count=${installment_count}&order_id=${order_id}
+  // Validação de parâmetros
+  if (!amount || !transaction_type) {
+    console.error(
+      "Parâmetros inválidos: amount e transaction_type são obrigatórios."
+    );
+    return;
+  }
 
-  // Verifique se a URL pode ser aberta
-  Linking.canOpenURL(url)
-    .then((supported) => {
-      if (supported) {
-        return Linking.openURL(url);
-      } else {
-        console.log(`Não foi possível abrir a URL: ${url}`);
-      }
-    })
-    .catch((err) => console.error("Erro ao tentar abrir a URL", err));
+  // Construção da URL
+  const url = new URL("payment-app://pay");
+  url.searchParams.append("return_scheme", return_scheme);
+  url.searchParams.append("amount", amount);
+  url.searchParams.append("editable_amount", editable_amount);
+  url.searchParams.append("transaction_type", transaction_type);
+  url.searchParams.append("installment_type", installment_type);
+  //url.searchParams.append("installment_count", installment_count);
+  url.searchParams.append("order_id", order_id.toString());
+
+  try {
+    const supported = await Linking.canOpenURL(url.toString());
+    if (supported) {
+      await Linking.openURL(url.toString());
+    } else {
+      console.log(`Não foi possível abrir a URL: ${url}`);
+    }
+  } catch (err) {
+    console.error("Erro ao tentar abrir a URL", err);
+  }
 };
 
 export { openPaymentApp };
