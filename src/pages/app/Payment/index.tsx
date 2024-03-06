@@ -80,8 +80,22 @@ const Payment = () => {
   }, [redirectURL, LimparCarrinho, navigation]);
 
   const finalizarPedido = async () => {
+    const amount = 150;
+    const editable_amount = "0";
+    const transaction_type = "CREDIT";
+    const installment_type = "NONE";
+    const installment_count = "0";
+    const order_id = 120;
+
     setIsLoading(true);
-    openPaymentApp();
+    openPaymentApp({
+      amount,
+      editable_amount,
+      transaction_type,
+      installment_type,
+      installment_count,
+      order_id,
+    });
     setIsLoading(false);
   };
 
