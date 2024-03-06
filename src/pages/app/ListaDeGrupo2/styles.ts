@@ -6,13 +6,13 @@ const isAndroid = Platform.OS === "android";
 export const Container = styled.SafeAreaView`
   flex: 1;
   background-color: ${(props) => props.theme.colors.Background[100]};
-  padding-top: ${isAndroid ? `${StatusBar.currentHeight}px` : "0"};
+  padding-top: ${isAndroid ? `${StatusBar.currentHeight}px` : "0"} 8px 8px 8px;
 `;
 
 export const Touchable = styled.TouchableOpacity`
   margin: 6px;
-  width: 112px;
-  height: 112px;
+  width: 105px;
+  height: 105px;
   border-radius: ${(props) => props.theme.size.borderRadius.sm}px;
   background-color: ${(props) => props.theme.colors.MildScale[50]};
 `;
