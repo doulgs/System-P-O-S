@@ -35,6 +35,7 @@ export interface Item {
   Observacao?: string;
   Quantidade?: number;
   FotoByte?: string | null; // Se FotoByte for uma sequência de bytes, ajuste o tipo conforme necessário
+  FotoBase64?: string;
   Mark?: boolean;
   Tabelas?: any; // Não é utilizado
   Handle: number;

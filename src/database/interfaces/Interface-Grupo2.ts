@@ -11,6 +11,7 @@ export interface Grupo2 {
   AbrirTelaExcecoes?: boolean;
   PossuiCaracteristicaItem?: boolean;
   FotoByte?: string;
+  FotoBase64?: string;
   Tabelas?: any; // Não é utilizado
   Handle: number;
   HandleFilial?: number;

@@ -23,7 +23,7 @@ const ListaDeGrupo2 = () => {
       const recuperarGrupo2 = async () => {
         const realm = await getRealm();
         try {
-          const result = realm.objects<Grupo2>("SchemaGrupo2");
+          const result = realm.objects<Grupo2>("SchemaGrupo2").sorted("Codigo");
           setGrupo2(Array.from(result));
         } catch (error) {
           console.error("Error fetching Grupo2 objects:", error);
@@ -34,7 +34,7 @@ const ListaDeGrupo2 = () => {
   );
 
   const renderizarGrupo2 = ({ item }: { item: Grupo2 }) => {
-    const imageAPI = item?.FotoByte || null;
+    const imageAPI = item?.FotoBase64 || null;
     const source = imageAPI
       ? { uri: `data:image/jpeg;base64,${imageAPI}` }
       : require("../../../assets/icons/IcoPublisoftLogoDefault.png");
@@ -47,7 +47,7 @@ const ListaDeGrupo2 = () => {
       >
         <Codigo>{item.Codigo}</Codigo>
         <ContainerGrupo2>
-          <Img source={source} resizeMode="contain" />
+          <Img source={source} resizeMode="cover" />
           <Title numberOfLines={2}>{item.Nome}</Title>
         </ContainerGrupo2>
       </Touchable>
@@ -58,10 +58,11 @@ const ListaDeGrupo2 = () => {
       <Container>
         <FlatList
           data={grupo2}
-          keyExtractor={(grupo2) => String(grupo2.Handle)}
+          keyExtractor={(item, index) => String(item.Handle + index)}
           renderItem={renderizarGrupo2}
           contentContainerStyle={{ alignItems: "center" }}
           numColumns={3}
+          showsVerticalScrollIndicator={false}
         />
       </Container>
     </>

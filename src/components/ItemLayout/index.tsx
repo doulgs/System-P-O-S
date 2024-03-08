@@ -6,7 +6,6 @@ import {
   Content,
   Image,
   Header,
-  CheckBoox,
   Footer,
   Action,
   ActionLeft,
@@ -15,7 +14,6 @@ import {
 } from "./styles";
 import { Item } from "../../database/interfaces/Interface-Item";
 import { Text } from "../Text";
-import { CheckIcon } from "../../assets/icons/Icon-Check";
 
 type ItemLayoutProps = {
   data: Item;
@@ -28,12 +26,18 @@ export const ItemLayout = ({
   adicionarQuantidade,
   removerQuantidade,
 }: ItemLayoutProps) => {
+  const imageAPI = data?.FotoBase64 || null;
+
+  const source = imageAPI
+    ? { uri: `data:image/jpeg;base64,${imageAPI}` }
+    : require("../../assets/images/NoImage.jpg");
+
   const backColor = data.Amount >= 1 ? "rgba(10,55,80,0.13)" : "#fcfcfc";
 
   return (
     <Background style={{ elevation: 3 }}>
       <Container style={{ backgroundColor: backColor }}>
-        <Image source={require("../../assets/images/NoImage.jpg")} />
+        <Image source={source} resizeMode="cover" />
         <Content>
           <Header>
             <Text weight="700" numberOfLines={2} style={{ maxWidth: "90%" }}>

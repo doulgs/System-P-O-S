@@ -32,6 +32,7 @@ export const SchemaItem: ObjectSchema = {
     Observacao: { type: "string", optional: true },
     Quantidade: { type: "double", optional: true },
     FotoByte: { type: "string", optional: true }, // Se FotoByte for uma sequência de bytes, ajuste o tipo conforme necessário
+    FotoBase64: { type: "string", optional: true }, // Se FotoByte for uma sequência de bytes, ajuste o tipo conforme necessário
     Mark: { type: "bool", optional: true },
     Tabelas: { type: "string", optional: true }, //Não é utilizado
     Handle: "int",
