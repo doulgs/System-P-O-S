@@ -47,7 +47,7 @@ const openPaymentApp = async ({
   url.searchParams.append("transaction_type", transaction_type);
   url.searchParams.append("installment_type", installment_type);
   //url.searchParams.append("installment_count", installment_count);
-  url.searchParams.append("order_id", order_id.toString());
+  //url.searchParams.append("order_id", order_id.toString());
 
   try {
     const supported = await Linking.canOpenURL(url.toString());

@@ -35,11 +35,21 @@ import {
 } from "../../../helpers/condicoesDePagamento";
 import { Select } from "../../../components/Select";
 
-interface ParsedURL {
-  protocol: string;
-  host: string;
-  pathname: string;
-  queryParams?: { [key: string]: string };
+interface UrlParams {
+  cardholder_name?: string;
+  itk?: string;
+  atk?: string;
+  authorization_date_time?: string;
+  brand?: string;
+  order_id?: string;
+  authorization_code?: string;
+  installment_count?: string;
+  pan?: string;
+  type?: string;
+  entry_mode?: string;
+  account_id?: string;
+  customer_wallet_provider_id?: string;
+  code?: string;
 }
 
 const Payment = () => {
@@ -51,48 +61,47 @@ const Payment = () => {
   const [pgmt, setPgmt] = useState<CondicoesDePagamentoProps | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // useEffect(() => {
-  //   const parseURL = (url: string): ParsedURL => {
-  //     const result: ParsedURL = {} as ParsedURL;
-  //     const [fullPath, queryString] = url.split("?");
-  //     const [protocol, host, ...pathParts] = fullPath.split("/");
-
-  //     result.protocol = protocol.replace(/:$/, "");
-  //     result.host = host;
-  //     result.pathname = "/" + pathParts.join("/");
-
-  //     if (queryString) {
-  //       result.queryParams = {};
-  //       queryString.split("&").forEach((param) => {
-  //         const [key, value] = param.split("=");
-  //         result.queryParams![key] = decodeURIComponent(
-  //           value.replace(/\+/g, " ")
-  //         );
-  //       });
-  //     }
-
-  //     return result;
-  //   };
-
-  //   const parsedURL = redirectURL ? parseURL(redirectURL) : null;
-
-  //   if (parsedURL?.queryParams?.code === "0") {
-  //     console.log("teste", parsedURL);
-  //     LimparCarrinho();
-  //     navigation.navigate("Home");
-  //   } else if (parsedURL?.queryParams?.code === "2") {
-  //     Alert.alert("Pagamento cancelado");
-  //   }
-  // }, [redirectURL, LimparCarrinho, navigation]);
-
   useEffect(() => {
     const handleOpenURL = (event: { url: string }) => {
       console.log("Deep link recebido:", event.url);
       Alert.alert("Deep link recebido", event.url);
+
+      // Extrai a string de consulta do URL
+      const url = new URL(event.url);
+      const params = new URLSearchParams(url.search);
+
+      // Extrai as propriedades desejadas e as tipa usando a interface UrlParams
+      const extractedParams: UrlParams = {
+        cardholder_name: params.get("cardholder_name") ?? undefined,
+        itk: params.get("itk") ?? undefined,
+        atk: params.get("atk") ?? undefined,
+        authorization_date_time:
+          params.get("authorization_date_time") ?? undefined,
+        brand: params.get("brand") ?? undefined,
+        order_id: params.get("order_id") ?? undefined,
+        authorization_code: params.get("authorization_code") ?? undefined,
+        installment_count: params.get("installment_count") ?? undefined,
+        pan: params.get("pan") ?? undefined,
+        type: params.get("type") ?? undefined,
+        entry_mode: params.get("entry_mode") ?? undefined,
+        account_id: params.get("account_id") ?? undefined,
+        customer_wallet_provider_id:
+          params.get("customer_wallet_provider_id") ?? undefined,
+        code: params.get("code") ?? undefined,
+      };
+
+      console.log("Passei aqui");
+
+      // Exemplo de uso das propriedades extraídas e tipadas
+      console.log(
+        "Nome do titular do cartão:",
+        extractedParams.cardholder_name
+      );
+      console.log("Chave de Transação do Iniciador:", extractedParams.itk);
+      // ... e assim por diante para os outros parâmetros
     };
 
     Linking.addEventListener("url", handleOpenURL);
-
     Linking.getInitialURL().then((url) => {
       if (url) {
         console.log("O aplicativo foi aberto por um deep link:", url);
@@ -101,7 +110,6 @@ const Payment = () => {
     });
 
     return () => {
-      // Remova todos os listeners do evento 'url'
       Linking.removeAllListeners("url");
     };
   }, []);
@@ -113,6 +121,7 @@ const Payment = () => {
       amount: formatarParaMoeda(orderTotal).replace(/[^0-9]/g, ""),
       transaction_type: pgmt?.type ?? "DEBIT",
     });
+
     setIsLoading(false);
   };
 
@@ -184,7 +193,7 @@ const Payment = () => {
 
       <Footer>
         <FooterContainer>
-          <Button onPress={() => finalizarPedido()}>
+          <Button onPress={() => finalizarPedido()} disabled={!pgmt}>
             {isLoading ? <ActivityIndicator /> : "Finalizar"}
           </Button>
         </FooterContainer>
