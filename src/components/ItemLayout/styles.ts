@@ -16,11 +16,15 @@ export const Content = styled.View`
   justify-content: space-between;
 `;
 
-export const Image = styled.Image`
+export const ImageContainer = styled.View`
   width: 120px;
   height: 110px;
   border-radius: ${(props) => props.theme.size.borderRadius.sm}px;
   margin: 4px;
+  overflow: hidden;
+`;
+export const Image = styled.Image`
+  flex: 1;
 `;
 
 export const Header = styled.View`

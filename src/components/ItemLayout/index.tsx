@@ -11,6 +11,7 @@ import {
   ActionLeft,
   ActionView,
   ActionRight,
+  ImageContainer,
 } from "./styles";
 import { Item } from "../../database/interfaces/Interface-Item";
 import { Text } from "../Text";
@@ -37,7 +38,9 @@ export const ItemLayout = ({
   return (
     <Background style={{ elevation: 3 }}>
       <Container style={{ backgroundColor: backColor }}>
-        <Image source={source} resizeMode="cover" />
+        <ImageContainer>
+          <Image source={source} resizeMode="cover" />
+        </ImageContainer>
         <Content>
           <Header>
             <Text weight="700" numberOfLines={2} style={{ maxWidth: "90%" }}>
