@@ -12,10 +12,11 @@ import {
   obterInfoDispositivo,
 } from "../../../helpers/obterInfoDispositivo";
 import { useAuth } from "../../../context/authContext";
-import { Keyboard } from "react-native";
+import { Alert, Keyboard } from "react-native";
 import { Text } from "../../../components/Text";
 import { Button } from "../../../components/Button";
 import { Loading } from "../../../components/Loading";
+import { deletarTabelas } from "../../../infra/command/deletarTabelas";
 
 const CadDispositivo: React.FC = () => {
   const { cadastrarDispositivo } = useAuth();
@@ -29,6 +30,30 @@ const CadDispositivo: React.FC = () => {
     setIsLoading(true);
     await cadastrarDispositivo(chaveAtivacao);
     setIsLoading(false);
+  }
+  async function DeleterBanco() {
+    Keyboard.dismiss();
+    setIsLoading(true);
+    await deletarTabelas();
+    setIsLoading(false);
+  }
+
+  function handleDelete() {
+    Alert.alert(
+      "Atenção",
+      `TODOS OS DADOS SERÃO EXCLUIDOS PERMANENTEMENTE.. Deseja realmente deletar todas as informações do aplicativo? Não é possivel reverter essa operação.`,
+      [
+        {
+          text: "Cancelar",
+          style: "cancel",
+        },
+        {
+          text: "Desejo deletar",
+          style: "default",
+          onPress: () => DeleterBanco(),
+        },
+      ]
+    );
   }
 
   useEffect(() => {
@@ -83,7 +108,7 @@ const CadDispositivo: React.FC = () => {
         </Button>
       </ContentButton>
       <ContentButton>
-        <Button onPress={() => {}}>
+        <Button onPress={handleDelete}>
           <Text color="#FFF">Limpar Base</Text>
         </Button>
       </ContentButton>

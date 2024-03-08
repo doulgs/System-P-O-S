@@ -48,7 +48,7 @@ export default function App() {
 
   return (
     <ThemeProvider theme={THEME}>
-      <NavigationContainer linking={linking} fallback={<Text>Loading...</Text>}>
+      <NavigationContainer linking={linking} fallback={<Loading />}>
         <AuthProvaider>
           <OrderProvaider>
             <CartProvider>
