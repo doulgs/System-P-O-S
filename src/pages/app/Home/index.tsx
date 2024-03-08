@@ -19,19 +19,20 @@ const Home = () => {
   const [isLoading, setisLoading] = useState(false);
 
   async function Sync() {
+    // Tem que manter nessa ordem
     setisLoading(true);
     console.log("Inicio do Sync");
     await realizarSync("SchemaFilial", "Filial");
-    await realizarSync("SchemaFormula", "Formula");
     await realizarSync("SchemaGrupo1", "Grupo1");
-    await realizarSync("SchemaGrupo2", "Grupo2");
+    await realizarSync("SchemaGrupoExcecao", "GrupoExcecao");
     await realizarSync("SchemaGrupo2Excecao", "Grupo2Excecao");
     await realizarSync("SchemaGrupo3", "Grupo3");
-    await realizarSync("SchemaGrupoExcecao", "GrupoExcecao");
     await realizarSync("SchemaItem", "Item");
-    await realizarSync("SchemaIteTabFor", "IteTabFor");
     await realizarSync("SchemaTabela", "Tabela");
+    await realizarSync("SchemaGrupo2", "Grupo2");
     await realizarSync("SchemaUnidade", "Unidade");
+    await realizarSync("SchemaFormula", "Formula");
+    await realizarSync("SchemaIteTabFor", "IteTabFor");
     console.log("Fim do Sync");
     setisLoading(false);
   }
@@ -44,7 +45,7 @@ const Home = () => {
     <>
       <Container>
         <ContainerHeader>
-          <Header realizarSync={() => Sync()} />
+          <Header realizarSync={Sync} />
         </ContainerHeader>
 
         <MenuContainer>
