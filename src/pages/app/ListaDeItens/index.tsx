@@ -77,7 +77,7 @@ const ListaDeItens = () => {
   return (
     <FlashList
       data={cart}
-      keyExtractor={(item, index) => String(item.Handle + index)}
+      keyExtractor={(item, index) => String(item.Handle)}
       renderItem={({ item, index }) => (
         <ItemLayout
           data={item}
