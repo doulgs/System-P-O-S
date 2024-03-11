@@ -22,7 +22,7 @@ interface AuthContextProps {
   cadastrarDispositivo: Function;
 }
 
-interface UsuarioProp {
+export interface UsuarioProp {
   Login: string | null | undefined;
   Senha: string | null | undefined;
   NomeSite: string | null | undefined;

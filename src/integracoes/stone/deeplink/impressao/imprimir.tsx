@@ -1,5 +1,7 @@
 import { Linking, ToastAndroid } from "react-native";
 import { Item } from "../../../../database/interfaces/Interface-Item";
+import { UsuarioProp } from "../../../../context/authContext";
+import { obterDataHora } from "../../../../helpers/obterDataHora";
 
 const enviarImpressao = async (arquivoJSON: string) => {
   const uri = `printer-app://print?SHOW_FEEDBACK_SCREEN=true/false&SCHEME_RETURN=linkpublipos&PRINTABLE_CONTENT=${encodeURIComponent(
@@ -22,21 +24,40 @@ const enviarImpressao = async (arquivoJSON: string) => {
   }
 };
 
-const realizarImpressao = async (order: Item[]) => {
+const realizarImpressao = async (order: Item[], user: UsuarioProp) => {
   const printPedido = [];
 
   for (let o = 0; o < order.length; o++) {
     for (let i = 0; i < order[o].Amount; i++) {
+      const filial = `${user.NomeEmpresa}`;
+      const dataHora = `${obterDataHora().dataHoraAtual}`;
+
       const excecoes = order[o].Excecoes.filter((value) => value.Amount >= 1)
         .map((value) => `\n \u2022 x${value.Amount ?? 0} ${value.Excecao}`)
         .join("");
-      const conteudo = `${order[o].Descricao}${excecoes}`;
+      const conteudo = `x1 - ${order[o].Descricao}${excecoes}`;
 
+      printPedido.push({
+        type: "text",
+        content: filial,
+        align: "center",
+        size: "big",
+      });
+      printPedido.push({
+        type: "text",
+        content: dataHora,
+        align: "right",
+        size: "medium",
+      });
       printPedido.push({
         type: "text",
         content: conteudo,
         align: "left",
         size: "big",
+      });
+      printPedido.push({
+        type: "line",
+        content: " ",
       });
       printPedido.push({
         type: "line",

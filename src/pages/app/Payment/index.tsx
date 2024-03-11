@@ -93,7 +93,7 @@ const Payment: React.FC = () => {
         code: params.get("code") ?? undefined,
       };
 
-      if (extractedParams.code === "0") {
+      if (extractedParams.code === "0" && user !== null) {
         Alert.alert(
           "Imprimir",
           "Deseja imprimir os itens em forma de Tickets?",
@@ -103,7 +103,7 @@ const Payment: React.FC = () => {
               onPress: () => {},
               style: "cancel",
             },
-            { text: "Sim", onPress: () => realizarImpressao(order) },
+            { text: "Sim", onPress: () => realizarImpressao(order, user) },
           ]
         );
       }
