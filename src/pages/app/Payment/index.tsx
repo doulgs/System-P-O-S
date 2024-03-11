@@ -39,6 +39,7 @@ import {
   handleImpressaoReturn,
 } from "../../../integracoes/stone/deeplink/impressao/imprimir";
 import { Item } from "../../../database/interfaces/Interface-Item";
+import { handleImpressao } from "../../../integracoes/stone/deeplink/impressao/layoutImpressao";
 
 interface UrlParams {
   cardholder_name?: string;
@@ -70,13 +71,10 @@ const Payment = () => {
   useEffect(() => {
     const handleOpenURL = (event: { url: string }) => {
       console.log("Deep link recebido:", event.url);
-      //Alert.alert("Deep link recebido", event.url);
 
-      // Extrai a string de consulta do URL
       const url = new URL(event.url);
       const params = new URLSearchParams(url.search);
 
-      // Extrai as propriedades desejadas e as tipa usando a interface UrlParams
       const extractedParams: UrlParams = {
         cardholder_name: params.get("cardholder_name") ?? undefined,
         itk: params.get("itk") ?? undefined,
@@ -97,15 +95,14 @@ const Payment = () => {
       };
 
       if (extractedParams.code === "0") {
-        handleImpressao(order);
+        handleImpressao();
       }
     };
 
     Linking.addEventListener("url", handleOpenURL);
     Linking.getInitialURL().then((url) => {
       if (url) {
-        console.log("O aplicativo foi aberto por um deep link:", url);
-        // Alert.alert("O aplicativo foi aberto por um deep link", url);
+        //console.log("O aplicativo foi aberto por um deep link:", url);
       }
     });
 
@@ -115,25 +112,11 @@ const Payment = () => {
   }, []);
 
   useEffect(() => {
-    // Adiciona um listener para capturar o retorno da impressão
     Linking.addEventListener("url", handleImpressaoReturn);
-    // Remove o listener quando o componente é desmontado
     return () => {
       Linking.removeAllListeners("url");
     };
   }, []);
-
-  const handleImpressao = async (order: Item[]) => {
-    const arquivoJSON = JSON.stringify([
-      {
-        type: "image",
-        imagePath:
-          "iVBORw0KGgoAAAANSUhEUgAAAHcAAAAuCAAAAAA309lpAAACMklEQVRYw91YQXLDIAyUMj027Us606f6RL7lJP0Ise/bg7ERSLLdZkxnyiVGIK0AoRVh0J+0l2ZITCAmSus8tYNNv9wUl8Xn2A6XZec8tsK9lN0zEaFBCxMc0M3IoHawBAAxffLx9/frY1kkEV0/iYjC8bjjmSRuCrHjcXMoS9zD4/nqePNf10v2whrkDRjLR4t8BWPXbdyRmccDgBMZUXDiiv2DeSK4sKwWrfgIda8V/6L6blZvLMARTescAohCD7xlcsItjYXEXHn2LIESzO3mDARPYTJXwiQ/VgWFobsYGKRdRy5x6/1QuAPpKdq89MiTS1x9EBXuYJyVZd46p6ndXVwAqfwJpd4C20uLk/LsUIilQ5Q11A4tuIU8Ti4bi8oz6lNX8iD8rNUdXDm3iMs81le4pUOLOJrGatzBx1VqVRSU8qAdNRc855GwHxcFblQbYTvqx3M0ZxZnZeBq+UoayI0h3y7QPMhOyQA9JMkO9aMIqs6Rmrw73T6ey9anvDX5kbinvT2PW7yYzj8ogrcYqBOJjNxc21d5EjmH0e/iaqUV9dXj3YgYtkvCjbjaqs5O+85MxVvwTcZdhR5YuFbckCSfNkHUolTcE9Cq9iQfXtV62bo9nUBIm8AXedPidimVFIjZCdYlTw4W8RtsatKC7Bt7D4t5tMle9qPD+y4uyL81FS/UnnVu3eMzhuj3G7CqzkHF77ISsaoraSsqVnRhq3rSZ+F5Ur//b5zOOVoAwDc6szxdC+PYAAAAAABJRU5ErkJggg==",
-      },
-    ]);
-
-    await enviarImpressao(arquivoJSON);
-  };
 
   const finalizarPedido = async () => {
     setIsLoading(true);
