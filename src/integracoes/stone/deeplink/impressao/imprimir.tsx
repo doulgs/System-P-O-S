@@ -1,7 +1,4 @@
 import { Linking, ToastAndroid } from "react-native";
-import { Item } from "../../../../database/interfaces/Interface-Item";
-import { UsuarioProp } from "../../../../context/authContext";
-import { obterDataHora } from "../../../../helpers/obterDataHora";
 
 const enviarImpressao = async (arquivoJSON: string) => {
   const uri = `printer-app://print?SHOW_FEEDBACK_SCREEN=true/false&SCHEME_RETURN=linkpublipos&PRINTABLE_CONTENT=${encodeURIComponent(
@@ -24,66 +21,13 @@ const enviarImpressao = async (arquivoJSON: string) => {
   }
 };
 
-const realizarImpressao = async (order: Item[], user: UsuarioProp) => {
-  const printPedido = [];
-
-  for (let o = 0; o < order.length; o++) {
-    for (let i = 0; i < order[o].Amount; i++) {
-      const filial = `${user.NomeEmpresa}`;
-      const dataHora = `${obterDataHora().dataHoraAtual}`;
-
-      const excecoes = order[o].Excecoes.filter((value) => value.Amount >= 1)
-        .map((value) => `\n \u2022 x${value.Amount ?? 0} ${value.Excecao}`)
-        .join("");
-      const conteudo = `x1 - ${order[o].Descricao}${excecoes}`;
-
-      printPedido.push({
-        type: "text",
-        content: filial,
-        align: "center",
-        size: "big",
-      });
-      printPedido.push({
-        type: "text",
-        content: dataHora,
-        align: "right",
-        size: "medium",
-      });
-      printPedido.push({
-        type: "text",
-        content: conteudo,
-        align: "left",
-        size: "big",
-      });
-      printPedido.push({
-        type: "line",
-        content: " ",
-      });
-      printPedido.push({
-        type: "line",
-        content: "----------------------------------",
-      });
-      printPedido.push({
-        type: "line",
-        content: " ",
-      });
-    }
-  }
-  //console.log(JSON.stringify(printPedido));
-  await imprimir(JSON.stringify(printPedido));
-  printPedido.length = 0;
-};
-
-async function imprimir(data: string) {
-  console.log("AQUI");
-  await enviarImpressao(data);
-}
-
 const handleImpressaoReturn = (event: { url?: string }) => {
   const { url } = event;
   if (url) {
     const params = new URLSearchParams(url);
     const result = params.get("result");
+    console.log(result);
+
     switch (result) {
       case "SUCCESS":
         ToastAndroid.show(
@@ -103,15 +47,35 @@ const handleImpressaoReturn = (event: { url?: string }) => {
           ToastAndroid.SHORT
         );
         break;
-      // Adicione outros casos conforme necessário
-      // default:
-      //   ToastAndroid.show(
-      //     "Erro desconhecido durante a impressão.",
-      //     ToastAndroid.SHORT
-      //   );
-      //   break;
+      case "PRINTER_LOW_ENERGY":
+        ToastAndroid.show("Máquina com baixa energia.", ToastAndroid.SHORT);
+        break;
+      case "PRINTER_BUSY":
+        ToastAndroid.show("Impressora ocupada.", ToastAndroid.SHORT);
+        break;
+      case "PRINTER_UNSUPPORTED_FORMAT":
+        ToastAndroid.show("Formato não suportado.", ToastAndroid.SHORT);
+        break;
+      case "PRINTER_INVALID_DATA":
+        ToastAndroid.show("Dados inválidos.", ToastAndroid.SHORT);
+        break;
+      case "PRINTER_OVERHEATING":
+        ToastAndroid.show(
+          "Superaquecimento da impressora.",
+          ToastAndroid.SHORT
+        );
+        break;
+      case "PRINTER_PAPER_JAM":
+        ToastAndroid.show(
+          "Papel preso na caixa de bobina.",
+          ToastAndroid.SHORT
+        );
+        break;
+      case "PRINTER_PRINT_ERROR":
+        ToastAndroid.show("Erro genérico da impressora.", ToastAndroid.SHORT);
+        break;
     }
   }
 };
 
-export { enviarImpressao, realizarImpressao, handleImpressaoReturn };
+export { enviarImpressao, handleImpressaoReturn };
