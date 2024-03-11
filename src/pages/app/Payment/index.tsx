@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ActivityIndicator, Alert, Linking } from "react-native";
+import { ActivityIndicator, Linking } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import { useAuth } from "../../../context/authContext";
@@ -29,11 +29,16 @@ import {
   FooterContainer,
 } from "./styles";
 
+import { Select } from "../../../components/Select";
+import {
+  enviarImpressao,
+  handleImpressaoReturn,
+} from "../../../helpers/functions/impressao/imprimir";
+import { Item } from "../../../database/interfaces/Interface-Item";
 import {
   CondicoesDePagamento,
   CondicoesDePagamentoProps,
 } from "../../../helpers/condicoesDePagamento";
-import { Select } from "../../../components/Select";
 
 interface UrlParams {
   cardholder_name?: string;
@@ -52,7 +57,7 @@ interface UrlParams {
   code?: string;
 }
 
-const Payment = () => {
+const Payment: React.FC = () => {
   const redirectURL = useURL();
   const navigation = useNavigation();
 
@@ -60,17 +65,15 @@ const Payment = () => {
   const { order, orderTotal, LimparCarrinho } = useOrder();
   const [pgmt, setPgmt] = useState<CondicoesDePagamentoProps | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [statusPayment, setStatusPayment] = useState(false);
 
   useEffect(() => {
     const handleOpenURL = (event: { url: string }) => {
       console.log("Deep link recebido:", event.url);
-      Alert.alert("Deep link recebido", event.url);
 
-      // Extrai a string de consulta do URL
       const url = new URL(event.url);
       const params = new URLSearchParams(url.search);
 
-      // Extrai as propriedades desejadas e as tipa usando a interface UrlParams
       const extractedParams: UrlParams = {
         cardholder_name: params.get("cardholder_name") ?? undefined,
         itk: params.get("itk") ?? undefined,
@@ -90,22 +93,15 @@ const Payment = () => {
         code: params.get("code") ?? undefined,
       };
 
-      console.log("Passei aqui");
-
-      // Exemplo de uso das propriedades extraídas e tipadas
-      console.log(
-        "Nome do titular do cartão:",
-        extractedParams.cardholder_name
-      );
-      console.log("Chave de Transação do Iniciador:", extractedParams.itk);
-      // ... e assim por diante para os outros parâmetros
+      if (extractedParams.code === "0") {
+        handleImpressao(order);
+      }
     };
 
     Linking.addEventListener("url", handleOpenURL);
     Linking.getInitialURL().then((url) => {
       if (url) {
         console.log("O aplicativo foi aberto por um deep link:", url);
-        Alert.alert("O aplicativo foi aberto por um deep link", url);
       }
     });
 
@@ -114,13 +110,48 @@ const Payment = () => {
     };
   }, []);
 
+  useEffect(() => {
+    Linking.addEventListener("url", handleImpressaoReturn);
+
+    return () => {
+      Linking.removeAllListeners("url");
+    };
+  }, []);
+
+  console.log(order);
+
+  const handleImpressao = async (order: Item[]) => {
+    // Inicializa um array vazio para armazenar os itens a serem impressos
+    const printPediddo = [];
+
+    // Itera sobre cada item no pedido
+    for (let ite = 0; ite < order.length; ite++) {
+      // Itera sobre a quantidade de cada item
+      for (let i = 0; i < order[ite].Amount; i++) {
+        // Adiciona um objeto representando o item a ser impresso ao array
+        printPediddo.push({
+          type: "text",
+          content: `${order[ite].Descricao}`,
+          align: "left",
+          size: "big",
+        });
+      }
+      // Após construir o pedido para este item, envia para a impressora
+      await enviarImpressao(JSON.stringify(printPediddo));
+      // Limpa o array printPedido para um array vazio
+      printPediddo.length = 0;
+    }
+  };
+
   const finalizarPedido = async () => {
     setIsLoading(true);
 
-    openPaymentApp({
-      amount: formatarParaMoeda(orderTotal).replace(/[^0-9]/g, ""),
-      transaction_type: pgmt?.type ?? "DEBIT",
-    });
+    if (pgmt) {
+      await openPaymentApp({
+        amount: formatarParaMoeda(orderTotal).replace(/[^0-9]/g, ""),
+        transaction_type: pgmt.type ?? "DEBIT",
+      });
+    }
 
     setIsLoading(false);
   };
