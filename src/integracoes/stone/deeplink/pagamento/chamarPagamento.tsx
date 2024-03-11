@@ -1,6 +1,6 @@
 import { Linking } from "react-native";
 
-interface OpenPaymentApp {
+interface abrirAppPagamentoProps {
   path?: string;
   scheme?: string;
   return_scheme?: string; //Determina para onde será o retorno do deeplink. Deve ser o mesmo valor configurado no lugar da variável scheme no AndroidManifest.
@@ -20,9 +20,9 @@ interface OpenPaymentApp {
 
 /**
  * Abre o aplicativo de pagamento com os parâmetros fornecidos.
- * @param {OpenPaymentApp} params Parâmetros para abrir o aplicativo de pagamento.
+ * @param {abrirAppPagamentoProps} params Parâmetros para abrir o aplicativo de pagamento.
  */
-const openPaymentApp = async ({
+const abrirAppPagamento = async ({
   return_scheme = "linkpublipos",
   amount,
   editable_amount = "0",
@@ -30,7 +30,7 @@ const openPaymentApp = async ({
   installment_type = "NONE",
   installment_count = "0",
   order_id = 12,
-}: OpenPaymentApp) => {
+}: abrirAppPagamentoProps) => {
   // Validação de parâmetros
   if (!amount || !transaction_type) {
     console.error(
@@ -61,4 +61,4 @@ const openPaymentApp = async ({
   }
 };
 
-export { openPaymentApp };
+export { abrirAppPagamento };

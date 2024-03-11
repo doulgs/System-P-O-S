@@ -1,4 +1,5 @@
 import { Linking, ToastAndroid } from "react-native";
+import { Item } from "../../../../database/interfaces/Interface-Item";
 
 const enviarImpressao = async (arquivoJSON: string) => {
   const uri = `printer-app://print?SHOW_FEEDBACK_SCREEN=true/false&SCHEME_RETURN=linkpublipos&PRINTABLE_CONTENT=${encodeURIComponent(
@@ -20,6 +21,42 @@ const enviarImpressao = async (arquivoJSON: string) => {
     ToastAndroid.show("Erro ao enviar a impressão.", ToastAndroid.SHORT);
   }
 };
+
+const realizarImpressao = async (order: Item[]) => {
+  const printPedido = [];
+
+  for (let o = 0; o < order.length; o++) {
+    for (let i = 0; i < order[o].Amount; i++) {
+      const excecoes = order[o].Excecoes.filter((value) => value.Amount >= 1)
+        .map((value) => `\n \u2022 x${value.Amount ?? 0} ${value.Excecao}`)
+        .join("");
+      const conteudo = `${order[o].Descricao}${excecoes}`;
+
+      printPedido.push({
+        type: "text",
+        content: conteudo,
+        align: "left",
+        size: "big",
+      });
+      printPedido.push({
+        type: "line",
+        content: "----------------------------------",
+      });
+      printPedido.push({
+        type: "line",
+        content: " ",
+      });
+    }
+  }
+  //console.log(JSON.stringify(printPedido));
+  await imprimir(JSON.stringify(printPedido));
+  printPedido.length = 0;
+};
+
+async function imprimir(data: string) {
+  console.log("AQUI");
+  await enviarImpressao(data);
+}
 
 const handleImpressaoReturn = (event: { url?: string }) => {
   const { url } = event;
@@ -56,4 +93,4 @@ const handleImpressaoReturn = (event: { url?: string }) => {
   }
 };
 
-export { enviarImpressao, handleImpressaoReturn };
+export { enviarImpressao, realizarImpressao, handleImpressaoReturn };

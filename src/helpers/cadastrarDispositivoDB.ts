@@ -1,6 +1,6 @@
-import api from "../../infra/services/api";
-import { obterInfoDispositivo } from "../obterInfoDispositivo";
-import { obterToken } from "../obterToken";
+import api from "../infra/services/api";
+import { obterToken } from "./obterToken";
+import { obterInfoDispositivo } from "./obterInfoDispositivo";
 
 async function cadastrarDispositivoDB(chaveEmpresa: string) {
   try {

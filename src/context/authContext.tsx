@@ -2,7 +2,7 @@ import Realm from "realm";
 import { getRealm } from "../infra/realm";
 import { useState, useContext, createContext, useEffect } from "react";
 //import NetInfo, { NetInfoState } from "@react-native-community/netinfo";
-import { cadastrarDispositivoDB } from "../helpers/functions/cadastrarDispositivoDB";
+import { cadastrarDispositivoDB } from "../helpers/cadastrarDispositivoDB";
 import {
   Usuario,
   UsuarioObject,

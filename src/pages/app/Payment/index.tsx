@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ActivityIndicator, Linking } from "react-native";
+import { ActivityIndicator, Alert, Linking } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import { useAuth } from "../../../context/authContext";
@@ -9,7 +9,6 @@ import { useURL } from "expo-linking";
 import { Text } from "../../../components/Text";
 import { Button } from "../../../components/Button";
 import { formatarParaMoeda } from "../../../helpers/utils/formatarParaMoeda";
-import { openPaymentApp } from "../../../helpers/functions/Pagamento/chamarPagamento";
 
 import {
   Container,
@@ -30,15 +29,16 @@ import {
 } from "./styles";
 
 import { Select } from "../../../components/Select";
-import {
-  enviarImpressao,
-  handleImpressaoReturn,
-} from "../../../helpers/functions/impressao/imprimir";
-import { Item } from "../../../database/interfaces/Interface-Item";
+
 import {
   CondicoesDePagamento,
   CondicoesDePagamentoProps,
 } from "../../../helpers/condicoesDePagamento";
+import {
+  handleImpressaoReturn,
+  realizarImpressao,
+} from "../../../integracoes/stone/deeplink/impressao/imprimir";
+import { abrirAppPagamento } from "../../../integracoes/stone/deeplink/pagamento/chamarPagamento";
 
 interface UrlParams {
   cardholder_name?: string;
@@ -94,11 +94,24 @@ const Payment: React.FC = () => {
       };
 
       if (extractedParams.code === "0") {
-        handleImpressao(order);
+        Alert.alert(
+          "Imprimir",
+          "Deseja imprimir os itens em forma de Tickets?",
+          [
+            {
+              text: "Não",
+              onPress: () => {},
+              style: "cancel",
+            },
+            { text: "Sim", onPress: () => realizarImpressao(order) },
+          ]
+        );
       }
     };
 
     Linking.addEventListener("url", handleOpenURL);
+    Linking.addEventListener("url", handleImpressaoReturn);
+
     Linking.getInitialURL().then((url) => {
       if (url) {
         console.log("O aplicativo foi aberto por um deep link:", url);
@@ -110,44 +123,19 @@ const Payment: React.FC = () => {
     };
   }, []);
 
-  useEffect(() => {
-    Linking.addEventListener("url", handleImpressaoReturn);
+  // useEffect(() => {
+  //   Linking.addEventListener("url", handleImpressaoReturn);
 
-    return () => {
-      Linking.removeAllListeners("url");
-    };
-  }, []);
-
-  console.log(order);
-
-  const handleImpressao = async (order: Item[]) => {
-    // Inicializa um array vazio para armazenar os itens a serem impressos
-    const printPediddo = [];
-
-    // Itera sobre cada item no pedido
-    for (let ite = 0; ite < order.length; ite++) {
-      // Itera sobre a quantidade de cada item
-      for (let i = 0; i < order[ite].Amount; i++) {
-        // Adiciona um objeto representando o item a ser impresso ao array
-        printPediddo.push({
-          type: "text",
-          content: `${order[ite].Descricao}`,
-          align: "left",
-          size: "big",
-        });
-      }
-      // Após construir o pedido para este item, envia para a impressora
-      await enviarImpressao(JSON.stringify(printPediddo));
-      // Limpa o array printPedido para um array vazio
-      printPediddo.length = 0;
-    }
-  };
+  //   return () => {
+  //     Linking.removeAllListeners("url");
+  //   };
+  // }, []);
 
   const finalizarPedido = async () => {
     setIsLoading(true);
 
     if (pgmt) {
-      await openPaymentApp({
+      await abrirAppPagamento({
         amount: formatarParaMoeda(orderTotal).replace(/[^0-9]/g, ""),
         transaction_type: pgmt.type ?? "DEBIT",
       });
