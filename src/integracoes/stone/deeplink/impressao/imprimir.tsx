@@ -25,7 +25,6 @@ const enviarImpressao = async (arquivoJSON: string) => {
   }
 };
 const handleImpressaoReturn = (event: { url: string }) => {
-  //console.log("Deep link recebido:", event.url);
   const url = new URL(event.url);
   const params = new URLSearchParams(url.search);
 

@@ -69,8 +69,8 @@ const Payment = () => {
   const [statusPayment, setStatusPayment] = useState(false);
 
   useEffect(() => {
-    const handleOpenURL = (event: { url: string }) => {
-      console.log("Deep link recebido:", event.url);
+    const handleOpenURL = async (event: { url: string }) => {
+      console.log("Deep link recebido -->:", event.url);
 
       const url = new URL(event.url);
       const params = new URLSearchParams(url.search);
@@ -94,8 +94,9 @@ const Payment = () => {
         code: params.get("code") ?? undefined,
       };
 
-      if (extractedParams.code === "0") {
-        handleImpressao();
+      if (extractedParams.code === "0" && user !== null) {
+        const retorno = handleImpressao(order, user);
+        enviarImpressao(await retorno);
       }
     };
 

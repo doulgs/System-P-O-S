@@ -35,7 +35,8 @@
     "realm": "^12.6.0",
     "styled-components": "^6.1.8",
     "yup": "^1.3.3",
-    "expo-linking": "~6.2.2"
+    "expo-linking": "~6.2.2",
+    "expo-image-manipulator": "~11.8.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
