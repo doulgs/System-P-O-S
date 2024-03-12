@@ -32,9 +32,9 @@ export const ExceptionLayout: React.FC<ExceptionLayoutProps> = ({
     <Container>
       <Text>{item.Total}</Text>
       <Header>
-        <CheckBoox onPress={() => {}}>
+        {/* <CheckBoox onPress={() => {}}>
           {item?.Amount >= 1 && <CheckIcon />}
-        </CheckBoox>
+        </CheckBoox> */}
         <HeaderInfo>
           <Text weight="700" numberOfLines={2}>
             {item?.Excecao}

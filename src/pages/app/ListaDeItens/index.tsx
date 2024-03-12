@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import React, { useCallback, useState, useMemo } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { useRoute } from "@react-navigation/native";
 import { useCart } from "../../../context/cartContext";
@@ -16,6 +16,9 @@ import { Container, Separator } from "./styles";
 type ScreenProps = {
   handle: number;
 };
+
+// Envolvendo ItemLayout com React.memo para otimizar renderizações
+const MemoizedItemLayout = React.memo(ItemLayout);
 
 const ListaDeItens = () => {
   const { handle } = useRoute().params as ScreenProps;
@@ -38,22 +41,35 @@ const ListaDeItens = () => {
           const result = realm
             .objects<Item>("SchemaItem")
             .filtered(`HandleGrupo2 = '${handle}'`);
-          realm.write(() => {
-            result.forEach(async (MyItem: Item) => {
-              const obterIteTabFor = realm
-                .objects<IteTabFor>("SchemaIteTabFor")
-                .filtered(`HandleItem = '${MyItem.Handle}'`);
 
+          // Otimizando a consulta ao banco de dados
+          const iteTabForHandles = result.map((item) => item.Handle);
+          const iteTabForResults = realm
+            .objects<IteTabFor>("SchemaIteTabFor")
+            .filtered(`HandleItem IN $0`, iteTabForHandles);
+
+          const excecoesHandles = result.map((item) => item.Handle);
+          const excecoesGrupo2Handles = result.map((item) => item.HandleGrupo2);
+          const excecoesResults = realm
+            .objects<Grupo2Excecao>("SchemaGrupo2Excecao")
+            .filtered(
+              `HandleItem IN $0 OR HandleGrupo2 IN $1`,
+              excecoesHandles,
+              excecoesGrupo2Handles
+            );
+
+          realm.write(() => {
+            result.forEach((MyItem: Item) => {
+              const obterIteTabFor = iteTabForResults.filtered(
+                `HandleItem = '${MyItem.Handle}'`
+              );
               if (obterIteTabFor[0]?.Preco !== null) {
                 MyItem.VendaValor = obterIteTabFor[0]?.Preco;
               }
 
-              const execoesDoItem = realm
-                .objects<Grupo2Excecao>("SchemaGrupo2Excecao")
-                .filtered(
-                  `HandleItem = '${MyItem.Handle}' OR HandleGrupo2 = '${MyItem.HandleGrupo2}'`
-                );
-
+              const execoesDoItem = excecoesResults.filtered(
+                `HandleItem = '${MyItem.Handle}' OR HandleGrupo2 = '${MyItem.HandleGrupo2}'`
+              );
               MyItem.Excecoes = Array.from(execoesDoItem);
             });
           });
@@ -79,7 +95,7 @@ const ListaDeItens = () => {
       data={cart}
       keyExtractor={(item, index) => String(item.Handle)}
       renderItem={({ item, index }) => (
-        <ItemLayout
+        <MemoizedItemLayout
           data={item}
           adicionarQuantidade={() => AdicionarQuantidade(index)}
           removerQuantidade={() => RemoverQuantidade(index)}

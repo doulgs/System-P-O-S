@@ -34,12 +34,6 @@ import {
   CondicoesDePagamentoProps,
 } from "../../../helpers/condicoesDePagamento";
 import { Select } from "../../../components/Select";
-import {
-  enviarImpressao,
-  handleImpressaoReturn,
-} from "../../../integracoes/stone/deeplink/impressao/imprimir";
-import { Item } from "../../../database/interfaces/Interface-Item";
-import { handleImpressao } from "../../../integracoes/stone/deeplink/impressao/layoutImpressao";
 
 interface UrlParams {
   cardholder_name?: string;
@@ -95,8 +89,7 @@ const Payment = () => {
       };
 
       if (extractedParams.code === "0" && user !== null) {
-        const retorno = handleImpressao(order, user);
-        enviarImpressao(await retorno);
+        navigation.navigate("PaymentProcess");
       }
     };
 
@@ -112,12 +105,12 @@ const Payment = () => {
     };
   }, []);
 
-  useEffect(() => {
-    Linking.addEventListener("url", handleImpressaoReturn);
-    return () => {
-      Linking.removeAllListeners("url");
-    };
-  }, []);
+  // useEffect(() => {
+  //   Linking.addEventListener("url", handleImpressaoReturn);
+  //   return () => {
+  //     Linking.removeAllListeners("url");
+  //   };
+  // }, []);
 
   const finalizarPedido = async () => {
     setIsLoading(true);

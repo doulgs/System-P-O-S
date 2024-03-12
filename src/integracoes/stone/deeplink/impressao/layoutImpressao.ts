@@ -1,14 +1,59 @@
-import { UsuarioProp } from "../../../../context/authContext";
 import { Item } from "../../../../database/interfaces/Interface-Item";
+import { UsuarioProp } from "../../../../context/authContext";
+import { obterDataHora } from "../../../../helpers/obterDataHora";
 
-export const handleImpressao = async (order: Item[], user: UsuarioProp) => {
-  const arquivoJSON = JSON.stringify([
-    {
-      type: "image",
-      imagePath:
-        "iVBORw0KGgoAAAANSUhEUgAAAHkAAAAzCAYAAACzOadDAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAASTSURBVHgB7Zz/NSwxFMfvvuN/VIAOdIAKUAEqQAWoABWgAlRAB6gAFdDBvPnMOdlzN5KZTDJr7Safc/Le7swkc5Nv7s2vPUYiUklhoVnin6oqOi8qo9FI/klh4SkiZ0AROQOKyBlQRM6AInIGFJEzoIicAUXkDCgiZ0AROQOKyBlQRM6AaJE/Pj4khdT8fcv6/v6W5+dnub29bf5/fX1NLrPrfaQhSC1rJM1JY7+jRhpgY2ND1tfXJRbKMO/l887OjsRA5Tc3N+Xp6cn7zPX1tZyfnzsbirykg4MD2d7eHl8/OjqSh4cHWVlZkVi7Tk5O5OzsrPl+enralBcD7UP9tH2hcNS4JAmY3o7Yh4eHzWc8RFeGipqGoqFd0CBUgHxaCBp/b2/Pmefq6qqzd3N/f3+/8VxsMDby3diOvSS+242oPQg7sMd+t7aRckku1tbWGhvsCKLbR2O3YypVX97f33HBcbq5uRnf47O+x7OGWuSJey70/VoUrw2Xl5fj52pxnM/UAjT36044YYed31UG7zb3yK+pBXPa+PX1VdWCje9RX5u29tFQFu81z9WeXMVA3uSJF95hPKQLQpfxhlTwgLbwRXg0XoOn2UML+dtCvCb0OTyyFlGGYMiykkSm4cyYE8r9/X30OGdDI7jKIpQSUg2+99FJao+WNqhfn7kHHYoONATYN0RZSSL3bQCI6RgaBDQeasra3d2deMYe9+yxXkMjMlfY2toSl62+eUQbMe2iwX5jL2W5IlFfqhh8Y0nomOO7Lh1jMtd8Y7CB8UyXQ2J89r3TVwbJhW9MDsnf1T5mvhM7BttIypic2rNi8rPGJXVBeLajBd7BMo3lVAiUkTKsxOaPXUq2kbSEmjYsa7SoFxcXwXlNmNV5KI/wzHjNfdbGs+bx8VGWl5ebz29vb4NuEmmqIQkN123hpSt1hWvbHr0U0Ynr9USw6ktIuG6zJ6SOfyJc/wYszbDTpJgdH8qoO5pzMoTXsFnSJ0IMDbaZ+oUu1foyVwcUx8fHEgvhmUZ0rem5x7p61tCJYzpyF3MlMkuJlMkQnszaGu+xvZpx2rcl+Zv4tnFTmLujRjZTSAZC7erq6sQzzKS57pvEIPDLy8uP3TcmPrOGyaA+jGC9zGFQ6KrAxdyJTOWNNyOi63QJkbnOSZIPyrA3OjhEmDXYpUM2wwj1TDlqnOsfDXStKQm/bWOtWboA3j2NUJlC6L5AF4OKTG9j3RfL3d1d8LNt4VjDWMsM2n4WW00HwHtCZ7Z0nM/PT4mBd4bWEXuHmvUPthliDv7txuQa4YeZcdsJFA2uDxVMmb6e3GdPmb1rxNFnwpRLWMeDGeNDduBodPu9lIOdzNrZQ/dNDH3tozdD7OtDboxUQ6DPX11JnznbsPCXgA2CtqSpJ1VVLah3E0TURoZvf9rGPkMXx8ZKG2zgpNTPdTYdAnmjfv7z18BLfetLc2qFV5gwi+fgeUMdeU4b/QucvvDzn4UQueCn/DmJTCgiZ0AROQOKyBlQRM6AInIGFJEzoIicAUXkDCgiZ0AROQOKyBlQRM6A5hRKCgvNf+orlx7ToEgUAAAAAElFTkSuQmCC",
-    },
-  ]);
+interface PrintPedidoItem {
+  type?: string;
+  content?: string;
+  align?: string;
+  size?: string;
+}
 
-  return arquivoJSON;
+const handleImpressao = async (
+  order: Item[],
+  user: UsuarioProp
+): Promise<string> => {
+  const printPedido: PrintPedidoItem[] = [];
+
+  order.forEach((item) => {
+    for (let i = 0; i < item.Amount; i++) {
+      const filial = user.NomeEmpresa;
+      const dataHora = obterDataHora().dataHoraAtual;
+
+      const excecoes = item.Excecoes.filter((value) => value.Amount >= 1)
+        .map((value) => `\n \u2022 x${value.Amount ?? 0} ${value.Excecao}`)
+        .join("");
+      const conteudo = `x1 - ${item.Descricao}${excecoes}`;
+
+      printPedido.push({
+        type: "line",
+        content: filial?.toString(),
+      });
+      printPedido.push({
+        type: "line",
+        content: dataHora.toString(),
+      });
+      printPedido.push({
+        type: "line",
+        content: conteudo.toString(),
+      });
+      printPedido.push({
+        type: "line",
+        content: " ",
+      });
+      printPedido.push({
+        type: "line",
+        content: "----------------------------------",
+      });
+      printPedido.push({
+        type: "line",
+        content: " ",
+      });
+    }
+  });
+
+  const jsonString = JSON.stringify(printPedido);
+  return jsonString;
 };
+
+export { handleImpressao };
