@@ -12,6 +12,7 @@ import ListaDeItens from "../pages/app/ListaDeItens";
 import Order from "../pages/app/Order";
 import Exceptions from "../pages/app/Exceptions";
 import Payment from "../pages/app/Payment";
+import PaymentProcess from "../pages/app/PaymentProcess";
 import Sales from "../pages/app/Sales";
 
 import { Text } from "../components/Text";
@@ -124,6 +125,11 @@ function AppRoutes() {
         name="Payment"
         component={Payment}
         options={{ headerTitle: "PAGAMENTO" }}
+      />
+      <Stack.Screen
+        name="PaymentProcess"
+        component={PaymentProcess}
+        options={{ headerTitle: "PROCESSO DE PAGAMENTO" }}
       />
       <Stack.Screen
         name="Sales"

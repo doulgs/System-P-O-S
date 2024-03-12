@@ -10,6 +10,7 @@ export declare global {
       ListaDeItens: { handle: number };
       Exceptions: { indexItem: number };
       Payment: undefined;
+      PaymentProcess: undefined;
       Sales: undefined;
     }
   }

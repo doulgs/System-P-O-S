@@ -16,8 +16,6 @@ import { OrderProvaider } from "./src/context/orderContext";
 import { CartProvider } from "./src/context/cartContext";
 import { Loading } from "./src/components/Loading";
 
-import { Text } from "react-native";
-
 export default function App() {
   const [isFontsLoaded] = useFonts({
     "GeneralSans-400": require("./src/assets/fonts/GeneralSans-Regular.otf"),
@@ -39,6 +37,7 @@ export default function App() {
         Order: { path: "Order" },
         Exceptions: { path: "Exceptions" },
         Payment: { path: "Payment" },
+        PaymentProcess: { path: "PaymentProcess" },
         Sales: { path: "Sales" },
         AcessarApp: { path: "AcessarApp" },
         CadDispositivo: { path: "CadDispositivo" },
