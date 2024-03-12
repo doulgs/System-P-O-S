@@ -1,13 +1,23 @@
 import { Linking, ToastAndroid } from "react-native";
 
 const enviarImpressao = async (jsonFile: string) => {
-  const uri = new URL(
-    `printer-app://print?SHOW_FEEDBACK_SCREEN=true&SCHEME_RETURN=linkpublipos&PRINTABLE_CONTENT=${jsonFile}`
-  );
+  const uri = `printer-app://print?SHOW_FEEDBACK_SCREEN=false&SCHEME_RETURN=linkpublipos&PRINTABLE_CONTENT=${encodeURIComponent(
+    jsonFile
+  )}`;
+
+  // const uri = new URL("printer-app://print");
+  // uri.searchParams.append("SHOW_FEEDBACK_SCREEN", "TRUE");
+  // uri.searchParams.append("SCHEME_RETURN", "linkpublipos");
+  // uri.searchParams.append(
+  //   "PRINTABLE_CONTENT",
+  //   `${encodeURIComponent(jsonFile)}`
+  // );
+
   try {
-    const canOpen = await Linking.canOpenURL(uri.toString());
+    const canOpen = await Linking.canOpenURL(uri);
     if (canOpen) {
-      await Linking.openURL(uri.toString());
+      //showErrorMessage("Sucesso");
+      await Linking.openURL(uri);
     } else {
       showErrorMessage("Não é possível abrir o aplicativo de impressão.");
     }
