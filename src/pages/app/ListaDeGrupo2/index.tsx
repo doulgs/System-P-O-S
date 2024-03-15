@@ -40,7 +40,6 @@ const ListaDeGrupo2 = () => {
       : require("../../../assets/icons/IcoPublisoftLogoDefault.png");
     return (
       <Touchable
-        style={{ elevation: 5 }}
         onPress={() =>
           navigation.navigate("ListaDeItens", { handle: item.Handle })
         }

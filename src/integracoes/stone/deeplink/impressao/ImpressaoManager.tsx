@@ -50,20 +50,20 @@ const handleImpressao = async (order: Item[], user: UsuarioProp) => {
       printPedido.push({
         type: "text",
         content: filial,
-        align: "center",
-        size: "big",
+        align: "left",
+        size: "medium",
       });
       printPedido.push({
         type: "text",
         content: dataHora,
-        align: "right",
+        align: "left",
         size: "medium",
       });
       printPedido.push({
         type: "text",
         content: "VALE",
         align: "center",
-        size: "medium",
+        size: "big",
       });
       printPedido.push({
         type: "text",
@@ -116,6 +116,7 @@ const processarImpressao = (
     if (order.length > 0 && user !== null) {
       const arquivoJSON = await handleImpressao(order, user);
       await enviarImpressao(arquivoJSON);
+      console.log("Fim da Impressão");
     }
 
     return () => {

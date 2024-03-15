@@ -9,14 +9,14 @@ export const CondicoesDePagamento = [
     description: "CRÉDITO",
     type: "CREDIT",
   },
-  {
-    description: "VOUCHER",
-    type: "VOUCHER",
-  },
-  {
-    description: "INSTANT_PAYMENT",
-    type: "INSTANT_PAYMENT",
-  },
+  // {
+  //   description: "VOUCHER",
+  //   type: "VOUCHER",
+  // },
+  // {
+  //   description: "INSTANT_PAYMENT",
+  //   type: "INSTANT_PAYMENT",
+  // },
   {
     description: "PIX",
     type: "PIX",

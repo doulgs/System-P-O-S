@@ -36,7 +36,7 @@ export const ItemLayout = ({
   const backColor = data.Amount >= 1 ? "rgba(10,55,80,0.13)" : "#fcfcfc";
 
   return (
-    <Background style={{ elevation: 3 }}>
+    <Background>
       <Container style={{ backgroundColor: backColor }}>
         <ImageContainer>
           <Image source={source} resizeMode="cover" />

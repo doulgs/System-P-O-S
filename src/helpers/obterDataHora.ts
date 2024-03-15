@@ -6,7 +6,7 @@ export const obterDataHora = () => {
   const mes = ("0" + (data.getMonth() + 1)).slice(-2);
   const ano = data.getFullYear();
 
-  const dataHoraAtual = `${horas}:${minutos} - ${dia}/${mes}/${ano}`;
+  const dataHoraAtual = `${dia}/${mes}/${ano} - ${horas}:${minutos}`;
   const horaAtual = `${horas}:${minutos}`;
   const dataAtual = `${dia}/${mes}/${ano}`;
 

@@ -88,6 +88,12 @@ const Payment = () => {
         code: params.get("code") ?? undefined,
       };
 
+      console.log("ATK", extractedParams.atk);
+      console.log(
+        "authorization_date_time",
+        extractedParams.authorization_date_time
+      );
+
       if (extractedParams.code === "0" && user !== null) {
         navigation.navigate("PaymentProcess");
       }

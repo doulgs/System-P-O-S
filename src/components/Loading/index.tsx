@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     justifyContent: "center",
     alignItems: "center",
-    elevation: 5,
+    //elevation: 5,
   },
   message: {
     marginTop: 10,
