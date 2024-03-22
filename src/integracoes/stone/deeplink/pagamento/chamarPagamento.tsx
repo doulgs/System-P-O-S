@@ -43,7 +43,7 @@ interface abrirAppPagamentoProps {
 const abrirAppPagamento = async ({
   return_scheme = "linkpublipos",
   amount,
-  editable_amount = "1",
+  editable_amount = "0",
   transaction_type,
   installment_type = "NONE",
 }: abrirAppPagamentoProps) => {

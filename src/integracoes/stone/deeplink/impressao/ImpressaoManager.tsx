@@ -3,6 +3,7 @@ import { Item } from "../../../../database/interfaces/Interface-Item";
 import { UsuarioProp } from "../../../../context/authContext";
 import { obterDataHora } from "../../../../helpers/obterDataHora";
 import { imageHeader } from "./imageHeader";
+import { useNavigation } from "@react-navigation/native";
 
 interface UrlParams {
   SUCCESS?: string;
@@ -93,6 +94,7 @@ const processarImpressao = (
   user: UsuarioProp
 ): Promise<void> => {
   return new Promise(async (resolve, reject) => {
+    const navigation = useNavigation();
     const handleImpressaoReturn = async (event: { url: string }) => {
       console.log("DeepLink Impressao -->:", event.url);
       const url = new URL(event.url);
@@ -115,8 +117,8 @@ const processarImpressao = (
     // Inicializa a impressão do primeiro item
     if (order.length > 0 && user !== null) {
       const arquivoJSON = await handleImpressao(order, user);
-      await enviarImpressao(arquivoJSON);
-      console.log("Fim da Impressão");
+      await enviarImpressao(arquivoJSON).then(() => {});
+      navigation.navigate("Home");
     }
 
     return () => {
